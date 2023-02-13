@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS "BaseInitialized" (
 CREATE TABLE IF NOT EXISTS "StateSet" (
     "event_id" INT REFERENCES "Event"("id"),
     "caller" VARCHAR(42),
-    "prevState" TEXT,
-    "newState" TEXT,
+    "prevState" SMALLINT,
+    "newState" SMALLINT,
     "timestamp" BIGINT
 );
 
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS "Followed" (
     "timestamp" BIGINT
 );
 
-CREATE TABLE IF NOT EXISTS FollowNFTTransferred (
+CREATE TABLE IF NOT EXISTS "FollowNFTTransferred" (
     "event_id" INT REFERENCES "Event"("id"),
     "profileId" BIGINT,
     "followNFTId" BIGINT,

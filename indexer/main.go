@@ -16,8 +16,8 @@ import (
 type Config struct {
 	ContractAddress string `mapstructure:"contract_address"`
 	RpcURL          string `mapstructure:"rpc_url"`
-	StartBlock      int64  `mapstructure:"start_block"`
 	PGDSN           string `mapstructure:"pg_dsn"`
+	StartBlock      int64  `mapstructure:"start_block"`
 	Step            int64  `mapstructure:"step"`
 }
 
@@ -33,7 +33,7 @@ func main() {
 	go fetchLogs(ethclient, conf.ContractAddress, conf.StartBlock, conf.Step, logsch)
 
 	// process logs and save to db
-	go processLogs(db, logsch)
+	processLogs(db, logsch)
 
 }
 
