@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS "Event" (
     "txHash" VARCHAR(66),
     "txIndex" INT,
     "logIndex" INT,
-    "removed" BOOLEAN
+    "removed" BOOLEAN,
+    "event" TEXT
 );
 
 

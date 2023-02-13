@@ -5,7 +5,6 @@ import (
 	"log"
 	"math/big"
 
-	"github.com/daoleno/lenscan/indexer/contract"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -33,12 +32,8 @@ func main() {
 	logsch := make(chan types.Log)
 	go fetchLogs(ethclient, conf.ContractAddress, conf.StartBlock, conf.Step, logsch)
 
-	// parse event logs
-	eventch := make(chan interface{})
-	go parseLogs(logsch, eventch)
-
-	// save to database
-	go saveToDB(db, eventch)
+	// process logs and save to db
+	go processLogs(db, logsch)
 
 }
 
@@ -80,15 +75,6 @@ func initEthClient(rpcURL string) *ethclient.Client {
 	return ethclient
 }
 
-func initEventFilter(contractAddress string, ethclient *ethclient.Client) *contract.ContractFilterer {
-	f, err := contract.NewContractFilterer(common.HexToAddress(contractAddress), ethclient)
-	if err != nil {
-		panic(err)
-	}
-
-	return f
-}
-
 // fetchLogs fetch logs from ethereum and pass to logs channel
 // step is the number of blocks to fetch at a time
 func fetchLogs(ethclient *ethclient.Client, contractAddress string, startBlock, step int64, logsch chan types.Log) {
@@ -119,62 +105,20 @@ func fetchLogs(ethclient *ethclient.Client, contractAddress string, startBlock, 
 	}
 }
 
-// parseLogs parse logs and pass to event channel
+// processLogs parse logs and pass to event channel
 // log will be parsed to related event struct
-func parseLogs(logsch chan types.Log, eventch chan interface{}) {
+func processLogs(db *pgxpool.Pool, logsch chan types.Log) {
 	for l := range logsch {
-		p := EventParsers[l.Topics[0]]
+		p := EventProcessors[l.Topics[0]]
 		if p == nil {
-			log.Printf("No parser found for event with topic %s", l.Topics[0].Hex())
+			log.Printf("No processor found for event with topic %s", l.Topics[0].Hex())
 			continue
 		}
 
-		event, err := p(l)
+		err := p.ProcessEvent(db, l)
 		if err != nil {
 			log.Printf("Error parsing event: %s", err)
 			continue
-		}
-
-		eventch <- event
-	}
-}
-
-// saveToDB save event to database
-func saveToDB(db *pgxpool.Pool, eventch chan interface{}) {
-	ctx := context.Background()
-	for event := range eventch {
-		switch e := event.(type) {
-		case *contract.ContractBaseInitialized:
-			// Save the ContractBaseInitialized event to the database
-			_, err := db.Exec(ctx, `
-				WITH inserted_event AS (
-					INSERT INTO Event (blockNumber, txHash, txIndex, logIndex, removed)
-					VALUES ($1, $2, $3, $4, $5)
-					RETURNING id
-				)
-				INSERT INTO BaseInitialized (event_id, name, symbol, timestamp)
-				SELECT id, $6, $7, $8
-				FROM inserted_event`,
-				e.Raw.BlockNumber, e.Raw.TxHash, e.Raw.TxIndex, e.Raw.Index, e.Raw.Removed, e.Name, e.Symbol, e.Timestamp)
-			if err != nil {
-				log.Println("Error saving BaseInitialized event to database:", err)
-			}
-
-		case *contract.ContractCollectModuleWhitelisted:
-			// Save the ContractCollectModuleWhitelisted event to the database
-			_, err := db.Exec(ctx, `
-				WITH inserted_event AS (
-					INSERT INTO Event (blockNumber, txHash, txIndex, logIndex, removed)
-					VALUES ($1, $2, $3, $4, $5)
-					RETURNING id
-				)
-				INSERT INTO CollectModuleWhitelisted (event_id, collectModule, whitelisted, timestamp)
-				SELECT id, $6, $7, $8
-				FROM inserted_event`,
-				e.Raw.BlockNumber, e.Raw.TxHash, e.Raw.TxIndex, e.Raw.Index, e.Raw.Removed, e.CollectModule, e.Whitelisted, e.Timestamp)
-			if err != nil {
-				log.Println("Error saving CollectModuleWhitelisted event to database:", err)
-			}
 		}
 	}
 }
