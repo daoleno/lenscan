@@ -30,7 +30,7 @@ func main() {
 
 	// fetch raw logs from ethereum
 	logsch := make(chan types.Log)
-	go fetchLogs(ethclient, conf.ContractAddress, conf.StartBlock, conf.Step, logsch)
+	go fetchLogs(ethclient, db, conf.ContractAddress, conf.StartBlock, conf.Step, logsch)
 
 	// process logs and save to db
 	processLogs(db, logsch)
@@ -77,7 +77,16 @@ func initEthClient(rpcURL string) *ethclient.Client {
 
 // fetchLogs fetch logs from ethereum and pass to logs channel
 // step is the number of blocks to fetch at a time
-func fetchLogs(ethclient *ethclient.Client, contractAddress string, startBlock, step int64, logsch chan types.Log) {
+func fetchLogs(ethclient *ethclient.Client, db *pgxpool.Pool, contractAddress string, startBlock, step int64, logsch chan types.Log) {
+	// fetch last block number from db, if not found, use startBlock
+	var lastBlock int64
+	err := db.QueryRow(context.Background(), `SELECT "blockNumber" FROM "LastBlock"`).Scan(&lastBlock)
+	if err != nil {
+		log.Printf("Error fetching last block number, using start block: %d", startBlock)
+	} else {
+		startBlock = lastBlock + 1
+	}
+
 	for {
 		// Fetch logs in batches of `step` blocks
 		endBlock := startBlock + step
@@ -92,8 +101,11 @@ func fetchLogs(ethclient *ethclient.Client, contractAddress string, startBlock, 
 			log.Fatalf("Error fetching logs from block %d to %d: %s", startBlock, endBlock, err)
 		}
 
+		log.Printf("Fetched %d logs from block %d to %d", len(logsSlice), startBlock, endBlock)
+
 		// If no logs are found, move on to the next batch
 		if len(logsSlice) == 0 {
+			updateLastBlock(db, endBlock)
 			startBlock = endBlock + 1
 			continue
 		}
@@ -102,6 +114,18 @@ func fetchLogs(ethclient *ethclient.Client, contractAddress string, startBlock, 
 			logsch <- log
 		}
 		startBlock = endBlock + 1
+
+		// Upsert last block number
+		updateLastBlock(db, endBlock)
+
+	}
+}
+
+func updateLastBlock(db *pgxpool.Pool, number int64) {
+	// Upsert last block number
+	_, err := db.Exec(context.Background(), `INSERT INTO "LastBlock" ("id", "blockNumber") VALUES (1, $1) ON CONFLICT ("id") DO UPDATE SET "blockNumber" = $1`, number)
+	if err != nil {
+		log.Fatalf("Error upserting last block number: %s", err)
 	}
 }
 
@@ -111,7 +135,7 @@ func processLogs(db *pgxpool.Pool, logsch chan types.Log) {
 	for l := range logsch {
 		p := EventProcessors[l.Topics[0]]
 		if p == nil {
-			log.Printf("No processor found for event with topic %s", l.Topics[0].Hex())
+			log.Printf("No processor found for event with topic %s at transaction %s", l.Topics[0].String(), l.TxHash.String())
 			continue
 		}
 
