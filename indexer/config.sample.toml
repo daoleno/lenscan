@@ -5,3 +5,4 @@ start_block=28384641
 step=3000
 step_factor=10
 max_retries=10
+polling_interval=3
