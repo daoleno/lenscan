@@ -326,3 +326,40 @@ CREATE TABLE IF NOT EXISTS "ApprovalForAll" (
     "operator" VARCHAR(42),
     "approved" BOOLEAN
 );
+
+-- Functions
+CREATE OR REPLACE FUNCTION get_publications_summary(
+    IN profile_id bigint, 
+    IN start_date timestamp, 
+    IN end_date timestamp
+)
+RETURNS TABLE (
+    "date" date, 
+    "count" bigint, 
+    "level" bigint
+) 
+IMMUTABLE
+AS $$
+BEGIN
+    RETURN QUERY 
+    SELECT 
+        DATE_TRUNC('day', to_timestamp("timestamp"))::date AS "date",
+        COUNT(*) AS "count",
+        CASE
+            WHEN COUNT(*) > 4 THEN 4
+            ELSE COUNT(*)
+        END AS "level"
+    FROM (
+        SELECT "event_id", "profileId", "pubId", "timestamp" FROM "PostCreated"
+        UNION ALL
+        SELECT "event_id", "profileId", "pubId", "timestamp" FROM "CommentCreated"
+        UNION ALL
+        SELECT "event_id", "profileId", "pubId", "timestamp" FROM "MirrorCreated"
+    ) AS "publications"
+    WHERE "profileId" = get_publications_summary.profile_id
+    AND to_timestamp("timestamp") >= get_publications_summary.start_date
+    AND to_timestamp("timestamp") < get_publications_summary.end_date
+    GROUP BY "date"
+    ORDER BY "date";
+END;
+$$ LANGUAGE plpgsql;
