@@ -138,6 +138,8 @@ CREATE TABLE IF NOT EXISTS "PostCreated" (
     "timestamp" bigint
 );
 
+CREATE INDEX IF NOT EXISTS "idx_PostCreated_profileId_timestamp" ON "PostCreated" ("profileId", "timestamp" DESC);
+
 CREATE TABLE IF NOT EXISTS "CommentCreated" (
     "event_id" INT PRIMARY KEY REFERENCES "Event"("id"),
     "profileId" bigint,
@@ -153,6 +155,8 @@ CREATE TABLE IF NOT EXISTS "CommentCreated" (
     "timestamp" bigint
 );
 
+CREATE INDEX IF NOT EXISTS "idx_CommentCreated_profileId_timestamp" ON "CommentCreated" ("profileId", "timestamp" DESC);
+
 CREATE TABLE IF NOT EXISTS "MirrorCreated" (
     "event_id" INT PRIMARY KEY REFERENCES "Event"("id"),
     "profileId" bigint,
@@ -164,6 +168,8 @@ CREATE TABLE IF NOT EXISTS "MirrorCreated" (
     "referenceModuleReturnData" bytea,
     "timestamp" bigint
 );
+
+CREATE INDEX IF NOT EXISTS "idx_MirrorCreated_profileId_timestamp" ON "MirrorCreated" ("profileId", "timestamp" DESC);
 
 CREATE TABLE IF NOT EXISTS "FollowNFTDeployed" (
     "event_id" INT PRIMARY KEY REFERENCES "Event"("id"),
