@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 	"time"
 
@@ -9,6 +10,10 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/viper"
+)
+
+var (
+	flagConfigFile = flag.String("config", "config.toml", "config file")
 )
 
 type Config struct {
@@ -23,7 +28,9 @@ type Config struct {
 }
 
 func main() {
-	conf := loadConfig()
+	flag.Parse()
+
+	conf := loadConfig(*flagConfigFile)
 
 	db := initDB(conf.PGDSN)
 
@@ -39,11 +46,9 @@ func main() {
 
 }
 
-func loadConfig() Config {
+func loadConfig(confPath string) Config {
 	// load config from toml file
-	viper.SetConfigName("config")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath(".")
+	viper.SetConfigFile(confPath)
 
 	err := viper.ReadInConfig()
 	if err != nil {

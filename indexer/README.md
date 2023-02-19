@@ -11,3 +11,9 @@ go generate ./...
 ```bash
 go build .
 ```
+
+## Docker
+
+```bash
+docker build -t lenscan-indexer .
+```
