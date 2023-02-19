@@ -5,10 +5,10 @@ COPY . .
 RUN go build -o indexer .
 
 # Final stage
-FROM alpine:3.17
+FROM ubuntu:22.04
 WORKDIR /app
 COPY --from=build /app/indexer /app
 COPY config.sample.toml /app/config.toml
-RUN apk --no-cache add ca-certificates
+RUN apt-get update && apt-get install -y ca-certificates
 EXPOSE 8080
 CMD ["./indexer", "--config", "/app/config.toml"]
