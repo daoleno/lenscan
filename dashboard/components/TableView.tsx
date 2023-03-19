@@ -1,11 +1,6 @@
 import {
-  BadgeDelta,
+  Badge,
   Card,
-  DeltaType,
-  Dropdown,
-  DropdownItem,
-  MultiSelectBox,
-  MultiSelectBoxItem,
   Table,
   TableBody,
   TableCell,
@@ -13,196 +8,126 @@ import {
   TableHeaderCell,
   TableRow,
 } from "@tremor/react";
+import Link from "next/link";
+
+import { shortHash } from "@/lib/utils";
+
+import { db } from "@/lib/postgrest";
 import { useState } from "react";
+import useSWR from "swr";
+import Pagination from "./Pagination";
 
-export type SalesPerson = {
-  name: string;
-  leads: number;
-  sales: string;
-  quota: string;
-  variance: string;
-  region: string;
-  status: string;
-  deltaType: DeltaType;
-};
+interface PaginationProps {
+  currentPage: number;
+  totalResults: number;
+  resultsPerPage: number;
+  onPageChange: (pageNumber: number) => void;
+}
 
-export const salesPeople: SalesPerson[] = [
-  {
-    name: "Peter Doe",
-    leads: 45,
-    sales: "1,000,000",
-    quota: "1,200,000",
-    variance: "low",
-    region: "Region A",
-    status: "overperforming",
-    deltaType: "moderateIncrease",
-  },
-  {
-    name: "Lena Whitehouse",
-    leads: 35,
-    sales: "900,000",
-    quota: "1,000,000",
-    variance: "low",
-    region: "Region B",
-    status: "average",
-    deltaType: "unchanged",
-  },
-  {
-    name: "Phil Less",
-    leads: 52,
-    sales: "930,000",
-    quota: "1,000,000",
-    variance: "medium",
-    region: "Region C",
-    status: "underperforming",
-    deltaType: "moderateDecrease",
-  },
-  {
-    name: "John Camper",
-    leads: 22,
-    sales: "390,000",
-    quota: "250,000",
-    variance: "low",
-    region: "Region A",
-    status: "overperforming",
-    deltaType: "increase",
-  },
-  {
-    name: "Max Balmoore",
-    leads: 49,
-    sales: "860,000",
-    quota: "750,000",
-    variance: "low",
-    region: "Region B",
-    status: "overperforming",
-    deltaType: "increase",
-  },
-  {
-    name: "Peter Moore",
-    leads: 82,
-    sales: "1,460,000",
-    quota: "1,500,000",
-    variance: "low",
-    region: "Region A",
-    status: "average",
-    deltaType: "unchanged",
-  },
-  {
-    name: "Joe Sachs",
-    leads: 49,
-    sales: "1,230,000",
-    quota: "1,800,000",
-    variance: "medium",
-    region: "Region B",
-    status: "underperforming",
-    deltaType: "moderateDecrease",
-  },
-];
+export default function TableView({
+  start,
+  end,
+}: {
+  start: number;
+  end: number;
+}) {
+  const { data, error } = useSWR(
+    `latest-events-${start}-${end}`,
+    async () => {
+      return await db.Event(start, end);
+    },
+    {
+      refreshInterval: 5000, // refresh data every 5 seconds
+    }
+  );
 
-export default function TableView() {
-  const [selectedStatus, setSelectedStatus] = useState("all");
-  const [selectedNames, setSelectedNames] = useState<string[]>([]);
+  console.log("data", data);
 
-  const isSalesPersonSelected = (salesPerson: SalesPerson) =>
-    (salesPerson.status === selectedStatus || selectedStatus === "all") &&
-    (selectedNames.includes(salesPerson.name) || selectedNames.length === 0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  if (error) return <div>Error: {error.message}</div>;
+  if (!data || !data.data) return <div>Loading...</div>;
+  const { data: events, count }: any = data;
+
+  console.log("events", events);
+
+  function handlePageChange(page: number) {
+    setCurrentPage(page);
+  }
 
   return (
-    <Card>
-      <div className="sm:mt-6 hidden sm:flex sm:justify-start sm:space-x-2">
-        <MultiSelectBox
-          handleSelect={(value) => setSelectedNames(value)}
-          placeholder="Select Salespeople"
-          maxWidth="max-w-xs"
-        >
-          {salesPeople.map((item) => (
-            <MultiSelectBoxItem
-              key={item.name}
-              value={item.name}
-              text={item.name}
-            />
-          ))}
-        </MultiSelectBox>
-        <Dropdown
-          maxWidth="max-w-xs"
-          defaultValue="all"
-          handleSelect={(value) => setSelectedStatus(value)}
-        >
-          <DropdownItem value="all" text="All Performances" />
-          <DropdownItem value="overperforming" text="Overperforming" />
-          <DropdownItem value="average" text="Average" />
-          <DropdownItem value="underperforming" text="Underperforming" />
-        </Dropdown>
-      </div>
-      <div className="mt-6 sm:hidden space-y-2 sm:space-y-0">
-        <MultiSelectBox
-          handleSelect={(value) => setSelectedNames(value)}
-          placeholder="Select Salespeople"
-          maxWidth="max-w-full"
-        >
-          {salesPeople.map((item) => (
-            <MultiSelectBoxItem
-              key={item.name}
-              value={item.name}
-              text={item.name}
-            />
-          ))}
-        </MultiSelectBox>
-        <Dropdown
-          maxWidth="max-w-full"
-          defaultValue="all"
-          handleSelect={(value) => setSelectedStatus(value)}
-        >
-          <DropdownItem value="all" text="All Performances" />
-          <DropdownItem value="overperforming" text="Overperforming" />
-          <DropdownItem value="average" text="Average" />
-          <DropdownItem value="underperforming" text="Underperforming" />
-        </Dropdown>
-      </div>
+    <div className="mt-6">
+      <Card>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell>Id</TableHeaderCell>
+              <TableHeaderCell>Block</TableHeaderCell>
+              <TableHeaderCell>Age</TableHeaderCell>
+              <TableHeaderCell>Txn Hash</TableHeaderCell>
+              <TableHeaderCell>Log Index</TableHeaderCell>
+              <TableHeaderCell>Event</TableHeaderCell>
+            </TableRow>
+          </TableHead>
 
-      <Table marginTop="mt-6">
-        <TableHead>
-          <TableRow>
-            <TableHeaderCell>Name</TableHeaderCell>
-            <TableHeaderCell textAlignment="text-right">Leads</TableHeaderCell>
-            <TableHeaderCell textAlignment="text-right">
-              Sales ($)
-            </TableHeaderCell>
-            <TableHeaderCell textAlignment="text-right">
-              Quota ($)
-            </TableHeaderCell>
-            <TableHeaderCell textAlignment="text-right">
-              Variance
-            </TableHeaderCell>
-            <TableHeaderCell textAlignment="text-right">Region</TableHeaderCell>
-            <TableHeaderCell textAlignment="text-right">Status</TableHeaderCell>
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-          {salesPeople
-            .filter((item) => isSalesPersonSelected(item))
-            .map((item) => (
-              <TableRow key={item.name}>
-                <TableCell>{item.name}</TableCell>
-                <TableCell textAlignment="text-right">{item.leads}</TableCell>
-                <TableCell textAlignment="text-right">{item.sales}</TableCell>
-                <TableCell textAlignment="text-right">{item.quota}</TableCell>
-                <TableCell textAlignment="text-right">
-                  {item.variance}
-                </TableCell>
-                <TableCell textAlignment="text-right">{item.region}</TableCell>
-                <TableCell textAlignment="text-right">
-                  <BadgeDelta
-                    deltaType={item.deltaType}
-                    text={item.status}
-                    size="xs"
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-    </Card>
+          <TableBody>
+            {events
+              .slice((currentPage - 1) * 25, currentPage * 25)
+              .map((item: Event) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <Link
+                      href={`https://polygonscan.com/block/${item.id}`}
+                      target="_blank"
+                      className="text-blue-500 hover:text-blue-600"
+                    >
+                      {item.id}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      href={`https://polygonscan.com/block/${item.blockNumber}`}
+                      target="_blank"
+                      className="text-blue-500 hover:text-blue-600"
+                    >
+                      {item.blockNumber}
+                    </Link>
+                  </TableCell>
+                  <TableCell>a few seconds ago</TableCell>
+                  <TableCell>
+                    <Link
+                      href={`https://polygonscan.com/tx/${item.txHash}`}
+                      target="_blank"
+                      className="text-blue-500 hover:text-blue-600"
+                    >
+                      {shortHash(item.txHash!)}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      href={`https://polygonscan.com/tx/${item.txHash}#eventlog`}
+                      target="_blank"
+                      className="text-blue-500 hover:text-blue-600"
+                    >
+                      {item.logIndex}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Badge size="xs" color="green">
+                      {item.event}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </Card>
+      <Pagination
+        currentPage={currentPage}
+        totalResults={1}
+        resultsPerPage={end - start}
+        onPageChange={handlePageChange}
+      />
+    </div>
   );
 }
