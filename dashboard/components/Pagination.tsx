@@ -1,4 +1,3 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { Card } from "@tremor/react";
 
 interface PaginationProps {
@@ -15,48 +14,10 @@ export default function Pagination({
   onPageChange,
 }: PaginationProps) {
   const totalPages = Math.ceil(totalResults / resultsPerPage);
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
-  const handlePreviousClick = () => {
-    if (currentPage > 1) {
-      onPageChange(currentPage - 1);
-    }
-  };
-
-  const handleNextClick = () => {
-    if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
-    }
-  };
-
-  const handlePageClick = (pageNumber: number) => {
-    onPageChange(pageNumber);
-  };
 
   return (
     <Card>
-      <div className="flex flex-1 justify-between sm:hidden">
-        <button
-          onClick={handlePreviousClick}
-          className={`${
-            currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-          } relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50`}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <button
-          onClick={handleNextClick}
-          className={`${
-            currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-          } relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50`}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
-
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+      <div className="flex flex-1 items-center justify-between">
         <div>
           <p className="text-sm text-gray-700">
             Showing{" "}
@@ -70,54 +31,70 @@ export default function Pagination({
             of <span className="font-medium">{totalResults}</span> results
           </p>
         </div>
-
-        <div>
-          <nav
-            className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-            aria-label="Pagination"
+        <div className="inline-flex items-center justify-center gap-3">
+          <button
+            onClick={() => onPageChange(1)}
+            className={`${
+              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+            } inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 px-7 text-sm text-gray-700`}
+            disabled={currentPage === 1}
           >
-            <button
-              onClick={handlePreviousClick}
-              className={`${
-                currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-              } relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0`}
-              disabled={currentPage === 1}
+            First
+          </button>
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            className={`${
+              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+            } inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100`}
+            disabled={currentPage === 1}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3 w-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
             >
-              <span className="sr-only">Previous</span>
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-
-            {pageNumbers.map((pageNumber) => (
-              <button
-                key={pageNumber}
-                onClick={() => handlePageClick(pageNumber)}
-                className={`${
-                  pageNumber === currentPage
-                    ? "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                } relative inline-flex items-center ${
-                  pageNumber >= currentPage + 3 || pageNumber <= currentPage - 3
-                    ? "hidden md:inline-flex"
-                    : "md:inline-flex"
-                } px-4 py-2 text-sm font-semibold`}
-              >
-                {pageNumber}
-              </button>
-            ))}
-
-            <button
-              onClick={handleNextClick}
-              className={`${
-                currentPage === totalPages
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
-              } relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0`}
-              disabled={currentPage === totalPages}
+              <path
+                fill-rule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>{" "}
+          </button>{" "}
+          <p className="text-sm">
+            {currentPage}
+            <span className="mx-1">/</span>
+            {totalPages}
+          </p>
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            className={`${
+              currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+            } inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100`}
+            disabled={currentPage === totalPages}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3 w-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
             >
-              <span className="sr-only">Next</span>
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </nav>
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={() => onPageChange(totalPages)}
+            className={`${
+              currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+            } inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 px-7 text-sm text-gray-700`}
+            disabled={currentPage === totalPages}
+          >
+            Last
+          </button>
         </div>
       </div>
     </Card>
