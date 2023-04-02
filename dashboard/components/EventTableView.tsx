@@ -27,7 +27,7 @@ export default function EventTableView({
   const { data, error } = useSWR(
     `latest-events-${range[0]}-${range[1]}`,
     async () => {
-      return await db.Event(range[0], range[1]);
+      return await db.Events(range[0], range[1]);
     }
     // {
     //   refreshInterval: 5000, // refresh data every 5 seconds
@@ -39,8 +39,6 @@ export default function EventTableView({
   if (error) return <div>Error: {error.message}</div>;
   if (!data || !data.data) return <div>Loading...</div>;
   const { data: events, count }: any = data;
-
-  console.log("events", events);
 
   function handlePageChange(page: number) {
     setCurrentPage(page);
@@ -67,7 +65,7 @@ export default function EventTableView({
               <TableRow key={item.id}>
                 <TableCell>
                   <Link
-                    href={`https://polygonscan.com/block/${item.id}`}
+                    href={`/events/${item.id}`}
                     target="_blank"
                     className="text-blue-500 hover:text-blue-600"
                   >
