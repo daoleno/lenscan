@@ -571,4 +571,15 @@ library Events {
         address indexed operator,
         bool approved
     );
+
+    // Upgradable Events
+    /**
+     * @dev Emitted when the implementation is upgraded.
+     */
+    event Upgraded(address indexed implementation);
+
+    /**
+     * @dev Emitted when the admin has changed the admin of the proxy.
+     */
+    event AdminChanged(address previousAdmin, address newAdmin);
 }

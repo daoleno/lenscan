@@ -406,6 +406,22 @@ var EventProcessors = map[common.Hash]*EventProcessor{
 			approvalForAll := e.(*contract.ContractApprovalForAll)
 			return saveEventToDB(db, "ApprovalForAll", e, approvalForAll.Raw)
 		}),
+	common.HexToHash("0xbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b"): NewEventProcessor(
+		func(l types.Log) (interface{}, error) {
+			return contractFilter.ParseUpgraded(l)
+		},
+		func(db *pgxpool.Pool, e interface{}) error {
+			upgraded := e.(*contract.ContractUpgraded)
+			return saveEventToDB(db, "Upgraded", e, upgraded.Raw)
+		}),
+	common.HexToHash("0x7e644d79422f17c01e4894b5f4f588d331ebfa28653d42ae832dc59e38c9798f"): NewEventProcessor(
+		func(l types.Log) (interface{}, error) {
+			return contractFilter.ParseAdminChanged(l)
+		},
+		func(db *pgxpool.Pool, e interface{}) error {
+			adminChanged := e.(*contract.ContractAdminChanged)
+			return saveEventToDB(db, "AdminChanged", e, adminChanged.Raw)
+		}),
 }
 
 func saveEventToDB(db *pgxpool.Pool, eventType string, eventData interface{}, rawEvent types.Log) error {
@@ -417,7 +433,7 @@ func saveEventToDB(db *pgxpool.Pool, eventType string, eventData interface{}, ra
 	ts := getTimestamp(rawEvent.BlockNumber, eventData)
 
 	_, err = db.Exec(context.Background(), `
-		INSERT INTO "Event_New" ("blockNumber", "txHash", "txIndex", "logIndex", "removed", "type", "data", "timestamp")
+		INSERT INTO "Event" ("blockNumber", "txHash", "txIndex", "logIndex", "removed", "type", "data", "timestamp")
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		ON CONFLICT ("blockNumber", "logIndex") DO UPDATE
 		SET "txHash" = excluded."txHash",
@@ -429,6 +445,7 @@ func saveEventToDB(db *pgxpool.Pool, eventType string, eventData interface{}, ra
 	if err != nil {
 		return fmt.Errorf("error saving %s event to database: %w", eventType, err)
 	}
+	log.Printf("saved %s event to database\n", eventType)
 	return nil
 }
 

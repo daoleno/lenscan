@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS "Event_New" (
+CREATE TABLE IF NOT EXISTS "Event" (
     "id" SERIAL PRIMARY KEY,
     "blockNumber" BIGINT,
     "txHash" VARCHAR(66),
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "Event_New" (
     "data" JSONB
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS "Event_New_blockNumber_logIndex" ON "Event_New" ("blockNumber", "logIndex");
+CREATE UNIQUE INDEX IF NOT EXISTS "Event_blockNumber_logIndex" ON "Event" ("blockNumber", "logIndex");
 
 CREATE TABLE IF NOT EXISTS "LastBlock" (
     "id" INT PRIMARY KEY,
