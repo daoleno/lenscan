@@ -12,6 +12,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var ec *ethclient.Client
+
 var (
 	flagConfigFile = flag.String("config", "config.toml", "config file")
 )
@@ -78,6 +80,8 @@ func initEthClient(rpcURL string) *ethclient.Client {
 	if err != nil {
 		panic(err)
 	}
+
+	ec = ethclient
 
 	return ethclient
 }

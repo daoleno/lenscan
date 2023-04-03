@@ -14,7 +14,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// / fetchLogs fetches logs from ethereum and sends them to the logsch channel.
+// fetchLogs fetches logs from ethereum and sends them to the logsch channel.
 // It fetches logs in batches of size `step`, starting from the `startBlock` and moving forward.
 // The `contractAddress` parameter specifies the contract address to filter logs.
 // The `maxRetries` parameter specifies the maximum number of retries if an error occurs.
@@ -159,4 +159,16 @@ func updateLastBlock(ctx context.Context, db *pgxpool.Pool, number uint64) {
 	if err != nil {
 		log.Fatalf("Error upserting last block number: %s", err)
 	}
+}
+
+func getTimestampFromBlock(number uint64) (uint64, error) {
+	if ec == nil {
+		log.Fatal("[getTimestampFromBlock] ethclient is nil")
+	}
+
+	block, err := ec.HeaderByNumber(context.Background(), big.NewInt(int64(number)))
+	if err != nil {
+		return 0, err
+	}
+	return block.Time, nil
 }
