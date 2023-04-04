@@ -94,6 +94,6 @@ func processLogs(db *pgxpool.Pool, logsch chan []types.Log) {
 		if err := ProcessEvents(db, logs); err != nil {
 			log.Printf("Error processing events: %v", err)
 		}
-		log.Printf("Processed %d events in %s seconds", len(logs), time.Since(now).String())
+		log.Printf("Processed %d events in %s", len(logs), time.Since(now).String())
 	}
 }
