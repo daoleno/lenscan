@@ -39,7 +39,7 @@ func main() {
 	ethclient := initEthClient(conf.RpcURL)
 
 	// fetch raw logs from ethereum
-	logsch := make(chan types.Log)
+	logsch := make(chan []types.Log)
 	ctx := context.Background()
 	go fetchLogs(ctx, ethclient, db, conf.ContractAddress, conf.StartBlock, conf.Step, conf.StepFactor, conf.MaxRetries, logsch, time.Duration(conf.PollingInterval)*time.Second)
 
@@ -88,18 +88,12 @@ func initEthClient(rpcURL string) *ethclient.Client {
 
 // processLogs parse logs and pass to event channel
 // log will be parsed to related event struct
-func processLogs(db *pgxpool.Pool, logsch chan types.Log) {
-	for l := range logsch {
-		p := EventProcessors[l.Topics[0]]
-		if p == nil {
-			log.Printf("No processor found for event with topic %s at transaction %s", l.Topics[0].String(), l.TxHash.String())
-			continue
+func processLogs(db *pgxpool.Pool, logsch chan []types.Log) {
+	for logs := range logsch {
+		now := time.Now()
+		if err := ProcessEvents(db, logs); err != nil {
+			log.Printf("Error processing events: %v", err)
 		}
-
-		err := p.ProcessEvent(db, l)
-		if err != nil {
-			log.Printf("Error parsing event: %s", err)
-			continue
-		}
+		log.Printf("Processed %d events in %s seconds", len(logs), time.Since(now).String())
 	}
 }

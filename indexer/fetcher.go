@@ -19,7 +19,7 @@ import (
 // The `contractAddress` parameter specifies the contract address to filter logs.
 // The `maxRetries` parameter specifies the maximum number of retries if an error occurs.
 // The `concurrency` parameter specifies the maximum number of concurrent requests to make.
-func fetchLogs(ctx context.Context, ethclient *ethclient.Client, db *pgxpool.Pool, contractAddress string, startBlock, step, stepFactor, maxRetries uint64, logsch chan<- types.Log, waitTime time.Duration) {
+func fetchLogs(ctx context.Context, ethclient *ethclient.Client, db *pgxpool.Pool, contractAddress string, startBlock, step, stepFactor, maxRetries uint64, logsch chan<- []types.Log, waitTime time.Duration) {
 	if stepFactor <= 0 {
 		log.Fatalf("stepFactor must be greater than 0")
 		return
@@ -65,14 +65,7 @@ func fetchLogs(ctx context.Context, ethclient *ethclient.Client, db *pgxpool.Poo
 					return
 				}
 				log.Printf("History: Fetched %d logs from block %d to %d", len(logsSlice), startIndex, endBlock)
-				for _, l := range logsSlice {
-					select {
-					case logsch <- l:
-					case <-ctx.Done():
-						log.Println("Context cancelled. Exiting fetchLogs.")
-						return
-					}
-				}
+				logsch <- logsSlice
 			}(i)
 		}
 		wg.Wait()
@@ -89,6 +82,7 @@ func fetchLogs(ctx context.Context, ethclient *ethclient.Client, db *pgxpool.Poo
 		log.Fatal(err)
 	}
 	startBlock = latestDBBlock + 1
+
 	for {
 		latestChainBlock, err := ethclient.BlockNumber(ctx)
 		if err != nil {
@@ -108,14 +102,7 @@ func fetchLogs(ctx context.Context, ethclient *ethclient.Client, db *pgxpool.Poo
 				return
 			}
 			log.Printf("Polling: Fetched %d logs from block %d to %d", len(logsSlice), startBlock, endBlock)
-			for _, l := range logsSlice {
-				select {
-				case logsch <- l:
-				case <-ctx.Done():
-					log.Println("Context cancelled. Exiting fetchLogs.")
-					return
-				}
-			}
+			logsch <- logsSlice
 
 			// Upsert last block number
 			updateLastBlock(ctx, db, endBlock)
