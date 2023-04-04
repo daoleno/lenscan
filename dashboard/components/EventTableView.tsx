@@ -11,7 +11,7 @@ import {
 } from "@tremor/react";
 import Link from "next/link";
 
-import { shortHash } from "@/lib/utils";
+import { age, shortHash } from "@/lib/utils";
 
 import { db } from "@/lib/postgrest";
 import { useState } from "react";
@@ -81,7 +81,7 @@ export default function EventTableView({
                     {item.blockNumber}
                   </Link>
                 </TableCell>
-                <TableCell>a few seconds ago</TableCell>
+                <TableCell>{age(item.timestamp)}</TableCell>
                 <TableCell>
                   <Link
                     href={`https://polygonscan.com/tx/${item.txHash}`}
@@ -102,7 +102,7 @@ export default function EventTableView({
                 </TableCell>
                 <TableCell>
                   <Badge size="xs" color="green">
-                    {item.event}
+                    {item.type}
                   </Badge>
                 </TableCell>
               </TableRow>

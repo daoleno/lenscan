@@ -1,6 +1,8 @@
 import Layout from "@/components/Layout";
 import { db } from "@/lib/postgrest";
+import { age } from "@/lib/utils";
 import { Badge, Card } from "@tremor/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
@@ -13,8 +15,6 @@ export default function Event() {
   if (!data || !data.data) return <div>Loading...</div>;
   const { data: event }: any = data;
 
-  console.log("event", event);
-
   return (
     <Layout>
       <h1 className="text-xl font-bold py-7">Event #{event.id}</h1>
@@ -23,66 +23,84 @@ export default function Event() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center">
               <label className="text-gray-500 basis-3/12">Block Number:</label>
-              <a
+              <Link
                 href={`https://polygonscan.com/block/${event.blockNumber}`}
                 target="_blank"
                 rel="noreferrer"
-                className="basis-9/12"
+                className="basis-9/12 text-blue-500 hover:text-blue-600"
               >
                 {event.blockNumber}
-              </a>
+              </Link>
             </div>
             <div className="flex items-center">
               <label className="text-gray-500 basis-3/12">
                 Transaction Hash:
               </label>
-              <a
+              <Link
                 href={`https://polygonscan.com/tx/${event.txHash}`}
                 target="_blank"
                 rel="noreferrer"
-                className="basis-9/12"
+                className="basis-9/12 text-blue-500 hover:text-blue-600"
               >
                 {event.txHash}
-              </a>
+              </Link>
             </div>
             <div className="flex items-center">
               <label className="text-gray-500 basis-3/12">
                 Transaction Index:
               </label>
-              <a
+              <Link
                 href={`https://polygonscan.com/tx/${event.txHash}`}
                 target="_blank"
                 rel="noreferrer"
-                className="basis-9/12"
+                className="basis-9/12 text-blue-500 hover:text-blue-600"
               >
                 {event.txIndex}
-              </a>
+              </Link>
             </div>
             <div className="flex items-center">
               <label className="text-gray-500 basis-3/12">Log Index:</label>
-              <a
+              <Link
                 href={`https://polygonscan.com/tx/${event.txHash}`}
                 target="_blank"
                 rel="noreferrer"
-                className="basis-9/12"
+                className="basis-9/12 text-blue-500 hover:text-blue-600"
               >
                 {event.logIndex}
-              </a>
+              </Link>
             </div>
           </div>
           <div className="flex items-center mt-4">
             <label className="text-gray-500 basis-3/12">Removed:</label>
             <span className="basis-9/12">{event.removed ? "Yes" : "No"}</span>
           </div>
+          <div className="flex items-center mt-4">
+            <label className="text-gray-500 basis-3/12">Timestamp:</label>
+            <span className="basis-9/12">{age(event.timestamp)}</span>
+          </div>
           <div className="flex mt-4">
             <label className="text-gray-500 basis-3/12">Event:</label>
             <div className="flex items-center basis-9/12">
               <Badge size="xs" color="green">
-                {event.event}
+                {event.type}
               </Badge>
             </div>
           </div>
         </div>
+      </Card>
+      <Card className="mt-3">
+        {event.data && (
+          <div className="flex flex-col gap-2 basis-9/12">
+            {Object.entries(event.data).map(([key, value]) => (
+              <div key={key} className="flex items-center">
+                <label className="text-gray-500 basis-3/12">{key}:</label>
+                <span className="basis-9/12">
+                  {value !== undefined ? String(value) : "-"}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </Card>
     </Layout>
   );

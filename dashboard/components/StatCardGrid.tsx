@@ -76,8 +76,6 @@ export default function StatCardGrid() {
     }
   }, [data]);
 
-  console.log(categories);
-
   return (
     <Grid numColsSm={2} numColsLg={3} className="mt-6 gap-6">
       {categories.map((item: any) => (
