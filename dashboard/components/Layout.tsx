@@ -1,3 +1,4 @@
+import { WithChildren } from "../types";
 import NavBar from "./Navbar";
 
 export default function Layout({ children }: WithChildren) {
