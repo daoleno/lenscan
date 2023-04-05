@@ -1,11 +1,11 @@
 import Layout from "@/components/Layout";
-import ProfileTableView from "@/components/ProfileTableView";
+import ProfilesTableView from "@/components/ProfilesTableView";
 
 export default function Profiles() {
   return (
     <Layout>
       <div className="mt-6">
-        <ProfileTableView />
+        <ProfilesTableView />
       </div>
     </Layout>
   );
