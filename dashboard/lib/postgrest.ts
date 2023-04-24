@@ -24,6 +24,14 @@ export const db = {
       .eq("data->>ProfileId", profileId)
       .order("id", { ascending: false })
       .range(start, end),
+
+  Publications: (start: number, end: number) =>
+    postgrest
+      .from("Event")
+      .select("*", { count: "planned" })
+      .in("type", ["PostCreated", "CommentCreated", "MirrorCreated"])
+      .order("id", { ascending: false })
+      .range(start, end),
 };
 
 export default postgrest;

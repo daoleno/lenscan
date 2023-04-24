@@ -16,7 +16,6 @@
     "@lens-protocol/client": "^0.2.0",
     "@lens-protocol/react-web": "^0.6.0",
     "@lens-protocol/wagmi": "^0.6.0",
-    "@next/font": "13.1.6",
     "@supabase/postgrest-js": "^1.4.1",
     "@tremor/react": "^2.0.0",
     "@types/node": "18.13.0",

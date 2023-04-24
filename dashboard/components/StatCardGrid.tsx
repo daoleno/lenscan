@@ -1,14 +1,17 @@
-import { Card, Color, Flex, Grid, Icon, Metric, Text } from "@tremor/react";
+import { Color } from "@tremor/react";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import lensClient from "@/lib/lensclient";
 import {
-  ChatBubbleLeftEllipsisIcon,
-  ChatBubbleLeftRightIcon,
-  ClipboardDocumentIcon,
-  RectangleStackIcon,
-  UserGroupIcon,
-  UserPlusIcon,
-} from "@heroicons/react/24/solid";
+  Copy,
+  Flame,
+  Layers,
+  MessageSquare,
+  Scroll,
+  UserPlus,
+  Users,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -27,45 +30,45 @@ export default function StatCardGrid() {
       {
         title: "Profiles",
         metric: stats.totalProfiles.toString(),
-        icon: UserGroupIcon, // replace with your own icon component
-        color: "blue", // replace with your desired color
+        icon: <Users />, // replace with your own icon component
+        color: "bg-blue-100", // replace with your desired color
       },
       {
         title: "Posts",
         metric: stats.totalPosts.toString(),
-        icon: ChatBubbleLeftEllipsisIcon,
-        color: "green",
+        icon: <Scroll />,
+        color: "bg-green-100",
       },
       {
         title: "Follows",
         metric: stats.totalFollows.toString(),
-        icon: UserPlusIcon,
-        color: "yellow",
+        icon: <UserPlus />,
+        color: "bg-yellow-100",
       },
       {
         title: "Collects",
         metric: stats.totalCollects.toString(),
-        icon: RectangleStackIcon,
-        color: "purple",
+        icon: <Layers />,
+        color: "bg-purple-100",
       },
       {
         title: "Mirrors",
         metric: stats.totalMirrors.toString(),
-        icon: ClipboardDocumentIcon,
-        color: "red",
+        icon: <Copy />,
+        color: "bg-red-100",
       },
       {
         title: "Comments",
         metric: stats.totalComments.toString(),
-        icon: ChatBubbleLeftRightIcon,
-        color: "orange",
+        icon: <MessageSquare />,
+        color: "bg-orange-100",
       },
-      // {
-      //   title: "Burnt Profiles",
-      //   metric: stats.totalBurntProfiles.toString(),
-      //   icon: FireIcon,
-      //   color: "teal",
-      // },
+      {
+        title: "Burnt Profiles",
+        metric: stats.totalBurntProfiles.toString(),
+        icon: <Flame />,
+        color: "bg-teal-100",
+      },
     ];
     return categories as Categories;
   });
@@ -77,23 +80,24 @@ export default function StatCardGrid() {
   }, [data]);
 
   return (
-    <Grid numColsSm={2} numColsLg={3} className="mt-6 gap-6">
-      {categories.map((item: any) => (
-        <Card key={item.title} decoration="top" decorationColor={item.color}>
-          <Flex justifyContent="start" className="space-x-4">
-            <Icon
-              icon={item.icon}
-              variant="light"
-              size="xl"
-              color={item.color}
-            />
-            <div className="truncate">
-              <Text>{item.title}</Text>
-              <Metric className="truncate">{item.metric}</Metric>
-            </div>
-          </Flex>
-        </Card>
-      ))}
-    </Grid>
+    <>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {categories.map((category) => (
+          <Card key={category.title}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {category.title}
+              </CardTitle>
+              <div className="h-4 w-4 text-muted-foreground">
+                {category.icon}
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{category.metric}</div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </>
   );
 }
