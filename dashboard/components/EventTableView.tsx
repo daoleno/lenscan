@@ -1,6 +1,5 @@
 import { Event } from "@/types";
 import {
-  Badge,
   Card,
   Table,
   TableBody,
@@ -17,6 +16,7 @@ import { db } from "@/lib/postgrest";
 import { useState } from "react";
 import useSWR from "swr";
 import Pagination from "./Pagination";
+import { Badge } from "./ui/badge";
 
 export default function EventTableView({
   showPagination = true,
@@ -45,8 +45,26 @@ export default function EventTableView({
     setRange([(page - 1) * 25, page * 25]);
   }
 
+  const eventTypes = [
+    "Followed",
+    "PostCreated",
+    "CommentCreated",
+    "MirrorCreated",
+    "Collected",
+  ];
+
   return (
-    <div className="mt-6">
+    <div>
+      <div className="flex flex-col justify-between space-y-7 pb-7">
+        <h2 className="text-3xl font-bold tracking-tight">Events</h2>
+        <div className="flex space-x-2">
+          {eventTypes.map((type) => (
+            <Badge key={type} variant="outline">
+              {type}
+            </Badge>
+          ))}
+        </div>
+      </div>
       <Card>
         <Table>
           <TableHead>
@@ -67,7 +85,7 @@ export default function EventTableView({
                   <Link
                     href={`/events/${item.id}`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {item.id}
                   </Link>
@@ -76,7 +94,7 @@ export default function EventTableView({
                   <Link
                     href={`https://polygonscan.com/block/${item.blockNumber}`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {item.blockNumber}
                   </Link>
@@ -86,7 +104,7 @@ export default function EventTableView({
                   <Link
                     href={`https://polygonscan.com/tx/${item.txHash}`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {shortHash(item.txHash!)}
                   </Link>
@@ -95,15 +113,13 @@ export default function EventTableView({
                   <Link
                     href={`https://polygonscan.com/tx/${item.txHash}#eventlog`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {item.logIndex}
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <Badge size="xs" color="green">
-                    {item.type}
-                  </Badge>
+                  <Badge variant={"outline"}>{item.type}</Badge>
                 </TableCell>
               </TableRow>
             ))}

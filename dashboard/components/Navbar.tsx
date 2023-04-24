@@ -7,7 +7,7 @@ function classNames(...classes: any) {
 
 export default function NavBar() {
   return (
-    <div className="flex h-16 justify-between">
+    <div className="flex h-14 items-center ">
       <div className="flex px-2 lg:px-0">
         <div className="flex flex-shrink-0 items-center text-md font-bold text-gray-900">
           🎄 Lenscan

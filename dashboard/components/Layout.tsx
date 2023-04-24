@@ -1,11 +1,19 @@
 import { WithChildren } from "../types";
-import NavBar from "./Navbar";
+
+import { fontSans } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
+import { SiteHeader } from "./site-header";
 
 export default function Layout({ children }: WithChildren) {
   return (
-    <main className="bg-slate-50 p-6 sm:p-10">
-      <NavBar />
-      <section>{children}</section>
+    <main
+      className={cn(
+        "min-h-screen bg-background font-sans antialiased relative pb-10",
+        fontSans.variable
+      )}
+    >
+      <SiteHeader />
+      <section className="container space-y-8">{children}</section>
     </main>
   );
 }
