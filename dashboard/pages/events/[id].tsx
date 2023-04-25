@@ -1,9 +1,11 @@
 import Layout from "@/components/Layout";
 import { Loading } from "@/components/loading";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { Tip } from "@/components/tip";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { db } from "@/lib/postgrest";
 import { age } from "@/lib/utils";
+import { definitions } from "@/types/generated-types";
+import { HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -21,91 +23,105 @@ export default function Event() {
       </Layout>
     );
   const { data: event }: any = data;
+  const eventFields = [
+    {
+      label: "Block Number:",
+      tip: "The block number in which the event was emitted.",
+      href: (event: definitions["Event"]) =>
+        `https://polygonscan.com/block/${event.blockNumber}`,
+      text: (event: definitions["Event"]) => event.blockNumber,
+    },
+    {
+      label: "Transaction Hash:",
+      tip: "The transaction hash in which the event was emitted.",
+      href: (event: definitions["Event"]) =>
+        `https://polygonscan.com/tx/${event.txHash}`,
+      text: (event: definitions["Event"]) => event.txHash,
+    },
+    {
+      label: "Transaction Index:",
+      tip: "The transaction index in which the event was emitted.",
+      href: (event: definitions["Event"]) =>
+        `https://polygonscan.com/tx/${event.txHash}`,
+      text: (event: definitions["Event"]) => event.txIndex,
+    },
+    {
+      label: "Log Index:",
+      tip: "The log index in which the event was emitted.",
+      href: (event: definitions["Event"]) =>
+        `https://polygonscan.com/tx/${event.txHash}`,
+      text: (event: definitions["Event"]) => event.logIndex,
+    },
+    {
+      label: "Removed:",
+      tip: "Whether the event was removed from the blockchain.",
+      text: (event: definitions["Event"]) => (event.removed ? "Yes" : "No"),
+    },
+    {
+      label: "Timestamp:",
+      tip: "The timestamp in which the event was emitted.",
+      text: (event: definitions["Event"]) => age(event.timestamp),
+    },
+    {
+      label: "Event:",
+      tip: "The type of event emitted.",
+      text: (event: definitions["Event"]) => event.type,
+    },
+  ];
 
   return (
     <Layout>
       <h1 className="text-xl font-bold py-7">Event #{event.id}</h1>
       <Card>
-        <div className="flex flex-col">
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center">
-              <label className="text-gray-500 basis-3/12">Block Number:</label>
-              <Link
-                href={`https://polygonscan.com/block/${event.blockNumber}`}
-                target="_blank"
-                rel="noreferrer"
-                className="basis-9/12 text-blue-500 hover:text-blue-600"
-              >
-                {event.blockNumber}
-              </Link>
-            </div>
-            <div className="flex items-center">
-              <label className="text-gray-500 basis-3/12">
-                Transaction Hash:
-              </label>
-              <Link
-                href={`https://polygonscan.com/tx/${event.txHash}`}
-                target="_blank"
-                rel="noreferrer"
-                className="basis-9/12 text-blue-500 hover:text-blue-600"
-              >
-                {event.txHash}
-              </Link>
-            </div>
-            <div className="flex items-center">
-              <label className="text-gray-500 basis-3/12">
-                Transaction Index:
-              </label>
-              <Link
-                href={`https://polygonscan.com/tx/${event.txHash}`}
-                target="_blank"
-                rel="noreferrer"
-                className="basis-9/12 text-blue-500 hover:text-blue-600"
-              >
-                {event.txIndex}
-              </Link>
-            </div>
-            <div className="flex items-center">
-              <label className="text-gray-500 basis-3/12">Log Index:</label>
-              <Link
-                href={`https://polygonscan.com/tx/${event.txHash}`}
-                target="_blank"
-                rel="noreferrer"
-                className="basis-9/12 text-blue-500 hover:text-blue-600"
-              >
-                {event.logIndex}
-              </Link>
+        <CardHeader className="font-semibold">Transaction Details</CardHeader>
+        <CardContent className="flex flex-col">
+          <div className="flex flex-col">
+            <div className="flex flex-col gap-4">
+              {eventFields.map((field, index) => (
+                <div className="flex items-center" key={index}>
+                  <Tip text={field.tip}>
+                    <HelpCircle className="text-gray-500 h-4" />
+                  </Tip>
+                  <label className="text-gray-500 basis-3/12">
+                    {field.label}
+                  </label>
+                  {field.href ? (
+                    <Link
+                      href={field.href(event)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="basis-9/12 underline underline-offset-4"
+                    >
+                      {field.text(event)}
+                    </Link>
+                  ) : (
+                    <span className="basis-9/12">{field.text(event)}</span>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
-          <div className="flex items-center mt-4">
-            <label className="text-gray-500 basis-3/12">Removed:</label>
-            <span className="basis-9/12">{event.removed ? "Yes" : "No"}</span>
-          </div>
-          <div className="flex items-center mt-4">
-            <label className="text-gray-500 basis-3/12">Timestamp:</label>
-            <span className="basis-9/12">{age(event.timestamp)}</span>
-          </div>
-          <div className="flex mt-4">
-            <label className="text-gray-500 basis-3/12">Event:</label>
-            <div className="flex items-center basis-9/12">
-              <Badge variant={"outline"}>{event.type}</Badge>
-            </div>
-          </div>
-        </div>
+        </CardContent>
       </Card>
       <Card className="mt-3">
-        {event.data && (
-          <div className="flex flex-col gap-2 basis-9/12">
-            {Object.entries(event.data).map(([key, value]) => (
-              <div key={key} className="flex items-center">
-                <label className="text-gray-500 basis-3/12">{key}:</label>
-                <span className="basis-9/12">
-                  {value !== undefined ? String(value) : "-"}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+        <CardHeader className="font-semibold">Event Data</CardHeader>
+        <CardContent>
+          {event.data && (
+            <div className="flex flex-col gap-2 basis-9/12">
+              {Object.entries(event.data).map(([key, value]) => (
+                <div key={key} className="flex items-center">
+                  <Tip text={key}>
+                    <HelpCircle className="text-gray-500 h-4" />
+                  </Tip>
+                  <label className="text-gray-500 basis-3/12">{key}:</label>
+                  <span className="basis-9/12">
+                    {value !== undefined ? String(value) : "-"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
       </Card>
     </Layout>
   );
