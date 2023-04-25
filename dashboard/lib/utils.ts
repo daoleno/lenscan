@@ -16,3 +16,10 @@ export function age(ts: number | undefined | null) {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function formatNumber(n: number | string) {
+  const formatter = new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 2,
+  });
+  return formatter.format(Number(n));
+}

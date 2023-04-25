@@ -3,6 +3,7 @@ import { Color } from "@tremor/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import lensClient from "@/lib/lensclient";
+import { formatNumber } from "@/lib/utils";
 import {
   Copy,
   Flame,
@@ -93,7 +94,9 @@ export default function StatCardGrid() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{category.metric}</div>
+              <div className="text-2xl font-bold">
+                {formatNumber(category.metric)}
+              </div>
             </CardContent>
           </Card>
         ))}
