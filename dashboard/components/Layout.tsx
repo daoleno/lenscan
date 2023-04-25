@@ -13,7 +13,7 @@ export default function Layout({ children }: WithChildren) {
       )}
     >
       <SiteHeader />
-      <section className="container space-y-8">{children}</section>
+      <section className="container">{children}</section>
     </main>
   );
 }

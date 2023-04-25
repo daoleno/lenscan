@@ -1,8 +1,9 @@
 import Layout from "@/components/Layout";
 import { Loading } from "@/components/loading";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { db } from "@/lib/postgrest";
 import { age } from "@/lib/utils";
-import { Badge, Card } from "@tremor/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -13,7 +14,12 @@ export default function Event() {
     return await db.Event(parseInt(id as string));
   });
   if (error) return <div>Error: {error.message} </div>;
-  if (!data || !data.data) return <Loading />;
+  if (!data || !data.data)
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
   const { data: event }: any = data;
 
   return (
@@ -82,9 +88,7 @@ export default function Event() {
           <div className="flex mt-4">
             <label className="text-gray-500 basis-3/12">Event:</label>
             <div className="flex items-center basis-9/12">
-              <Badge size="xs" color="green">
-                {event.type}
-              </Badge>
+              <Badge variant={"outline"}>{event.type}</Badge>
             </div>
           </div>
         </div>
