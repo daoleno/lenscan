@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import useSWR from "swr";
 import Pagination from "./Pagination";
+import { Loading } from "./loading";
 
 export default function PublicationsTableView({
   showPagination = true,
@@ -28,7 +29,7 @@ export default function PublicationsTableView({
   const [currentPage, setCurrentPage] = useState(1);
 
   if (error) return <div>Error: {error.message}</div>;
-  if (!data || !data.data) return <div>Loading...</div>;
+  if (!data || !data.data) return <Loading />;
   const { data: events, count }: any = data;
 
   console.log("events(pub)", events);

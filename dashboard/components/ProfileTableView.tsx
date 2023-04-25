@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@tremor/react";
 import Link from "next/link";
+import { Loading } from "./loading";
 
 import { age, shortHash } from "@/lib/utils";
 
@@ -49,7 +50,7 @@ export default function ProfileTableView({
   const [currentPage, setCurrentPage] = useState(1);
 
   if (error) return <div>Error: {error.message}</div>;
-  if (!data || !data.data) return <div>Loading...</div>;
+  if (!data || !data.data) return <Loading />;
   const { data: events, count }: any = data;
 
   function handlePageChange(page: number) {

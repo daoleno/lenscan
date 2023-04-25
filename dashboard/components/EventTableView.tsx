@@ -16,6 +16,7 @@ import { db } from "@/lib/postgrest";
 import { useState } from "react";
 import useSWR from "swr";
 import Pagination from "./Pagination";
+import { Loading } from "./loading";
 import { Badge } from "./ui/badge";
 
 export default function EventTableView({
@@ -37,7 +38,7 @@ export default function EventTableView({
   const [currentPage, setCurrentPage] = useState(1);
 
   if (error) return <div>Error: {error.message}</div>;
-  if (!data || !data.data) return <div>Loading...</div>;
+  if (!data || !data.data) return <Loading />;
   const { data: events, count }: any = data;
 
   function handlePageChange(page: number) {

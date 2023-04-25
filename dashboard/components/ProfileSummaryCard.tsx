@@ -1,6 +1,7 @@
 import { Color } from "@tremor/react";
 
 import { useProfile } from "@lens-protocol/react-web";
+import { Loading } from "./loading";
 
 type Categories = {
   title: string;
@@ -16,9 +17,9 @@ export default function ProfileSummaryCard({
 }) {
   const { data: profile, loading, error } = useProfile({ profileId });
   console.log("profile", profile);
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading />;
   if (error) return <div>Error: {error.message} </div>;
-  if (!profile) return <div>Loading...</div>;
+  if (!profile) return <Loading />;
 
   return (
     <div className="bg-gray-200 p-4 rounded-lg">

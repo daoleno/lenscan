@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import { Loading } from "@/components/loading";
 import { db } from "@/lib/postgrest";
 import { age } from "@/lib/utils";
 import { Badge, Card } from "@tremor/react";
@@ -12,7 +13,7 @@ export default function Event() {
     return await db.Event(parseInt(id as string));
   });
   if (error) return <div>Error: {error.message} </div>;
-  if (!data || !data.data) return <div>Loading...</div>;
+  if (!data || !data.data) return <Loading />;
   const { data: event }: any = data;
 
   return (

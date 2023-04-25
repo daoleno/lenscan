@@ -10,12 +10,13 @@ import {
 import Link from "next/link";
 
 import { ProfileFragment, useExploreProfiles } from "@lens-protocol/react-web";
+import { Loading } from "./loading";
 
 export default function ProfilesTableView() {
   const { data: profiles, loading, error } = useExploreProfiles({ limit: 30 });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (error) {
