@@ -3,8 +3,8 @@ import type { definitions } from "@/types/generated-types";
 import { PostgrestClient } from "@supabase/postgrest-js";
 
 // Create a single postgrest client for interacting with database
-// const postgrest = new PostgrestClient<definitions>("https://api.lenscan.io");
-const postgrest = new PostgrestClient<definitions>("http://localhost:3000");
+const lenscanApi = process.env.NEXT_PUBLIC_LENSCAN_API as string;
+const postgrest = new PostgrestClient<definitions>(lenscanApi);
 
 export const db = {
   Events: (start: number, end: number) =>
