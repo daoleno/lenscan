@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import { Loading } from "@/components/loading";
 import { Tip } from "@/components/tip";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { db } from "@/lib/postgrest";
 import { age } from "@/lib/utils";
@@ -65,7 +66,9 @@ export default function Event() {
     {
       label: "Event:",
       tip: "The type of event emitted.",
-      text: (event: definitions["Event"]) => event.type,
+      text: (event: definitions["Event"]) => (
+        <Badge variant={"outline"}>{event.type}</Badge>
+      ),
     },
   ];
 

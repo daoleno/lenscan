@@ -1,6 +1,5 @@
 import { Event } from "@/types";
 import {
-  Badge,
   Card,
   Table,
   TableBody,
@@ -11,6 +10,7 @@ import {
 } from "@tremor/react";
 import Link from "next/link";
 import { Loading } from "./loading";
+import { Badge } from "./ui/badge";
 
 import { age, shortHash } from "@/lib/utils";
 
@@ -80,7 +80,7 @@ export default function ProfileTableView({
                   <Link
                     href={`/events/${item.id}`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {item.id}
                   </Link>
@@ -89,7 +89,7 @@ export default function ProfileTableView({
                   <Link
                     href={`https://polygonscan.com/block/${item.blockNumber}`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {item.blockNumber}
                   </Link>
@@ -99,7 +99,7 @@ export default function ProfileTableView({
                   <Link
                     href={`https://polygonscan.com/tx/${item.txHash}`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {shortHash(item.txHash!)}
                   </Link>
@@ -108,15 +108,13 @@ export default function ProfileTableView({
                   <Link
                     href={`https://polygonscan.com/tx/${item.txHash}#eventlog`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {item.logIndex}
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <Badge size="xs" color="green">
-                    {item.type}
-                  </Badge>
+                  <Badge variant={"outline"}>{item.type}</Badge>
                 </TableCell>
               </TableRow>
             ))}

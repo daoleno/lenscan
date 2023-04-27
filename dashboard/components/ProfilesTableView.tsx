@@ -28,7 +28,10 @@ export default function ProfilesTableView() {
   }
 
   return (
-    <div className="mt-6">
+    <div>
+      <div className="flex flex-col justify-between space-y-7 pb-7">
+        <h2 className="text-3xl font-bold tracking-tight">Profiles</h2>
+      </div>
       <Card>
         <Table>
           <TableHead>
@@ -49,7 +52,7 @@ export default function ProfilesTableView() {
                   <Link
                     href={`/profiles/${item.id}`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {item.id}
                   </Link>
@@ -61,7 +64,7 @@ export default function ProfilesTableView() {
                     <Link
                       href={`https://app.ens.domains/name/${item.onChainIdentity.ens.name}`}
                       target="_blank"
-                      className="text-blue-500 hover:text-blue-600"
+                      className="font-medium underline underline-offset-4"
                     >
                       {String(item.onChainIdentity.ens.name)}
                     </Link>

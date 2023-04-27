@@ -2,7 +2,10 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import * as timeago from "timeago.js";
 
-export function shortHash(hash: string, length = 10) {
+export function shortHash(hash: string | undefined, length = 10) {
+  if (!hash) {
+    return "-";
+  }
   return `${hash.slice(0, length)}...`;
 }
 
