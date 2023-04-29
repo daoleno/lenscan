@@ -45,12 +45,10 @@ export default function ProfileTableView({
     // }
   );
 
-  console.log("data", data);
-
   const [currentPage, setCurrentPage] = useState(1);
 
   if (error) return <div>Error: {error.message}</div>;
-  if (!data || !data.data) return <Loading />;
+  if (!data || !data.data) return <Loading fixed={false} />;
   const { data: events, count }: any = data;
 
   function handlePageChange(page: number) {

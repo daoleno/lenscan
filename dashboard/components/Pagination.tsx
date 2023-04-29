@@ -18,7 +18,7 @@ export default function Pagination({
   const totalPages = Math.ceil(totalResults / resultsPerPage);
 
   return (
-    <Card>
+    <Card className="mt-3">
       <div className="flex flex-1 items-center justify-between">
         <div>
           <p className="text-sm text-gray-700">

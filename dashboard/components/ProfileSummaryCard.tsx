@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import Balance from "react-wrap-balancer";
 
 import { formatNumber, shortHash } from "@/lib/utils";
-import { useProfile } from "@lens-protocol/react-web";
+import { ProfileFragment } from "@lens-protocol/api-bindings";
 import {
   CheckCircle2,
   Fingerprint,
@@ -12,19 +11,15 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Loading } from "./loading";
+import Balance from "react-wrap-balancer";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export default function ProfileSummaryCard({
-  profileId,
+  profile,
 }: {
-  profileId: string;
+  profile: ProfileFragment;
 }) {
-  const { data: profile, loading, error } = useProfile({ profileId });
-  console.log("profile", profile);
-  if (error) return <div>Error: {error.message} </div>;
-  if (!profile) return <Loading />;
-
+  if (!profile) return null;
   return (
     <>
       <div>
@@ -40,7 +35,7 @@ export default function ProfileSummaryCard({
           )}
         </div>
         <div className="flex sm:flex-row flex-col">
-          <div className="flex flex-col -mt-16 sm:w-1/2">
+          <div className="flex flex-col -mt-16 sm:w-1/2 ">
             <div className="flex px-5 mb-5">
               {profile.picture ? (
                 <img
@@ -108,11 +103,20 @@ export default function ProfileSummaryCard({
             {profile.__attributes!.map(
               ({ key, value }) =>
                 value !== "[]" && (
-                  <div key={key} className="flex flex-col space-y-1">
-                    <span className="text-sm font-medium text-gray-600 uppercase">
+                  <div
+                    key={key}
+                    className="flex flex-col space-y-1 font-medium"
+                  >
+                    <span className="text-sm text-gray-600 uppercase">
                       {key.replace(/([a-z])([A-Z])/g, "$1 $2")}
                     </span>
-                    <span className="font-medium">{value}</span>
+                    {key.toLocaleLowerCase().includes("website") ? (
+                      <Link href={value}>{value} </Link>
+                    ) : key.toLocaleLowerCase().includes("twitter") ? (
+                      <Link href={`https://twitter.com/${value}`}>{value}</Link>
+                    ) : (
+                      <span>{value}</span>
+                    )}
                   </div>
                 )
             )}
@@ -200,7 +204,6 @@ export default function ProfileSummaryCard({
   );
 }
 
-// url: ipfs://bafybeiewog3iscltj6uvus6iut5kerbbkyxovjhvnikrc4luy5sap6w3zu
 const ipfsGateway = "https://lens.infura-ipfs.io";
 function getIPFSURL(picture: any) {
   let url = "";

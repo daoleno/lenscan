@@ -5,8 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Badge } from "./ui/badge";
 
-// import { Icons } from "@/components/icons"
-
 const items = [
   {
     name: "Dashboard",
@@ -34,7 +32,6 @@ export function MainNav({
   return (
     <div className={cn("mr-4 hidden md:flex", className)} {...props}>
       <Link href="/" className="mr-6 flex items-center space-x-2">
-        {/* <Icons.logo className="h-6 w-6" /> */}
         <Leaf className="h-6 w-6" />
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
