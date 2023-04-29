@@ -1,6 +1,5 @@
 import Layout from "@/components/Layout";
-import ProfileSummaryCard from "@/components/ProfileSummaryCard";
-import ProfileTableView from "@/components/ProfileTableView";
+import Publication from "@/components/publication";
 import { useRouter } from "next/router";
 
 export default function Event() {
@@ -8,9 +7,7 @@ export default function Event() {
 
   return (
     <Layout>
-      <ProfileSummaryCard profileId={id as string} />
-      {/* <ProfileStatCardGrid profileId={id as string} /> */}
-      <ProfileTableView profileId={id as string} />
+      <Publication id={id as string} />
     </Layout>
   );
 }

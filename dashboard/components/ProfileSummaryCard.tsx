@@ -66,14 +66,11 @@ export default function ProfileSummaryCard({
           <div className="grid grid-cols-3 gap-6 sm:grid-cols-2 lg:grid-cols-4 py-7 sm:w-1/2">
             {Object.entries(profile.stats)
               .filter(
-                ([key, value]) =>
-                  key === "totalCollects" ||
-                  key === "totalComments" ||
-                  key === "totalFollowers" ||
-                  key === "totalFollowing" ||
-                  key === "totalMirrors" ||
-                  key === "totalPosts" ||
-                  key === "totalPublications"
+                ([key]) =>
+                  !key.startsWith("__") &&
+                  key !== "commentsCount" &&
+                  key !== "postsCount" &&
+                  key !== "mirrorsCount"
               )
               .map(([key, value]) => (
                 <Card key={key} className="rounded-xl overflow-scroll">

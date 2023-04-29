@@ -1,4 +1,4 @@
-import ProfileNotFound from "@/components/404";
+import NotFound from "@/components/404";
 import Layout from "@/components/Layout";
 import ProfileSummaryCard from "@/components/ProfileSummaryCard";
 import ProfileTableView from "@/components/ProfileTableView";
@@ -43,11 +43,19 @@ export default function Profile() {
   }
 
   if (!hasProfile) {
-    return <ProfileNotFound />;
+    return (
+      <Layout>
+        <NotFound type="Profile" />
+      </Layout>
+    );
   }
 
   if (error) {
-    return <Error msg={error.message} />;
+    return (
+      <Layout>
+        <Error msg={error.message} />
+      </Layout>
+    );
   }
 
   return (

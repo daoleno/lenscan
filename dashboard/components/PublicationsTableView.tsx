@@ -1,15 +1,22 @@
 import { db } from "@/lib/postgrest";
+import { age, shortHash } from "@/lib/utils";
+import { definitions } from "@/types/generated-types";
 import {
   Card,
   Table,
+  TableBody,
+  TableCell,
   TableHead,
   TableHeaderCell,
   TableRow,
 } from "@tremor/react";
+import { ethers } from "ethers";
+import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
 import Pagination from "./Pagination";
 import { Loading } from "./loading";
+import { Badge } from "./ui/badge";
 
 export default function PublicationsTableView({
   showPagination = true,
@@ -41,51 +48,81 @@ export default function PublicationsTableView({
 
   return (
     <div className="mt-6">
+      <div className="flex flex-col justify-between space-y-7 pb-7">
+        <h2 className="text-3xl font-bold tracking-tight">Publications</h2>
+      </div>
       <Card>
         <Table>
           <TableHead>
             <TableRow>
               <TableHeaderCell>Id</TableHeaderCell>
-              <TableHeaderCell>Name</TableHeaderCell>
-              <TableHeaderCell>Handle</TableHeaderCell>
-              <TableHeaderCell>ENS</TableHeaderCell>
-              <TableHeaderCell>Total Followers</TableHeaderCell>
-              <TableHeaderCell>Total Publications</TableHeaderCell>
+              <TableHeaderCell>Profile Id</TableHeaderCell>
+              <TableHeaderCell>Pub Id</TableHeaderCell>
+              <TableHeaderCell>block</TableHeaderCell>
+              <TableHeaderCell>Age</TableHeaderCell>
+              <TableHeaderCell>Txn Hash</TableHeaderCell>
+              <TableHeaderCell>type</TableHeaderCell>
             </TableRow>
           </TableHead>
 
-          {/* <TableBody>
-            {events.map((item: Event) => (
+          <TableBody>
+            {events?.map((item: definitions["Event"]) => (
               <TableRow key={item.id}>
                 <TableCell>
                   <Link
-                    href={`/publications/${item.id}`}
+                    href={`/events/${item.id}`}
                     target="_blank"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="font-medium underline underline-offset-4"
                   >
                     {item.id}
                   </Link>
                 </TableCell>
-                <TableCell>{item.name ?? "-"}</TableCell>
-                <TableCell>{item.handle}</TableCell>
                 <TableCell>
-                  {item.onChainIdentity.ens?.name ? (
-                    <Link
-                      href={`https://app.ens.domains/name/${item.onChainIdentity.ens.name}`}
-                      target="_blank"
-                      className="text-blue-500 hover:text-blue-600"
-                    >
-                      {String(item.onChainIdentity.ens.name)}
-                    </Link>
-                  ) : (
-                    "-"
-                  )}
+                  <Link
+                    href={`/profiles/${ethers.utils.hexlify(
+                      (item.data as any)?.ProfileId
+                    )}`}
+                    className="font-medium underline underline-offset-4"
+                  >
+                    {(item.data as any)?.ProfileId || "-"}
+                  </Link>
                 </TableCell>
-                <TableCell>{item.stats.totalFollowers}</TableCell>
-                <TableCell>{item.stats.totalPublications}</TableCell>
+                <TableCell>
+                  <Link
+                    href={`/publications/${ethers.utils.hexlify(
+                      (item.data as any)?.ProfileId
+                    )}-${ethers.utils.hexlify((item.data as any)?.PubId)}`}
+                    className="font-medium underline underline-offset-4"
+                  >
+                    {(item.data as any)?.PubId || "-"}
+                  </Link>
+                </TableCell>
+
+                <TableCell>
+                  <Link
+                    href={`https://polygonscan.com/block/${item.blockNumber}`}
+                    target="_blank"
+                    className="font-medium underline underline-offset-4"
+                  >
+                    {item.blockNumber}
+                  </Link>
+                </TableCell>
+                <TableCell>{age(item.timestamp)}</TableCell>
+                <TableCell>
+                  <Link
+                    href={`https://polygonscan.com/tx/${item.txHash}`}
+                    target="_blank"
+                    className="font-medium underline underline-offset-4"
+                  >
+                    {shortHash(item.txHash!)}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={"outline"}>{item.type}</Badge>
+                </TableCell>
               </TableRow>
             ))}
-          </TableBody> */}
+          </TableBody>
         </Table>
       </Card>
       {showPagination && (
