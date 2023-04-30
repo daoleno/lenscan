@@ -1,7 +1,9 @@
 import { usePublication } from "@lens-protocol/react-web";
 import NotFound from "./404";
 import Comment from "./comment";
+import DynamicReactJson from "./dynamic-react-json";
 import { Loading } from "./loading";
+import Mirror from "./mirror";
 import Post from "./post";
 ("lucide-react");
 
@@ -25,7 +27,11 @@ export default function Publication({ id }: { id: string }) {
         <Post post={pub} />
       ) : pub?.__typename === "Comment" ? (
         <Comment comment={pub} />
-      ) : null}
+      ) : pub?.__typename === "Mirror" ? (
+        <Mirror mirror={pub} />
+      ) : (
+        <DynamicReactJson src={pub} />
+      )}
     </>
   );
 }

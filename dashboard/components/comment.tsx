@@ -7,13 +7,11 @@ import {
   Focus,
   XCircle,
 } from "lucide-react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
+import DynamicReactJson from "./dynamic-react-json";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 ("lucide-react");
-
-const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
 export default function Comment({ comment }: { comment: CommentFragment }) {
   const overviewItems = [
