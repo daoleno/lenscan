@@ -121,7 +121,7 @@ function PostCard({ post }: { post: PostFragment }) {
           <Badge>{post.__typename}</Badge>
           <span className=""> @ </span>
           <Link
-            href={`/profiles/${post.profile.handle}`}
+            href={`/profile/${post.profile.handle}`}
             className="font-bold underline underline-offset-4"
           >
             {post.profile.handle}
@@ -204,7 +204,7 @@ function PostCard({ post }: { post: PostFragment }) {
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg">
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle>Metadata</CardTitle>
             <FileText />

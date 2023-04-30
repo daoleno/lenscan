@@ -84,7 +84,7 @@ export default function EventTableView({
               <TableRow key={item.id}>
                 <TableCell>
                   <Link
-                    href={`/events/${item.id}`}
+                    href={`/event/${item.id}`}
                     target="_blank"
                     className="font-medium underline underline-offset-4"
                   >

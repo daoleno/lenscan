@@ -57,7 +57,6 @@ export default function PublicationsTableView({
             <TableRow>
               <TableHeaderCell>Id</TableHeaderCell>
               <TableHeaderCell>Profile Id</TableHeaderCell>
-              <TableHeaderCell>Pub Id</TableHeaderCell>
               <TableHeaderCell>block</TableHeaderCell>
               <TableHeaderCell>Age</TableHeaderCell>
               <TableHeaderCell>Txn Hash</TableHeaderCell>
@@ -70,31 +69,23 @@ export default function PublicationsTableView({
               <TableRow key={item.id}>
                 <TableCell>
                   <Link
-                    href={`/events/${item.id}`}
-                    target="_blank"
+                    href={`/publication/${ethers.utils.hexlify(
+                      (item.data as any)?.ProfileId
+                    )}-${ethers.utils.hexlify((item.data as any)?.PubId)}`}
                     className="font-medium underline underline-offset-4"
                   >
-                    {item.id}
+                    {ethers.utils.hexlify((item.data as any)?.ProfileId)}-
+                    {ethers.utils.hexlify((item.data as any)?.PubId)}
                   </Link>
                 </TableCell>
                 <TableCell>
                   <Link
-                    href={`/profiles/${ethers.utils.hexlify(
+                    href={`/profile/${ethers.utils.hexlify(
                       (item.data as any)?.ProfileId
                     )}`}
                     className="font-medium underline underline-offset-4"
                   >
                     {(item.data as any)?.ProfileId || "-"}
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Link
-                    href={`/publications/${ethers.utils.hexlify(
-                      (item.data as any)?.ProfileId
-                    )}-${ethers.utils.hexlify((item.data as any)?.PubId)}`}
-                    className="font-medium underline underline-offset-4"
-                  >
-                    {(item.data as any)?.PubId || "-"}
                   </Link>
                 </TableCell>
 

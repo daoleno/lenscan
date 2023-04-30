@@ -7,7 +7,7 @@ export function Search() {
   const router = useRouter();
   const handleSearch = () => {
     if (input === "") return;
-    router.push(`/profiles/${input}`);
+    router.push(`/profile/${input}`);
   };
 
   return (

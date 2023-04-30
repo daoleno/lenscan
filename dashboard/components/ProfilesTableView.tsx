@@ -50,7 +50,7 @@ export default function ProfilesTableView() {
               <TableRow key={item.id}>
                 <TableCell>
                   <Link
-                    href={`/profiles/${item.id}`}
+                    href={`/profile/${item.id}`}
                     target="_blank"
                     className="font-medium underline underline-offset-4"
                   >
