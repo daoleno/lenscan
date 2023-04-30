@@ -1,5 +1,4 @@
 import NotFound from "@/components/404";
-import Layout from "@/components/Layout";
 import ProfileSummaryCard from "@/components/ProfileSummaryCard";
 import ProfileTableView from "@/components/ProfileTableView";
 import { Error } from "@/components/error";
@@ -35,33 +34,21 @@ export default function Profile() {
   const error = idError && handleError;
 
   if (isLoading) {
-    return (
-      <Layout>
-        <Loading />
-      </Layout>
-    );
+    return <Loading />;
   }
 
   if (!hasProfile) {
-    return (
-      <Layout>
-        <NotFound type="Profile" />
-      </Layout>
-    );
+    return <NotFound type="Profile" />;
   }
 
   if (error) {
-    return (
-      <Layout>
-        <Error msg={error.message} />
-      </Layout>
-    );
+    return <Error msg={error.message} />;
   }
 
   return (
-    <Layout>
+    <>
       <ProfileSummaryCard profile={profile} />
       <ProfileTableView profileId={profileId} />
-    </Layout>
+    </>
   );
 }

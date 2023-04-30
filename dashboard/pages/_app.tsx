@@ -1,3 +1,4 @@
+import Layout from "@/components/Layout";
 import { LensConfig, LensProvider, production } from "@lens-protocol/react-web";
 import { bindings as wagmiBindings } from "@lens-protocol/wagmi";
 import type { AppProps } from "next/app";
@@ -26,7 +27,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={client}>
       <LensProvider config={lensConfig}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </LensProvider>
     </WagmiConfig>
   );

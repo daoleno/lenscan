@@ -1,5 +1,4 @@
 import EventTableView from "@/components/EventTableView";
-import Layout from "@/components/Layout";
 import StatCardGrid from "@/components/StatCardGrid";
 import {
   PageHeader,
@@ -9,20 +8,18 @@ import {
 
 export default function Home() {
   return (
-    <Layout>
+    <div className="mt-6 space-y-6">
+      <PageHeader>
+        <PageHeaderHeading>Lens Protocol Explorer</PageHeaderHeading>
+        <PageHeaderDescription>
+          Explore the interesting events happening on the Lens Protocol.
+        </PageHeaderDescription>
+      </PageHeader>
+      <StatCardGrid />
       <div className="mt-6 space-y-6">
-        <PageHeader>
-          <PageHeaderHeading>Lens Protocol Explorer</PageHeaderHeading>
-          <PageHeaderDescription>
-            Explore the interesting events happening on the Lens Protocol.
-          </PageHeaderDescription>
-        </PageHeader>
-        <StatCardGrid />
-        <div className="mt-6 space-y-6">
-          {/* <ChartView /> */}
-          <EventTableView showPagination={false} itemsPerPage={10} />
-        </div>
+        {/* <ChartView /> */}
+        <EventTableView showPagination={false} itemsPerPage={10} />
       </div>
-    </Layout>
+    </div>
   );
 }

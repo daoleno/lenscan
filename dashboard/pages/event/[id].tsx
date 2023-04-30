@@ -1,4 +1,3 @@
-import Layout from "@/components/Layout";
 import { Loading } from "@/components/loading";
 import { Tip } from "@/components/tip";
 import { Badge } from "@/components/ui/badge";
@@ -17,12 +16,7 @@ export default function Event() {
     return await db.Event(parseInt(id as string));
   });
   if (error) return <div>Error: {error.message} </div>;
-  if (!data || !data.data)
-    return (
-      <Layout>
-        <Loading />
-      </Layout>
-    );
+  if (!data || !data.data) return <Loading />;
   const { data: event }: any = data;
   const eventFields = [
     {
@@ -73,7 +67,7 @@ export default function Event() {
   ];
 
   return (
-    <Layout>
+    <>
       <h1 className="text-xl font-bold py-7">Event #{event.id}</h1>
       <Card>
         <CardHeader className="font-semibold">Transaction Details</CardHeader>
@@ -126,6 +120,6 @@ export default function Event() {
           )}
         </CardContent>
       </Card>
-    </Layout>
+    </>
   );
 }
