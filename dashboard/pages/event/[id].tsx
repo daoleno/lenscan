@@ -1,10 +1,11 @@
 import { Loading } from "@/components/loading";
 import { Tip } from "@/components/tip";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/lib/postgrest";
 import { age } from "@/lib/utils";
 import { definitions } from "@/types/generated-types";
+import { ethers } from "ethers";
 import { HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -101,23 +102,41 @@ export default function Event() {
         </CardContent>
       </Card>
       <Card className="mt-3">
-        <CardHeader className="font-semibold">Event Data</CardHeader>
+        <CardHeader className="flex flex-col font-semibold space-y-3">
+          <CardTitle>Event Data</CardTitle>
+          {event.data &&
+            (event.type == "PostCreated" ||
+              event.type == "CommentCreated" ||
+              event.type == "MirrorCreated" ||
+              event.type == "Collected") && (
+              <div className="flex items-center space-x-3">
+                <Badge>{event.type}</Badge>
+                <Link
+                  href={`/publication/${ethers.utils.hexlify(
+                    (event.data as any)?.ProfileId
+                  )}-${ethers.utils.hexlify((event.data as any)?.PubId)}`}
+                  className="font-medium underline underline-offset-4"
+                >
+                  {ethers.utils.hexlify((event.data as any)?.ProfileId)}-
+                  {ethers.utils.hexlify((event.data as any)?.PubId)}
+                </Link>
+              </div>
+            )}
+        </CardHeader>
         <CardContent>
-          {event.data && (
-            <div className="flex flex-col gap-2 basis-9/12">
-              {Object.entries(event.data).map(([key, value]) => (
-                <div key={key} className="flex items-center">
-                  <Tip text={key}>
-                    <HelpCircle className="text-gray-500 h-4" />
-                  </Tip>
-                  <label className="text-gray-500 basis-3/12">{key}:</label>
-                  <span className="basis-9/12">
-                    {value !== undefined ? String(value) : "-"}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="flex flex-col gap-2 basis-9/12">
+            {Object.entries(event.data).map(([key, value]) => (
+              <div key={key} className="flex items-center">
+                <Tip text={key}>
+                  <HelpCircle className="text-gray-500 h-4" />
+                </Tip>
+                <label className="text-gray-500 basis-3/12">{key}:</label>
+                <span className="basis-9/12">
+                  {value !== undefined ? String(value) : "-"}
+                </span>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </>
