@@ -10,8 +10,6 @@ import Post from "./post";
 export default function Publication({ id }: { id: string }) {
   const { data: pub, loading, error } = usePublication({ publicationId: id });
 
-  console.log({ pub, loading, error });
-
   if (loading) {
     return <Loading />;
   }

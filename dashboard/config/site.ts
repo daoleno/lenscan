@@ -7,6 +7,7 @@ export const siteConfig = {
   links: {
     twitter: "https://twitter.com/dao_leno",
     lenster: "https://lenster.xyz/u/daoleno",
+    telegram: "https://t.me/+Zq8XF9cI6GhkMTNl",
   },
 };
 

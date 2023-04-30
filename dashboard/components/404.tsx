@@ -1,4 +1,5 @@
-import { Link } from "lucide-react";
+import { siteConfig } from "@/config/site";
+import Link from "next/link";
 
 export default function NotFound({ type }: { type: string }) {
   return (
@@ -14,17 +15,17 @@ export default function NotFound({ type }: { type: string }) {
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <Link
             href="/"
-            className="rounded-md bg-gray-600 px-3.5 py-2.5 text-sm font-semibold shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+            className="rounded-md border border-1 px-3.5 py-2.5 text-sm font-semibold shadow-sm hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
           >
             Go back home
           </Link>
-          <a
-            href="https://t.me/+Zq8XF9cI6GhkMTNl"
+          <Link
+            href={siteConfig.links.telegram}
             target="_blank"
             className="text-sm font-semibold text-gray-900"
           >
             Contact support <span aria-hidden="true">&rarr;</span>
-          </a>
+          </Link>
         </div>
       </div>
     </main>
