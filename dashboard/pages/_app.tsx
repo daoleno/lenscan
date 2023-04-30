@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import { LensConfig, LensProvider, production } from "@lens-protocol/react-web";
 import { bindings as wagmiBindings } from "@lens-protocol/wagmi";
+import PlausibleProvider from "next-plausible";
 import type { AppProps } from "next/app";
 import "styles/globals.css";
 import { WagmiConfig, configureChains, createClient } from "wagmi";
@@ -25,12 +26,14 @@ const lensConfig: LensConfig = {
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <WagmiConfig client={client}>
-      <LensProvider config={lensConfig}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </LensProvider>
-    </WagmiConfig>
+    <PlausibleProvider domain="lenscan.io">
+      <WagmiConfig client={client}>
+        <LensProvider config={lensConfig}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </LensProvider>
+      </WagmiConfig>
+    </PlausibleProvider>
   );
 }
