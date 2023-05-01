@@ -58,7 +58,7 @@ export default function EventTableView({
     <div>
       <div className="flex flex-col justify-between space-y-7 pb-7">
         <h2 className="text-3xl font-bold tracking-tight">Events</h2>
-        <div className="flex space-x-2">
+        <div className="flex flex-wrap gap-2">
           {eventTypes.map((type) => (
             <Badge key={type} variant="outline">
               {type}
