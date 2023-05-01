@@ -21,7 +21,7 @@ export const db = {
     postgrest
       .from("Event")
       .select("*", { count: "exact" })
-      .eq("data->>ProfileId", profileId)
+      .eq("data->ProfileId", profileId)
       .order("id", { ascending: false })
       .range(start, end),
 
