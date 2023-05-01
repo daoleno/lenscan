@@ -20,7 +20,7 @@ export const db = {
   EventsByProfileId: (profileId: string, start: number, end: number) =>
     postgrest
       .from("Event")
-      .select("*", { count: "exact" })
+      .select("*", { count: "planned" })
       .eq("data->ProfileId", profileId)
       .order("id", { ascending: false })
       .range(start, end),
