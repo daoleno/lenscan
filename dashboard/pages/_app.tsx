@@ -26,7 +26,11 @@ const lensConfig: LensConfig = {
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <PlausibleProvider domain="lenscan.io">
+    <PlausibleProvider
+      customDomain="https://analytics.lenscan.io"
+      domain="lenscan.io"
+      selfHosted
+    >
       <WagmiConfig client={client}>
         <LensProvider config={lensConfig}>
           <Layout>
