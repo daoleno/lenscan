@@ -1,4 +1,3 @@
-import { Event } from "@/types";
 import {
   Card,
   Table,
@@ -12,9 +11,8 @@ import Link from "next/link";
 
 import { age, shortHash } from "@/lib/utils";
 
-import { db } from "@/lib/postgrest";
+import { trpc } from "@/lib/trpc";
 import { useState } from "react";
-import useSWR from "swr";
 import Pagination from "./Pagination";
 import { Loading } from "./loading";
 import { Badge } from "./ui/badge";
@@ -23,28 +21,14 @@ export default function EventTableView({
   showPagination = true,
   itemsPerPage = 25,
 }) {
-  const [range, setRange] = useState([0, itemsPerPage - 1]);
-
-  const { data, error } = useSWR(
-    `latest-events-${range[0]}-${range[1]}`,
-    async () => {
-      return await db.Events(range[0], range[1]);
-    }
-    // {
-    //   refreshInterval: 5000, // refresh data every 5 seconds
-    // }
-  );
-
-  const [currentPage, setCurrentPage] = useState(1);
+  const [cursor, setCursor] = useState(null);
+  const { data, error, isLoading } = trpc.event.getEvents.useQuery({
+    take: itemsPerPage,
+    cursor,
+  });
 
   if (error) return <div>Error: {error.message}</div>;
-  if (!data || !data.data) return <Loading />;
-  const { data: events, count }: any = data;
-
-  function handlePageChange(page: number) {
-    setCurrentPage(page);
-    setRange([(page - 1) * 25, page * 25]);
-  }
+  if (isLoading) return <Loading fixed={false} />;
 
   const eventTypes = [
     "Followed",
@@ -80,7 +64,7 @@ export default function EventTableView({
           </TableHead>
 
           <TableBody>
-            {events.map((item: Event) => (
+            {data.events.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
                   <Link
@@ -97,10 +81,10 @@ export default function EventTableView({
                     target="_blank"
                     className="font-medium underline underline-offset-4"
                   >
-                    {item.blockNumber}
+                    {Number(item.blockNumber)}
                   </Link>
                 </TableCell>
-                <TableCell>{age(item.timestamp)}</TableCell>
+                <TableCell>{age(Number(item.timestamp))}</TableCell>
                 <TableCell>
                   <Link
                     href={`https://polygonscan.com/tx/${item.txHash}`}
@@ -129,10 +113,11 @@ export default function EventTableView({
       </Card>
       {showPagination && (
         <Pagination
-          currentPage={currentPage}
-          totalResults={count}
-          resultsPerPage={range[1] - range[0]}
-          onPageChange={handlePageChange}
+          curCursor={cursor}
+          nextCursor={data.nextCursor}
+          totalResults={data.count}
+          resultsPerPage={itemsPerPage}
+          setCursor={setCursor}
         />
       )}
     </div>

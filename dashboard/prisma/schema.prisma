@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  blockNumber Int?
+  txHash      String?  @db.VarChar(66)
+  txIndex     Int?
+  logIndex    Int?
+  removed     Boolean?
+  timestamp   Int?
+  type        String?
+  data        Json?
+
+  @@unique([blockNumber, logIndex], map: "Event_blockNumber_logIndex")
+  @@index([type])
+}
+
+model LastBlock {
+  id          Int  @id
+  blockNumber Int?
+}

@@ -1,6 +1,5 @@
-import { db } from "@/lib/postgrest";
+import { trpc } from "@/lib/trpc";
 import { age, shortHash } from "@/lib/utils";
-import { definitions } from "@/types/generated-types";
 import {
   Card,
   Table,
@@ -13,7 +12,6 @@ import {
 import { ethers } from "ethers";
 import Link from "next/link";
 import { useState } from "react";
-import useSWR from "swr";
 import Pagination from "./Pagination";
 import { Loading } from "./loading";
 import { Badge } from "./ui/badge";
@@ -22,29 +20,14 @@ export default function PublicationsTableView({
   showPagination = true,
   itemsPerPage = 25,
 }) {
-  const [range, setRange] = useState([0, itemsPerPage - 1]);
-  const { data, error } = useSWR(
-    `latest-publications-${range[0]}-${range[1]}`,
-    async () => {
-      return await db.Publications(range[0], range[1]);
-    }
-    // {
-    //   refreshInterval: 5000, // refresh data every 5 seconds
-    // }
-  );
-
-  const [currentPage, setCurrentPage] = useState(1);
+  const [cursor, setCursor] = useState(null);
+  const { data, error, isLoading } = trpc.event.getPublications.useQuery({
+    take: itemsPerPage,
+    cursor,
+  });
 
   if (error) return <div>Error: {error.message}</div>;
-  if (!data || !data.data) return <Loading />;
-  const { data: events, count }: any = data;
-
-  console.log("events(pub)", events);
-
-  function handlePageChange(page: number) {
-    setCurrentPage(page);
-    setRange([(page - 1) * 25, page * 25]);
-  }
+  if (isLoading) return <Loading fixed={false} />;
 
   return (
     <div className="mt-6">
@@ -65,7 +48,7 @@ export default function PublicationsTableView({
           </TableHead>
 
           <TableBody>
-            {events?.map((item: definitions["Event"]) => (
+            {data.events.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
                   <Link
@@ -95,10 +78,10 @@ export default function PublicationsTableView({
                     target="_blank"
                     className="font-medium underline underline-offset-4"
                   >
-                    {item.blockNumber}
+                    {Number(item.blockNumber)}
                   </Link>
                 </TableCell>
-                <TableCell>{age(item.timestamp)}</TableCell>
+                <TableCell>{age(Number(item.timestamp))}</TableCell>
                 <TableCell>
                   <Link
                     href={`https://polygonscan.com/tx/${item.txHash}`}
@@ -118,10 +101,11 @@ export default function PublicationsTableView({
       </Card>
       {showPagination && (
         <Pagination
-          currentPage={currentPage}
-          totalResults={count}
-          resultsPerPage={range[1] - range[0]}
-          onPageChange={handlePageChange}
+          curCursor={cursor}
+          nextCursor={data.nextCursor}
+          totalResults={data.count}
+          resultsPerPage={itemsPerPage}
+          setCursor={setCursor}
         />
       )}
     </div>

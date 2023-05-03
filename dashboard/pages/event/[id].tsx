@@ -1,69 +1,68 @@
+import NotFound from "@/components/404";
 import { Loading } from "@/components/loading";
 import { Tip } from "@/components/tip";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { db } from "@/lib/postgrest";
+import { trpc } from "@/lib/trpc";
 import { age } from "@/lib/utils";
-import { definitions } from "@/types/generated-types";
+import { Event } from "@prisma/client";
 import { ethers } from "ethers";
 import { HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR from "swr";
 
 export default function Event() {
   const { id } = useRouter().query;
-  const { data, error } = useSWR(`event-${id}`, async () => {
-    return await db.Event(parseInt(id as string));
-  });
+  const {
+    data: event,
+    error,
+    isLoading,
+  } = trpc.event.getEvent.useQuery(Number(id));
+
   if (error) return <div>Error: {error.message} </div>;
-  if (!data || !data.data) return <Loading />;
-  const { data: event }: any = data;
+  if (isLoading) return <Loading />;
+  if (!event) return <NotFound type="Event" />;
+
   const eventFields = [
     {
       label: "Block Number:",
       tip: "The block number in which the event was emitted.",
-      href: (event: definitions["Event"]) =>
+      href: (event: Event) =>
         `https://polygonscan.com/block/${event.blockNumber}`,
-      text: (event: definitions["Event"]) => event.blockNumber,
+      text: (event: Event) => event.blockNumber,
     },
     {
       label: "Transaction Hash:",
       tip: "The transaction hash in which the event was emitted.",
-      href: (event: definitions["Event"]) =>
-        `https://polygonscan.com/tx/${event.txHash}`,
-      text: (event: definitions["Event"]) => event.txHash,
+      href: (event: Event) => `https://polygonscan.com/tx/${event.txHash}`,
+      text: (event: Event) => event.txHash,
     },
     {
       label: "Transaction Index:",
       tip: "The transaction index in which the event was emitted.",
-      href: (event: definitions["Event"]) =>
-        `https://polygonscan.com/tx/${event.txHash}`,
-      text: (event: definitions["Event"]) => event.txIndex,
+      href: (event: Event) => `https://polygonscan.com/tx/${event.txHash}`,
+      text: (event: Event) => event.txIndex,
     },
     {
       label: "Log Index:",
       tip: "The log index in which the event was emitted.",
-      href: (event: definitions["Event"]) =>
-        `https://polygonscan.com/tx/${event.txHash}`,
-      text: (event: definitions["Event"]) => event.logIndex,
+      href: (event: Event) => `https://polygonscan.com/tx/${event.txHash}`,
+      text: (event: Event) => event.logIndex,
     },
     {
       label: "Removed:",
       tip: "Whether the event was removed from the blockchain.",
-      text: (event: definitions["Event"]) => (event.removed ? "Yes" : "No"),
+      text: (event: Event) => (event.removed ? "Yes" : "No"),
     },
     {
       label: "Timestamp:",
       tip: "The timestamp in which the event was emitted.",
-      text: (event: definitions["Event"]) => age(event.timestamp),
+      text: (event: Event) => age(Number(event.timestamp)),
     },
     {
       label: "Event:",
       tip: "The type of event emitted.",
-      text: (event: definitions["Event"]) => (
-        <Badge variant={"outline"}>{event.type}</Badge>
-      ),
+      text: (event: Event) => <Badge variant={"outline"}>{event.type}</Badge>,
     },
   ];
 
@@ -125,7 +124,7 @@ export default function Event() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-2 basis-9/12">
-            {Object.entries(event.data).map(([key, value]) => (
+            {Object.entries(event.data || {}).map(([key, value]) => (
               <div key={key} className="flex items-center">
                 <Tip text={key}>
                   <HelpCircle className="text-gray-500 h-4" />

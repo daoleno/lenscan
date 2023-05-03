@@ -8,6 +8,8 @@ import { WagmiConfig, configureChains, createClient } from "wagmi";
 import { polygon } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
+import { trpc } from "@/lib/trpc";
+
 const { provider, webSocketProvider } = configureChains(
   [polygon],
   [publicProvider()]
@@ -24,7 +26,7 @@ const lensConfig: LensConfig = {
   environment: production,
 };
 
-export default function App({ Component, pageProps }: AppProps) {
+export function App({ Component, pageProps }: AppProps) {
   return (
     <PlausibleProvider
       customDomain="https://analytics.lenscan.io"
@@ -41,3 +43,5 @@ export default function App({ Component, pageProps }: AppProps) {
     </PlausibleProvider>
   );
 }
+
+export default trpc.withTRPC(App);
