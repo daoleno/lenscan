@@ -103,7 +103,6 @@ export default function PublicationsTableView({
         <Pagination
           curCursor={cursor}
           nextCursor={data.nextCursor}
-          totalResults={data.count}
           resultsPerPage={itemsPerPage}
           setCursor={setCursor}
         />

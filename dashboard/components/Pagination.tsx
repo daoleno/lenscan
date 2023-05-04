@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 interface PaginationProps {
   curCursor: number | null;
   nextCursor: number | null;
-  totalResults: number;
+  totalResults?: number;
   resultsPerPage: number;
   setCursor: any;
 }
@@ -20,9 +20,11 @@ export default function Pagination({
     <Card className="mt-3">
       <div className="flex flex-1 items-center justify-between">
         <div>
-          <p className="text-sm text-gray-700">
-            Total <span className="font-medium">{totalResults}</span> results
-          </p>
+          {totalResults && (
+            <p className="text-sm text-gray-700">
+              Total <span className="font-medium">{totalResults}</span> results
+            </p>
+          )}
         </div>
         <div className="inline-flex items-center justify-center gap-3">
           <Button

@@ -11,7 +11,13 @@ export const eventRouter = router({
       })
     )
     .query(async ({ input }) => {
-      const count = await prisma.event.count();
+      const res = (await prisma.$queryRaw`
+        SELECT reltuples::bigint AS estimate
+        FROM pg_class
+        WHERE relname = 'Event';
+      `) as { estimate: string }[];
+      const count = Number(res[0].estimate);
+
       if (!input.cursor) {
         const firstQueryEvents = await prisma.event.findMany({
           take: input.take,
@@ -103,14 +109,6 @@ export const eventRouter = router({
       })
     )
     .query(async ({ input }) => {
-      const count = await prisma.event.count({
-        where: {
-          type: {
-            in: ["PostCreated", "CommentCreated", "MirrorCreated"],
-          },
-        },
-      });
-
       if (!input.cursor) {
         const firstQueryEvents = await prisma.event.findMany({
           where: {
@@ -127,7 +125,6 @@ export const eventRouter = router({
           ? firstQueryLastEvent.id
           : null;
         return {
-          count,
           events: firstQueryEvents,
           nextCursor: firstQueryNextCursor,
         };
@@ -149,7 +146,6 @@ export const eventRouter = router({
       const lastEvent = events[events.length - 1];
       const nextCursor = lastEvent ? lastEvent.id : null;
       return {
-        count,
         events,
         nextCursor,
       };
