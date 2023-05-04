@@ -14,6 +14,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS "Event_blockNumber_logIndex" ON "Event" ("bloc
 CREATE INDEX IF NOT EXISTS "Event_data_ProfileId_idx" ON "Event" ((data -> 'ProfileId'));
 CREATE INDEX IF NOT EXISTS "Event_type_idx" ON "Event" ("type");
 CREATE INDEX IF NOT EXISTS "Event_timestamp_idx" ON "Event" ("timestamp");
+CREATE INDEX idx_event_id_profile ON "Event" (id, (data->'ProfileId'));
+
 
 
 
