@@ -39,7 +39,7 @@ export default function ProfileTableView({
       enabled: !!id,
     }
   );
-
+  const { data: count } = trpc.event.getEventsCountByProfileId.useQuery(id);
   if (error) return <div>Error: {error.message}</div>;
   if (isLoading) return <Loading fixed={false} />;
 
@@ -110,7 +110,7 @@ export default function ProfileTableView({
         <Pagination
           curCursor={cursor}
           nextCursor={data.nextCursor}
-          totalResults={data.count}
+          totalResults={count}
           resultsPerPage={itemsPerPage}
           setCursor={setCursor}
         />

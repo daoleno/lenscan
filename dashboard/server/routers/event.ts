@@ -61,6 +61,15 @@ export const eventRouter = router({
     });
     return event;
   }),
+  getEventsCountByProfileId: publicProcedure
+    .input(z.number())
+    .query(async ({ input }) => {
+      const res = (await prisma.$queryRawUnsafe(
+        `SELECT COUNT(*) FROM "Event" WHERE data->'ProfileId' = '${input}'`
+      )) as any[];
+      const count = Number(res[0].count);
+      return count;
+    }),
   getEventsByProfileId: publicProcedure
     .input(
       z.object({
@@ -70,11 +79,6 @@ export const eventRouter = router({
       })
     )
     .query(async ({ input }) => {
-      const res = (await prisma.$queryRawUnsafe(
-        `SELECT COUNT(*) FROM "Event" WHERE data->'ProfileId' = '${input.profileId}'`
-      )) as any[];
-      const count = Number(res[0].count);
-
       if (!input.cursor) {
         const firstQueryEvents = (await prisma.$queryRawUnsafe(
           `SELECT * FROM "Event" WHERE data->'ProfileId' = '${input.profileId}' ORDER BY id DESC LIMIT ${input.take}`
@@ -85,7 +89,6 @@ export const eventRouter = router({
           ? firstQueryLastEvent.id
           : null;
         return {
-          count,
           events: firstQueryEvents,
           nextCursor: firstQueryNextCursor,
         };
@@ -97,7 +100,6 @@ export const eventRouter = router({
       const lastEvent = events[events.length - 1];
       const nextCursor = lastEvent ? lastEvent.id : null;
       return {
-        count,
         events,
         nextCursor,
       };
