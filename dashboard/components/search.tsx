@@ -5,7 +5,8 @@ import { useState } from "react";
 export function Search() {
   const [input, setInput] = useState("");
   const router = useRouter();
-  const handleSearch = () => {
+  const handleSearch = (e: React.SyntheticEvent) => {
+    e.preventDefault();
     if (input === "") return;
     router.push(`/profile/${input}`);
   };
