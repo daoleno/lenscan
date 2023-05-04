@@ -27,15 +27,18 @@ export default function ProfileTableView({
   showPagination = true,
   itemsPerPage = 25,
 }: ProfileTableViewProps) {
-  if (profileId && profileId.startsWith("0x")) {
-    profileId = parseInt(profileId).toString();
-  }
-
+  let id = parseInt(profileId);
   const [cursor, setCursor] = useState(null);
-  const { data, error, isLoading } = trpc.event.getEvents.useQuery({
-    take: itemsPerPage,
-    cursor,
-  });
+  const { data, error, isLoading } = trpc.event.getEventsByProfileId.useQuery(
+    {
+      profileId: id,
+      take: itemsPerPage,
+      cursor,
+    },
+    {
+      enabled: !!id,
+    }
+  );
 
   if (error) return <div>Error: {error.message}</div>;
   if (isLoading) return <Loading fixed={false} />;

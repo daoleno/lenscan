@@ -64,35 +64,36 @@ export const eventRouter = router({
   getEventsByProfileId: publicProcedure
     .input(
       z.object({
-        profileId: z.string(),
+        profileId: z.number(),
         take: z.number(),
-        cursor: z.number().optional(),
+        cursor: z.number().nullable(),
       })
     )
     .query(async ({ input }) => {
-      const count = await prisma.event.count({
-        where: {
-          data: {
-            path: ["ProfileId"],
-            equals: input.profileId,
-          },
-        },
-      });
-      const events = await prisma.event.findMany({
-        where: {
-          data: {
-            path: ["ProfileId"],
-            equals: input.profileId,
-          },
-        },
-        take: input.take,
-        cursor: {
-          id: input.cursor,
-        },
-        orderBy: {
-          id: "desc",
-        },
-      });
+      const res = (await prisma.$queryRawUnsafe(
+        `SELECT COUNT(*) FROM "Event" WHERE data->'ProfileId' = '${input.profileId}'`
+      )) as any[];
+      const count = Number(res[0].count);
+
+      if (!input.cursor) {
+        const firstQueryEvents = (await prisma.$queryRawUnsafe(
+          `SELECT * FROM "Event" WHERE data->'ProfileId' = '${input.profileId}' ORDER BY id DESC LIMIT ${input.take}`
+        )) as any[];
+        const firstQueryLastEvent =
+          firstQueryEvents[firstQueryEvents.length - 1];
+        const firstQueryNextCursor = firstQueryLastEvent
+          ? firstQueryLastEvent.id
+          : null;
+        return {
+          count,
+          events: firstQueryEvents,
+          nextCursor: firstQueryNextCursor,
+        };
+      }
+
+      const events = (await prisma.$queryRawUnsafe(
+        `SELECT * FROM "Event" WHERE data->'ProfileId' = '${input.profileId}' AND id < ${input.cursor} ORDER BY id DESC LIMIT ${input.take}`
+      )) as any[];
       const lastEvent = events[events.length - 1];
       const nextCursor = lastEvent ? lastEvent.id : null;
       return {
