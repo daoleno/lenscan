@@ -4,12 +4,13 @@ import ProfileTableView from "@/components/ProfileTableView";
 import { Error } from "@/components/error";
 import { Loading } from "@/components/loading";
 import { useProfile } from "@lens-protocol/react-web";
+import { ethers } from "ethers";
 import { useRouter } from "next/router";
 
 export default function Profile() {
   const { id } = useRouter().query;
   const q = id?.toString();
-  const isProfileId = q?.startsWith("0x");
+  const isProfileId = ethers.utils.isHexString(q);
   const realhandle =
     q == "lensprotocol" ? q : q?.endsWith(".lens") ? q : q + ".lens";
   const handle = isProfileId ? "" : realhandle;
