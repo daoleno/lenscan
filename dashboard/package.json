@@ -20,6 +20,7 @@
     "@lens-protocol/react-web": "^0.6.0",
     "@lens-protocol/wagmi": "^0.6.0",
     "@prisma/client": "^4.13.0",
+    "@radix-ui/react-avatar": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.5",
     "@supabase/postgrest-js": "^1.4.1",
     "@tremor/react": "^2.0.0",

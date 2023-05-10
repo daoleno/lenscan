@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { formatNumber, shortHash } from "@/lib/utils";
+import { formatNumber, getIPFSURL, shortHash } from "@/lib/utils";
 import { ProfileFragment } from "@lens-protocol/api-bindings";
 import {
   CheckCircle2,
@@ -202,24 +202,4 @@ export default function ProfileSummaryCard({
       </div>
     </>
   );
-}
-
-const ipfsGateway = "https://lens.infura-ipfs.io";
-function getIPFSURL(picture: any) {
-  let url = "";
-  if (!picture) {
-    return url;
-  }
-  if (picture.__typename === "MediaSet") {
-    url = picture.original.url;
-  }
-  if (picture.__typename === "NftImage") {
-    url = picture.uri;
-  }
-
-  if (url && url.startsWith("ipfs://")) {
-    const cid = url.replace("ipfs://", "");
-    return `${ipfsGateway}/ipfs/${cid}`;
-  }
-  return url;
 }

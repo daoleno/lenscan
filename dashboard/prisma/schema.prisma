@@ -9,12 +9,12 @@ datasource db {
 
 model Event {
   id          Int      @id @default(autoincrement())
-  blockNumber Int?
+  blockNumber BigInt?
   txHash      String?  @db.VarChar(66)
   txIndex     Int?
   logIndex    Int?
   removed     Boolean?
-  timestamp   Int?
+  timestamp   BigInt?
   type        String?
   data        Json?
 
@@ -25,4 +25,21 @@ model Event {
 model LastBlock {
   id          Int  @id
   blockNumber Int?
+}
+
+model MomokaTx {
+  id                 Int      @id @default(autoincrement())
+  proofTxId          String   @unique
+  success            Boolean?
+  dataAvailabilityId String   @unique
+  publicationId      String   @unique
+  signature          String   @unique
+  timestampProofs    Json?
+  chainProofs        Json?
+  timestamp          BigInt?
+  type               String?
+  event              Json?
+
+  @@index([proofTxId])
+  @@index([type])
 }

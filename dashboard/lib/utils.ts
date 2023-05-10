@@ -26,3 +26,34 @@ export function formatNumber(n: number | string) {
   });
   return formatter.format(Number(n));
 }
+
+// format any POST_CREATED style to PostCreated style
+export function formatEventType(type: string | null) {
+  if (!type) {
+    return "-";
+  }
+  return type
+    .split("_")
+    .map((w) => w[0] + w.slice(1).toLowerCase())
+    .join("");
+}
+
+const ipfsGateway = "https://lens.infura-ipfs.io";
+export function getIPFSURL(picture: any) {
+  let url = "";
+  if (!picture) {
+    return url;
+  }
+  if (picture.__typename === "MediaSet") {
+    url = picture.original.url;
+  }
+  if (picture.__typename === "NftImage") {
+    url = picture.uri;
+  }
+
+  if (url && url.startsWith("ipfs://")) {
+    const cid = url.replace("ipfs://", "");
+    return `${ipfsGateway}/ipfs/${cid}`;
+  }
+  return url;
+}

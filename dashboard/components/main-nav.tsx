@@ -11,6 +11,10 @@ const items = [
     href: "/",
   },
   {
+    name: "Momoka",
+    href: "/momoka-txs",
+  },
+  {
     name: "Events",
     href: "/events",
   },
