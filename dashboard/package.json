@@ -11,9 +11,11 @@
     "prebuild": "prisma generate",
     "prisma:pull": "prisma db pull",
     "prisma:push": "prisma db push",
-    "prisma:migrate": "prisma migrate deploy"
+    "prisma:migrate": "prisma migrate deploy",
+    "codegen": "graphql-codegen"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.14",
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.16",
     "@lens-protocol/client": "^0.2.0",
@@ -53,6 +55,12 @@
     "wagmi": "^0.12.9"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^3.3.1",
+    "@graphql-codegen/fragment-matcher": "^4.0.1",
+    "prettier-plugin-tailwindcss": "^0.2.8",
+    "@graphql-codegen/typescript": "^3.0.4",
+    "@graphql-codegen/typescript-operations": "^3.0.4",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "autoprefixer": "^10.4.13",
     "openapi-typescript": "5.4.1",
     "postcss": "^8.4.21",

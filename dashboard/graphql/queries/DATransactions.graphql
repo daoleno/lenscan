@@ -1,0 +1,18 @@
+query DATransactions($request: DataAvailabilityTransactionsRequest!) {
+  dataAvailabilityTransactions(request: $request) {
+    items {
+      ... on DataAvailabilityPost {
+        ...DAPostFields
+      }
+      ... on DataAvailabilityComment {
+        ...DACommentFields
+      }
+      ... on DataAvailabilityMirror {
+        ...DAMirrorFields
+      }
+    }
+    pageInfo {
+      next
+    }
+  }
+}

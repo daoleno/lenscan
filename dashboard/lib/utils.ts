@@ -57,3 +57,10 @@ export function getIPFSURL(picture: any) {
   }
   return url;
 }
+
+export async function getJSONObj(url: string) {
+  const res = await fetch(url);
+  const json = await res.json();
+  console.log("json", json);
+  return json;
+}
