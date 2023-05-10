@@ -1,0 +1,23 @@
+{
+  "name": "momoka-indexer",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "prestart": "prisma generate",
+    "prisma:pull": "prisma db pull",
+    "prisma:push": "prisma db push",
+    "prisma:migrate": "prisma migrate deploy"
+  },
+  "dependencies": {
+    "@lens-protocol/momoka": "^1.1.0",
+    "@prisma/client": "^4.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.2",
+    "prisma": "^4.14.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}

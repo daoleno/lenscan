@@ -10,7 +10,7 @@
     "predev": "prisma generate",
     "prebuild": "prisma generate",
     "prisma:pull": "prisma db pull",
-    "f:push": "prisma db push",
+    "prisma:push": "prisma db push",
     "prisma:migrate": "prisma migrate deploy"
   },
   "dependencies": {
