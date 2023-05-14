@@ -35,12 +35,12 @@ export default function Footer() {
             </Link>
           ))}
         </div>
-        <div className="mt-8 md:order-1 md:mt-0 font-medium">
+        <div className="mt-8 font-medium md:order-1 md:mt-0">
           <p className="text-center leading-5 text-gray-500">
             &copy; 2023 lenscan. Made with ☘️ by
             <Link
               href={siteConfig.links.lenster}
-              className="font-medium text-gray-700 underline ml-2"
+              className="ml-2 font-medium text-gray-700 underline"
             >
               daoleno
             </Link>

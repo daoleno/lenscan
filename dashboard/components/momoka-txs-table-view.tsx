@@ -17,6 +17,7 @@ import { AlertOctagon, Verified } from "lucide-react";
 import { useState } from "react";
 import Pagination from "./Pagination";
 import { Loading } from "./loading";
+import MomokaStats from "./momoka-stats";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 
@@ -48,7 +49,9 @@ export default function MomokaTxsTableView({
             </Badge>
           ))}
         </div>
+        <MomokaStats />
       </div>
+
       <Card>
         <Table>
           <TableHead>
@@ -88,7 +91,7 @@ export default function MomokaTxsTableView({
                   <Link
                     href={`/profile/${(item.event as any).profileId}`}
                     target="_blank"
-                    className="font-medium flex items-center space-x-3"
+                    className="flex items-center space-x-3 font-medium"
                   >
                     <Avatar>
                       <AvatarImage
