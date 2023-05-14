@@ -1,7 +1,7 @@
-import LensClient, { polygon } from "@lens-protocol/client";
+import { LensClient, production } from "@lens-protocol/client";
 
 const lensClient = new LensClient({
-  environment: polygon,
+  environment: production,
 });
 
 export default lensClient;

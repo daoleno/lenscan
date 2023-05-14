@@ -19,8 +19,8 @@ export const momokaRouter = router({
         SELECT reltuples::bigint AS estimate
         FROM pg_class
         WHERE relname = 'MomokaTx';
-      `) as { estimate: string }[];
-      const count = Number(res[0].estimate);
+      `) as any[];
+      const count = Number(res[0]);
 
       if (!input.cursor) {
         const firstQueryTxs = await prisma.momokaTx.findMany({
@@ -82,7 +82,14 @@ export const momokaRouter = router({
         nextCursor,
       };
     }),
-  getTx: publicProcedure.input(z.number()).query(async ({ input }) => {}),
+  getTx: publicProcedure.input(z.string()).query(async ({ input }) => {
+    const tx = await prisma.momokaTx.findUnique({
+      where: {
+        proofTxId: input,
+      },
+    });
+    return tx;
+  }),
   getTxsCountByProfileId: publicProcedure
     .input(z.number())
     .query(async ({ input }) => {

@@ -7,19 +7,16 @@ import { bindings as wagmiBindings } from "@lens-protocol/wagmi";
 import PlausibleProvider from "next-plausible";
 import type { AppProps } from "next/app";
 import "styles/globals.css";
-import { WagmiConfig, configureChains, createClient } from "wagmi";
-import { polygon } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
+import { createPublicClient, http } from "viem";
+import { polygon } from "viem/chains";
+import { WagmiConfig, createConfig } from "wagmi";
 
-const { provider, webSocketProvider } = configureChains(
-  [polygon],
-  [publicProvider()]
-);
-
-const wagmiClient = createClient({
+const config = createConfig({
   autoConnect: true,
-  provider,
-  webSocketProvider,
+  publicClient: createPublicClient({
+    chain: polygon,
+    transport: http(),
+  }),
 });
 
 const lensConfig: LensConfig = {
@@ -35,7 +32,7 @@ export function App({ Component, pageProps }: AppProps) {
         domain="lenscan.io"
         selfHosted
       >
-        <WagmiConfig client={wagmiClient}>
+        <WagmiConfig config={config}>
           <LensProvider config={lensConfig}>
             <Layout>
               <Component {...pageProps} />

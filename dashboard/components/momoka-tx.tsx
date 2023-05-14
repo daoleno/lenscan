@@ -4,7 +4,8 @@ import { Loading } from "./loading";
 import { Tip } from "@/components/tip";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getJSONObj } from "@/lib/utils";
+import { trpc } from "@/lib/trpc";
+import { shortHash } from "@/lib/utils";
 import {
   DataAvailabilityTransactionQuery,
   useDataAvailabilityTransactionQuery,
@@ -13,6 +14,7 @@ import {
 import { AlertOctagon, HelpCircle, Verified } from "lucide-react";
 import Link from "next/link";
 import DynamicReactJson from "./dynamic-react-json";
+import SimpleTooltip from "./tooltip";
 
 export default function MomokaTx({ id }: { id: string }) {
   const { data, loading, error } = useDataAvailabilityTransactionQuery({
@@ -27,6 +29,8 @@ export default function MomokaTx({ id }: { id: string }) {
       },
     },
   });
+
+  const { data: tx } = trpc.momoka.getTx.useQuery(id, { enabled: !!id });
 
   if (loading) {
     return <Loading />;
@@ -87,7 +91,7 @@ export default function MomokaTx({ id }: { id: string }) {
       ) => tx?.createdAt,
     },
     {
-      label: "Posted via",
+      label: "Posted via:",
       tip: "Publication posted via.",
       text: (
         tx: DataAvailabilityTransactionQuery["dataAvailabilityTransaction"]
@@ -104,7 +108,7 @@ export default function MomokaTx({ id }: { id: string }) {
 
   return (
     <>
-      <div className="flex items-center space-x-3 py-7 text-2xl font-bold text-gray-800">
+      <div className="flex items-center space-x-3 py-7 text-2xl font-bold text-gray-500">
         <span>Transaction</span>
         <Badge>MOMOKA</Badge>
       </div>
@@ -142,28 +146,65 @@ export default function MomokaTx({ id }: { id: string }) {
         </CardContent>
       </Card>
       <Card className="mt-3">
-        <CardHeader className="flex flex-col space-y-3 font-semibold">
-          <CardTitle>Detail</CardTitle>
+        <CardHeader>
+          <CardTitle>Proof</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-4">
-            <div className="basis-3/12  text-gray-800">
-              On-chain Content URI
+          <div className="flex flex-col space-y-7">
+            <div className="flex">
+              <div className="basis-3/12 text-gray-500">
+                On-chain Content URI:
+              </div>
+              <div className="flex basis-9/12 items-center">
+                <Link
+                  href={pub?.publication?.onChainContentURI || ""}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="basis-9/12 underline underline-offset-4"
+                >
+                  {pub?.publication?.onChainContentURI}
+                </Link>
+              </div>
             </div>
-            <div className="flex basis-9/12 items-center">
-              <Link
-                href={pub?.publication?.onChainContentURI || ""}
-                target="_blank"
-                rel="noreferrer"
-                className="basis-9/12 underline underline-offset-4"
-              >
-                {pub?.publication?.onChainContentURI}
-              </Link>
+            <div className="flex">
+              <div className="basis-3/12 text-gray-500">
+                Data Availability ID:
+              </div>
+              <div className="flex basis-9/12 items-center">
+                {tx?.dataAvailabilityId}
+              </div>
+            </div>
+            <div className="flex">
+              <div className="basis-3/12 text-gray-500">Signature:</div>
+              <SimpleTooltip tip={tx?.signature}>
+                <div className="flex basis-9/12 items-center">
+                  {shortHash(tx?.signature, 42)}
+                </div>{" "}
+              </SimpleTooltip>
+            </div>
+            <div className="flex">
+              <div className="basis-3/12 text-gray-500">Chain Proof:</div>
+              <div className="flex basis-9/12 items-center overflow-auto rounded-md border border-gray-200 p-3">
+                <DynamicReactJson
+                  name={false}
+                  displayDataTypes={false}
+                  collapsed={1}
+                  src={tx?.chainProofs as any}
+                />
+              </div>
+            </div>
+            <div className="flex  space-y-3">
+              <div className="basis-3/12 text-gray-500">Timestamp Proof:</div>
+              <div className="flex basis-9/12 items-center overflow-auto rounded-md border border-gray-200 p-3">
+                <DynamicReactJson
+                  name={false}
+                  displayDataTypes={false}
+                  collapsed={1}
+                  src={tx?.timestampProofs as any}
+                />
+              </div>
             </div>
           </div>
-          <DynamicReactJson
-            src={getJSONObj(pub?.publication?.onChainContentURI || "")}
-          />
         </CardContent>
       </Card>
     </>
