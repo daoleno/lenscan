@@ -68,7 +68,7 @@ export default function Event() {
 
   return (
     <>
-      <h1 className="text-xl font-bold py-7">Event #{event.id}</h1>
+      <h1 className="py-7 text-xl font-bold">Event #{event.id}</h1>
       <Card>
         <CardHeader className="font-semibold">Transaction Details</CardHeader>
         <CardContent className="flex flex-col">
@@ -77,9 +77,9 @@ export default function Event() {
               {eventFields.map((field, index) => (
                 <div className="flex items-center" key={index}>
                   <Tip text={field.tip}>
-                    <HelpCircle className="text-gray-500 h-4" />
+                    <HelpCircle className="h-4 text-gray-500" />
                   </Tip>
-                  <label className="text-gray-500 basis-3/12">
+                  <label className="basis-3/12 text-gray-500">
                     {field.label}
                   </label>
                   {field.href ? (
@@ -89,7 +89,7 @@ export default function Event() {
                       rel="noreferrer"
                       className="basis-9/12 underline underline-offset-4"
                     >
-                      {field.text(event)}
+                      {field.text(event) as any}
                     </Link>
                   ) : (
                     <span className="basis-9/12">{field.text(event)}</span>
@@ -101,7 +101,7 @@ export default function Event() {
         </CardContent>
       </Card>
       <Card className="mt-3">
-        <CardHeader className="flex flex-col font-semibold space-y-3">
+        <CardHeader className="flex flex-col space-y-3 font-semibold">
           <CardTitle>Event Data</CardTitle>
           {event.data &&
             (event.type == "PostCreated" ||
@@ -123,13 +123,13 @@ export default function Event() {
             )}
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col gap-2 basis-9/12">
+          <div className="flex basis-9/12 flex-col gap-2">
             {Object.entries(event.data || {}).map(([key, value]) => (
               <div key={key} className="flex items-center">
                 <Tip text={key}>
-                  <HelpCircle className="text-gray-500 h-4" />
+                  <HelpCircle className="h-4 text-gray-500" />
                 </Tip>
-                <label className="text-gray-500 basis-3/12">{key}:</label>
+                <label className="basis-3/12 text-gray-500">{key}:</label>
                 <span className="basis-9/12">
                   {value !== undefined ? String(value) : "-"}
                 </span>

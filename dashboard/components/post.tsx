@@ -1,4 +1,4 @@
-import { PostFragment } from "@lens-protocol/api-bindings";
+import { Post } from "@lens-protocol/react-web";
 import {
   BarChart,
   CheckCircle2,
@@ -15,7 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
-export default function Post({ post }: { post: PostFragment }) {
+export default function Post({ post }: { post: Post }) {
   const overviewItems = [
     { label: "Id", value: post.id },
     { label: "Name", value: post.metadata.name },
@@ -23,7 +23,7 @@ export default function Post({ post }: { post: PostFragment }) {
     { label: "CreatedAt At", value: post.createdAt },
     { label: "Collect Policy", value: post.collectPolicy || "-" },
     { label: "Reference Policy", value: post.referencePolicy || "-" },
-    { label: "Collect Module", value: post.__collectModule },
+    { label: "Collect Module", value: post.collectModule },
     { label: "Mirrors", value: post.mirrors || "-" },
     { label: "Reaction", value: post.reaction || "-" },
     { label: "Collected By", value: post.collectedBy?.address || "-" },
@@ -51,11 +51,11 @@ export default function Post({ post }: { post: PostFragment }) {
   return (
     <div className="flex flex-col space-y-7 py-7">
       <div className="flex flex-col space-y-2">
-        <div className="text-2xl font-bold text-gray-800 flex items-center">
+        <div className="flex items-center text-2xl font-bold text-gray-800">
           <span>Publication</span>
           <span className="ml-2 font-mono">{post.id}</span>
         </div>
-        <div className="font-bold text-gray-600 text-sm">
+        <div className="text-sm font-bold text-gray-600">
           <Badge>{post.__typename}</Badge>
           <span> @ </span>
           <Link
@@ -76,7 +76,7 @@ export default function Post({ post }: { post: PostFragment }) {
           <CardContent className="grid grid-cols-2 gap-4">
             {overviewItems.map((item, index) => (
               <div key={index} className="flex flex-col space-y-1 font-medium">
-                <span className="text-sm text-gray-600 uppercase">
+                <span className="text-sm uppercase text-gray-600">
                   {item.label}
                 </span>
                 <span>
@@ -105,7 +105,7 @@ export default function Post({ post }: { post: PostFragment }) {
               .filter(([key]) => !key.startsWith("__"))
               .map(([key, value]) => (
                 <div key={key} className="flex flex-col space-y-1 font-medium">
-                  <span className="text-sm text-gray-600 uppercase">
+                  <span className="text-sm uppercase text-gray-600">
                     {key
                       .replace(/^total/, "")
                       .replace(/([a-z])([A-Z])/g, "$1 $2")}
@@ -123,7 +123,7 @@ export default function Post({ post }: { post: PostFragment }) {
           <CardContent className="grid grid-cols-2 gap-4">
             {checkItems.map((item, index) => (
               <div key={index} className="flex flex-col space-y-1 font-medium">
-                <span className="text-sm text-gray-600 uppercase">
+                <span className="text-sm uppercase text-gray-600">
                   {item.label}
                 </span>
                 <span className="flex flex-row items-center space-x-2">

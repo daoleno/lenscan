@@ -66,7 +66,7 @@ export default function MomokaTxsTableView({
           </TableHead>
 
           <TableBody>
-            {data.list.map((item) => (
+            {data.list.map((item: any) => (
               <TableRow key={item.proofTxId}>
                 <TableCell>
                   <Link

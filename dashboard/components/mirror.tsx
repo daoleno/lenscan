@@ -1,10 +1,10 @@
-import { MirrorFragment } from "@lens-protocol/api-bindings";
+import { Mirror } from "@lens-protocol/react-web";
 import { CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "./ui/badge";
 ("lucide-react");
 
-export default function Mirror({ mirror }: { mirror: MirrorFragment }) {
+export default function Mirror({ mirror }: { mirror: Mirror }) {
   const overviewItems = [
     {
       label: "Mirror Of",
@@ -18,11 +18,11 @@ export default function Mirror({ mirror }: { mirror: MirrorFragment }) {
   return (
     <div className="flex flex-col space-y-7 py-7">
       <div className="flex flex-col space-y-2">
-        <div className="text-2xl font-bold text-gray-800 flex items-center">
+        <div className="flex items-center text-2xl font-bold text-gray-800">
           <span>Publication</span>
           <span className="ml-2 font-mono">{mirror.id}</span>
         </div>
-        <div className="font-bold text-gray-600 text-sm">
+        <div className="text-sm font-bold text-gray-600">
           <Badge>{mirror.__typename}</Badge>
           <span> @ </span>
           <Link

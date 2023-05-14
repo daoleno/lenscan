@@ -1,4 +1,4 @@
-import { usePublication } from "@lens-protocol/react-web";
+import { PublicationId, usePublication } from "@lens-protocol/react-web";
 import NotFound from "./404";
 import Comment from "./comment";
 import DynamicReactJson from "./dynamic-react-json";
@@ -8,7 +8,11 @@ import Post from "./post";
 ("lucide-react");
 
 export default function Publication({ id }: { id: string }) {
-  const { data: pub, loading, error } = usePublication({ publicationId: id });
+  const {
+    data: pub,
+    loading,
+    error,
+  } = usePublication({ publicationId: id as PublicationId });
 
   if (loading) {
     return <Loading />;

@@ -3,7 +3,7 @@ import ProfileSummaryCard from "@/components/ProfileSummaryCard";
 import ProfileTableView from "@/components/ProfileTableView";
 import { Error } from "@/components/error";
 import { Loading } from "@/components/loading";
-import { useProfile } from "@lens-protocol/react-web";
+import { ProfileId, useProfile } from "@lens-protocol/react-web";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
 
@@ -19,7 +19,7 @@ export default function Profile() {
     loading: idProfileLoading,
     error: idError,
   } = useProfile({
-    profileId: q || "",
+    profileId: q as ProfileId,
   });
   const {
     data: handleProfile,

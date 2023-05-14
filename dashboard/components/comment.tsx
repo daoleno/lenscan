@@ -1,4 +1,4 @@
-import { CommentFragment } from "@lens-protocol/api-bindings";
+import { Comment } from "@lens-protocol/react-web";
 import {
   BarChart,
   CheckCircle2,
@@ -13,7 +13,7 @@ import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 ("lucide-react");
 
-export default function Comment({ comment }: { comment: CommentFragment }) {
+export default function Comment({ comment }: { comment: Comment }) {
   const overviewItems = [
     { label: "Id", value: comment.id },
     { label: "Name", value: comment.metadata.name },
@@ -21,7 +21,7 @@ export default function Comment({ comment }: { comment: CommentFragment }) {
     { label: "CreatedAt At", value: comment.createdAt },
     { label: "Collect Policy", value: comment.collectPolicy || "-" },
     { label: "Reference Policy", value: comment.referencePolicy || "-" },
-    { label: "Collect Module", value: comment.__collectModule },
+    { label: "Collect Module", value: comment.collectModule },
     { label: "Mirrors", value: comment.mirrors || "-" },
     { label: "Reaction", value: comment.reaction || "-" },
     { label: "Collected By", value: comment.collectedBy?.address || "-" },
@@ -49,11 +49,11 @@ export default function Comment({ comment }: { comment: CommentFragment }) {
   return (
     <div className="flex flex-col space-y-7 py-7">
       <div className="flex flex-col space-y-2">
-        <div className="text-2xl font-bold text-gray-800 flex items-center">
+        <div className="flex items-center text-2xl font-bold text-gray-800">
           <span>Publication</span>
           <span className="ml-2 font-mono">{comment.id}</span>
         </div>
-        <div className="font-bold text-gray-600 text-sm">
+        <div className="text-sm font-bold text-gray-600">
           <Badge>{comment.__typename}</Badge>
           <span> @ </span>
           <Link
@@ -63,7 +63,7 @@ export default function Comment({ comment }: { comment: CommentFragment }) {
             {comment.profile.handle}
           </Link>
         </div>
-        <div className="flex flex-col space-y-1 ml-1">
+        <div className="ml-1 flex flex-col space-y-1">
           <span className="text-sm">Comment On</span>
           <Link
             className="font-mono underline underline-offset-4"
@@ -74,7 +74,7 @@ export default function Comment({ comment }: { comment: CommentFragment }) {
               ` (${((comment.commentOn as any).metadata as any).name})`}
           </Link>
         </div>
-        <div className="flex flex-col space-y-1 ml-1">
+        <div className="ml-1 flex flex-col space-y-1">
           <span className="text-sm">Main Post</span>
           <Link
             className="font-mono underline underline-offset-4"
@@ -96,7 +96,7 @@ export default function Comment({ comment }: { comment: CommentFragment }) {
           <CardContent className="grid grid-cols-2 gap-4">
             {overviewItems.map((item, index) => (
               <div key={index} className="flex flex-col space-y-1 font-medium">
-                <span className="text-sm text-gray-600 uppercase">
+                <span className="text-sm uppercase text-gray-600">
                   {item.label}
                 </span>
                 <span>
@@ -125,7 +125,7 @@ export default function Comment({ comment }: { comment: CommentFragment }) {
               .filter(([key]) => !key.startsWith("__"))
               .map(([key, value]) => (
                 <div key={key} className="flex flex-col space-y-1 font-medium">
-                  <span className="text-sm text-gray-600 uppercase">
+                  <span className="text-sm uppercase text-gray-600">
                     {key
                       .replace(/^total/, "")
                       .replace(/([a-z])([A-Z])/g, "$1 $2")}
@@ -143,7 +143,7 @@ export default function Comment({ comment }: { comment: CommentFragment }) {
           <CardContent className="grid grid-cols-2 gap-4">
             {checkItems.map((item, index) => (
               <div key={index} className="flex flex-col space-y-1 font-medium">
-                <span className="text-sm text-gray-600 uppercase">
+                <span className="text-sm uppercase text-gray-600">
                   {item.label}
                 </span>
                 <span className="flex flex-row items-center space-x-2">

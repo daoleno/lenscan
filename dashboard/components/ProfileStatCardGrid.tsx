@@ -7,7 +7,7 @@ import {
   RectangleStackIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
-import { useProfile } from "@lens-protocol/react-web";
+import { ProfileId, useProfile } from "@lens-protocol/react-web";
 
 type Categories = {
   title: string;
@@ -21,8 +21,11 @@ export default function ProfileStatCardGrid({
 }: {
   profileId: string;
 }) {
-  const { data: profile, loading, error } = useProfile({ profileId });
-  console.log("profile", profile);
+  const {
+    data: profile,
+    loading,
+    error,
+  } = useProfile({ profileId: profileId as ProfileId });
 
   const categories: Categories = [
     {
