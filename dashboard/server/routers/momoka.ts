@@ -1,6 +1,7 @@
 import lensClient from "@/lib/lensclient";
 import { ProfileFragment } from "@lens-protocol/client";
 import { MomokaTx } from "@prisma/client";
+import { ethers } from "ethers";
 import { z } from "zod";
 import prisma from "../prisma";
 import { publicProcedure, router } from "../trpc";
@@ -31,6 +32,13 @@ export const momokaRouter = router({
         const firstQueryNextCursor = firstQueryLastTx
           ? firstQueryLastTx.id
           : null;
+        if (firstQueryTxs.length === 0) {
+          return {
+            count,
+            list: [],
+            nextCursor: null,
+          };
+        }
 
         const profiles = await lensClient.profile.fetchAll({
           profileIds: [
@@ -62,6 +70,14 @@ export const momokaRouter = router({
           id: "desc",
         },
       });
+
+      if (txs.length === 0) {
+        return {
+          count,
+          list: [],
+          nextCursor: null,
+        };
+      }
 
       const profiles = await lensClient.profile.fetchAll({
         profileIds: [...new Set(txs.map((tx) => (tx.event as any).profileId))],
@@ -108,27 +124,62 @@ export const momokaRouter = router({
       })
     )
     .query(async ({ input }) => {
+      const profileId = ethers.utils.hexlify(input.profileId);
       if (!input.cursor) {
-        const firstQuerytxs = (await prisma.$queryRawUnsafe(
-          `SELECT * FROM "MomokaTx" WHERE data->'ProfileId' = '${input.profileId}' ORDER BY id DESC LIMIT ${input.take}`
+        const firstQueryTxs = (await prisma.$queryRawUnsafe(
+          `SELECT * FROM "MomokaTx" WHERE event->>'profileId' = '${profileId}' ORDER BY id DESC LIMIT ${input.take}`
         )) as any[];
-        const firstQueryLastTx = firstQuerytxs[firstQuerytxs.length - 1];
+        const firstQueryLastTx = firstQueryTxs[firstQueryTxs.length - 1];
         const firstQueryNextCursor = firstQueryLastTx
           ? firstQueryLastTx.id
           : null;
+        if (firstQueryTxs.length === 0) {
+          return {
+            list: [],
+            nextCursor: null,
+          };
+        }
+        const profiles = await lensClient.profile.fetchAll({
+          profileIds: [
+            ...new Set(firstQueryTxs.map((tx) => (tx.event as any).profileId)),
+          ],
+        });
+        const txs = firstQueryTxs.map((tx) => {
+          const profile = profiles.items.find(
+            (profile) => profile.id === (tx.event as any).profileId
+          );
+          return { ...tx, profile };
+        }) as MomokaTxs;
         return {
-          list: firstQuerytxs,
+          list: txs,
           nextCursor: firstQueryNextCursor,
         };
       }
 
       const txs = (await prisma.$queryRawUnsafe(
-        `SELECT * FROM "MomokaTx" WHERE data->'ProfileId' = '${input.profileId}' AND id < ${input.cursor} ORDER BY id DESC LIMIT ${input.take}`
+        `SELECT * FROM "MomokaTx" WHERE event->>'profileId' = '${profileId}' AND id < ${input.cursor} ORDER BY id DESC LIMIT ${input.take}`
       )) as any[];
-      const lastTx = txs[txs.length - 1];
+      if (txs.length === 0) {
+        return {
+          list: [],
+          nextCursor: null,
+        };
+      }
+      const profiles = await lensClient.profile.fetchAll({
+        profileIds: [...new Set(txs.map((tx) => (tx.event as any).profileId))],
+      });
+
+      const newTxs = txs.map((tx) => {
+        const profile = profiles.items.find(
+          (profile) => profile.id === (tx.event as any).profileId
+        );
+        return { ...tx, profile };
+      }) as MomokaTxs;
+
+      const lastTx = newTxs[newTxs.length - 1];
       const nextCursor = lastTx ? lastTx.id : null;
       return {
-        list: txs,
+        list: newTxs,
         nextCursor,
       };
     }),
