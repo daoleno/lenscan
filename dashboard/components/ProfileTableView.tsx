@@ -64,7 +64,7 @@ export default function ProfileTableView({
 
   return (
     <Tabs className="mt-6 flex flex-col space-y-3" defaultValue="events">
-      <TabsList>
+      <TabsList className="mx-auto flex items-start space-x-3">
         <TabsTrigger value="events">Polygon Events</TabsTrigger>
         <TabsTrigger value="momoka-txns">Momoka Transactions</TabsTrigger>
       </TabsList>
