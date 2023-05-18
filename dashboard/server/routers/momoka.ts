@@ -127,7 +127,7 @@ export const momokaRouter = router({
       const profileId = ethers.utils.hexlify(input.profileId);
       if (!input.cursor) {
         const firstQueryTxs = (await prisma.$queryRawUnsafe(
-          `SELECT * FROM "MomokaTx" WHERE event->>'profileId' = '${profileId}' ORDER BY id DESC LIMIT ${input.take}`
+          `SELECT * FROM "MomokaTx" WHERE event->>'profileId' = '${profileId}' ORDER BY timestamp DESC LIMIT ${input.take}`
         )) as any[];
         const firstQueryLastTx = firstQueryTxs[firstQueryTxs.length - 1];
         const firstQueryNextCursor = firstQueryLastTx
@@ -157,7 +157,7 @@ export const momokaRouter = router({
       }
 
       const txs = (await prisma.$queryRawUnsafe(
-        `SELECT * FROM "MomokaTx" WHERE event->>'profileId' = '${profileId}' AND id < ${input.cursor} ORDER BY id DESC LIMIT ${input.take}`
+        `SELECT * FROM "MomokaTx" WHERE event->>'profileId' = '${profileId}' AND id < ${input.cursor} ORDER BY timestamp DESC LIMIT ${input.take}`
       )) as any[];
       if (txs.length === 0) {
         return {

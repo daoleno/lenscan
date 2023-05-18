@@ -81,7 +81,7 @@ export const eventRouter = router({
     .query(async ({ input }) => {
       if (!input.cursor) {
         const firstQueryEvents = (await prisma.$queryRawUnsafe(
-          `SELECT * FROM "Event" WHERE data->'ProfileId' = '${input.profileId}' ORDER BY id DESC LIMIT ${input.take}`
+          `SELECT * FROM "Event" WHERE data->'ProfileId' = '${input.profileId}' ORDER BY timestamp DESC LIMIT ${input.take}`
         )) as any[];
         const firstQueryLastEvent =
           firstQueryEvents[firstQueryEvents.length - 1];
@@ -95,7 +95,7 @@ export const eventRouter = router({
       }
 
       const events = (await prisma.$queryRawUnsafe(
-        `SELECT * FROM "Event" WHERE data->'ProfileId' = '${input.profileId}' AND id < ${input.cursor} ORDER BY id DESC LIMIT ${input.take}`
+        `SELECT * FROM "Event" WHERE data->'ProfileId' = '${input.profileId}' AND id < ${input.cursor} ORDER BY timestamp DESC LIMIT ${input.take}`
       )) as any[];
       const lastEvent = events[events.length - 1];
       const nextCursor = lastEvent ? lastEvent.id : null;
