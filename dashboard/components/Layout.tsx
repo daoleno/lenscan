@@ -9,12 +9,12 @@ export default function Layout({ children }: WithChildren) {
   return (
     <main
       className={cn(
-        "min-h-screen bg-background font-sans antialiased relative pb-10",
+        "relative flex min-h-screen flex-col bg-background pb-7 font-sans antialiased",
         fontSans.variable
       )}
     >
       <SiteHeader />
-      <section className="container">{children}</section>
+      <section className="container flex-grow">{children}</section>
       <Footer />
     </main>
   );

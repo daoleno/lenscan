@@ -25,7 +25,7 @@ const navigation = [
 
 export default function Footer() {
   return (
-    <footer className="container">
+    <footer className="container mt-auto">
       <div className="pt-12 md:flex md:items-center md:justify-between ">
         <div className="flex justify-center space-x-6 md:order-2">
           {navigation.map((item) => (
