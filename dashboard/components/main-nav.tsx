@@ -26,6 +26,10 @@ const items = [
     name: "Publications",
     href: "/publications",
   },
+  // {
+  //   name: "Analytics",
+  //   href: "/analytics",
+  // },
 ];
 
 export function MainNav({
@@ -44,7 +48,7 @@ export function MainNav({
           </Badge>
         </span>
       </Link>
-      <nav className="hidden sm:flex items-center space-x-6 text-sm font-medium">
+      <nav className="hidden items-center space-x-6 text-sm font-medium sm:flex">
         {items.map((item) => (
           <Link
             key={item.name}

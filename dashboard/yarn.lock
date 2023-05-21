@@ -2548,13 +2548,6 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
 
-"@supabase/postgrest-js@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.npmmirror.com/@supabase/postgrest-js/-/postgrest-js-1.4.1.tgz"
-  integrity sha512-aruqwV/aTggkM7OVv2JinCeXmRMKHJCZpkuS1nuoa0NgLw7g3NyILSyWOKYTBJ/PxE/zXtWsBhdxFzaaNz5uxg==
-  dependencies:
-    cross-fetch "^3.1.5"
-
 "@swc/helpers@0.5.0":
   version "0.5.0"
   resolved "https://registry.npmmirror.com/@swc/helpers/-/helpers-0.5.0.tgz#bf1d807b60f7290d0ec763feea7ccdeda06e85f1"
@@ -2601,10 +2594,10 @@
   resolved "https://registry.npmmirror.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@tremor/react@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmmirror.com/@tremor/react/-/react-2.0.0.tgz#719f064778ccc552a04b0c2dafb64aa044badbd1"
-  integrity sha512-F4UtSpBm6FZurWnv5A8lvr8NM3j6MCGLVz8LbfaQ9M36V53KTg0dNXuyjQf3Bhn+pNAK1nTi87JFIinDuZTy1Q==
+"@tremor/react@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.npmmirror.com/@tremor/react/-/react-2.7.0.tgz#3db3ed1bb427fdaa8cbd82e5cee668ea716f5538"
+  integrity sha512-dyjdWLzyYdDyKqw7VxXM79rVo9TqP2NXtFqq+1PPkrFIEtGQzZKBICAeQ7BHltvNBx79fpc+N/rUK5HM6bR5IA==
   dependencies:
     "@floating-ui/react" "^0.19.1"
     date-fns "^2.28.0"
@@ -4394,6 +4387,11 @@ date-fns@^2.28.0:
   version "2.29.3"
   resolved "https://registry.npmmirror.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
   integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
+
+dayjs@^1.11.7:
+  version "1.11.7"
+  resolved "https://registry.npmmirror.com/dayjs/-/dayjs-1.11.7.tgz#4b296922642f70999544d1144a2c25730fce63e2"
+  integrity sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==
 
 debounce@^1.2.0:
   version "1.2.1"

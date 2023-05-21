@@ -10,10 +10,11 @@ import {
 import { useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatNumber } from "@/lib/utils";
+import { age, formatNumber } from "@/lib/utils";
 import { Loading } from "./loading";
 
-import { Coins, CreditCard, Loader2, Sprout } from "lucide-react";
+import { trpc } from "@/lib/trpc";
+import { Coins, CreditCard, Loader2, Sprout, Verified } from "lucide-react";
 
 type Categories = {
   title: string;
@@ -35,6 +36,8 @@ const MomokaStats = () => {
   });
   const { fetchData: fetchSpentAmount, loading: fetchingSpentAmount } =
     useSubmitterSpent();
+
+  const { data: lastTx } = trpc.momoka.getLastTx.useQuery();
 
   const fetchCounts = async () => {
     const { data: countData } = await fetchAllCount();
@@ -86,6 +89,11 @@ const MomokaStats = () => {
       title: "Average Fee",
       metric: `$ ${(getTotalSpentInUsd() / allTransactionsCount).toFixed(4)}`,
       icon: <Coins />,
+    },
+    {
+      title: "LAST FINALIZED",
+      metric: age(Number(lastTx?.timestamp)),
+      icon: <Verified />,
     },
   ];
 

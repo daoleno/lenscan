@@ -6,7 +6,15 @@ import { z } from "zod";
 import prisma from "../prisma";
 import { publicProcedure, router } from "../trpc";
 
+interface DailyTransactionCount {
+  date: string;
+  transactions: number;
+  posts?: number;
+  comments?: number;
+  mirrors?: number;
+}
 type MomokaTxs = Array<MomokaTx> & { profile?: ProfileFragment };
+
 export const momokaRouter = router({
   getTxs: publicProcedure
     .input(
@@ -230,5 +238,37 @@ export const momokaRouter = router({
         list: txs,
         nextCursor,
       };
+    }),
+  getLastTx: publicProcedure.query(async () => {
+    const tx = await prisma.momokaTx.findFirst({
+      orderBy: {
+        id: "desc",
+      },
+    });
+    return tx;
+  }),
+
+  // analytics
+  getDailyTxCount: publicProcedure
+    .input(
+      z.object({
+        timeStart: z.number(),
+        timeEnd: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      return await prisma.$queryRaw<DailyTransactionCount[]>`
+                          SELECT
+                            TO_CHAR(TO_DATE(date, 'YYYY-MM-DD'), 'Mon DD') AS date,
+                            -- SUM(count) AS transactions,
+                            SUM(CASE WHEN type = 'POST_CREATED' THEN count ELSE 0 END) AS posts,
+                            SUM(CASE WHEN type = 'COMMENT_CREATED' THEN count ELSE 0 END) AS comments,
+                            SUM(CASE WHEN type = 'MIRROR_CREATED' THEN count ELSE 0 END) AS mirrors
+                          FROM daily_transaction_count
+                          WHERE date >= TO_CHAR(to_timestamp(${input.timeStart}), 'YYYY-MM-DD')
+                            AND date <= TO_CHAR(to_timestamp(${input.timeEnd}), 'YYYY-MM-DD')
+                          GROUP BY date
+                          ORDER BY date ASC;
+                      `;
     }),
 });

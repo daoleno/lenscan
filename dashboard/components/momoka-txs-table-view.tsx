@@ -17,6 +17,7 @@ import { AlertOctagon, Verified } from "lucide-react";
 import { useState } from "react";
 import Pagination from "./Pagination";
 import { Loading } from "./loading";
+import MomokaDailyTxsChart from "./momoka-daily-txs-charts";
 import MomokaStats from "./momoka-stats";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
@@ -50,6 +51,7 @@ export default function MomokaTxsTableView({
           ))}
         </div>
         <MomokaStats />
+        <MomokaDailyTxsChart />
       </div>
 
       <Card>

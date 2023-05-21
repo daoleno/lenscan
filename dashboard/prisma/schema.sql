@@ -43,6 +43,29 @@ CREATE TABLE IF NOT EXISTS "LastBlock" (
     "blockNumber" INT
 );
 
+-- materialized view 
+-- postgresql.conf
+-- shared_preload_libraries = 'pg_cron'    # (change requires restart)
+-- CREATE EXTENSION pg_cron
+CREATE MATERIALIZED VIEW daily_transaction_count AS
+SELECT type, TO_CHAR(to_timestamp("timestamp"), 'YYYY-MM-DD') AS date, COUNT(*) AS count
+FROM "MomokaTx"
+GROUP BY type, date
+ORDER BY date DESC;
+
+CREATE UNIQUE INDEX daily_transaction_count_pk ON daily_transaction_count (type, date);
+
+CREATE OR REPLACE FUNCTION refresh_daily_transaction_count() RETURNS void AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW CONCURRENTLY daily_transaction_count;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT cron.schedule_in_database('hourly-refresh-daily-transaction-count', '0 * * * *', 'SELECT refresh_daily_transaction_count()', 'lenscan');  -- every hour
+-- 0 * * * * psql postgres://postgres:jTYx8byH35wmNH5O@localhost:5432/lenscan -c "SELECT refresh_daily_transaction_count()"
+
+
+
 
 -- for lens profile
 CREATE MATERIALIZED VIEW publications_summary_by_date AS
