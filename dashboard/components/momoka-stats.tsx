@@ -91,7 +91,7 @@ const MomokaStats = () => {
       icon: <Coins />,
     },
     {
-      title: "LAST FINALIZED",
+      title: "Last Finalized",
       metric: age(Number(lastTx?.timestamp)),
       icon: <Verified />,
     },
