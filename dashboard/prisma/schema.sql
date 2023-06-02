@@ -62,7 +62,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 SELECT cron.schedule_in_database('hourly-refresh-daily-transaction-count', '0 * * * *', 'SELECT refresh_daily_transaction_count()', 'lenscan');  -- every hour
--- 0 * * * * psql postgres://postgres:jTYx8byH35wmNH5O@localhost:5432/lenscan -c "SELECT refresh_daily_transaction_count()"
+-- 0 * * * * psql postgres://postgres:password@localhost:5432/lenscan -c "SELECT refresh_daily_transaction_count()"
 
 
 
@@ -86,7 +86,14 @@ ORDER BY "mv_date", "profileId";
 
 CREATE UNIQUE INDEX publications_summary_by_date_pk ON publications_summary_by_date (mv_date, "profileId");
 
-REFRESH MATERIALIZED VIEW publications_summary_by_date;
+CREATE OR REPLACE FUNCTION refresh_publications_summary_by_date() RETURNS void AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW CONCURRENTLY publications_summary_by_date;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT cron.schedule_in_database('hourly-refresh-publications-summary-by-date', '0 * * * *', 'SELECT refresh_publications_summary_by_date()', 'lenscan');  -- every hour
+-- 0 * * * * psql postgres://postgres:password@localhost:5432/lenscan -c "SELECT refresh_publications_summary_by_date()"
 
 CREATE OR REPLACE FUNCTION get_publications_summary(
     profile_id bigint,
