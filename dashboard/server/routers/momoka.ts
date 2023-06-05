@@ -259,7 +259,7 @@ export const momokaRouter = router({
     .query(async ({ input }) => {
       return await prisma.$queryRaw<DailyTransactionCount[]>`
                           SELECT
-                            TO_CHAR(TO_DATE(date, 'YYYY-MM-DD'), 'Mon DD') AS date,
+                            date,
                             -- SUM(count) AS transactions,
                             SUM(CASE WHEN type = 'POST_CREATED' THEN count ELSE 0 END) AS posts,
                             SUM(CASE WHEN type = 'COMMENT_CREATED' THEN count ELSE 0 END) AS comments,

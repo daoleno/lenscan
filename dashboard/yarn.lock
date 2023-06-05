@@ -2594,10 +2594,10 @@
   resolved "https://registry.npmmirror.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@tremor/react@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.npmmirror.com/@tremor/react/-/react-2.7.0.tgz#3db3ed1bb427fdaa8cbd82e5cee668ea716f5538"
-  integrity sha512-dyjdWLzyYdDyKqw7VxXM79rVo9TqP2NXtFqq+1PPkrFIEtGQzZKBICAeQ7BHltvNBx79fpc+N/rUK5HM6bR5IA==
+"@tremor/react@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.npmmirror.com/@tremor/react/-/react-2.9.1.tgz#9ba60afe6c7dbe8492a6b42bb8d2b64db382b2b0"
+  integrity sha512-sO1qCmF/4LgwF53A0MUnWORcIBLAbYNP1aZLCjA9t8+Fv+qe0yD7OOwquttO1yC1mz2RYDKcMvZZA5GZBUf1rQ==
   dependencies:
     "@floating-ui/react" "^0.19.1"
     date-fns "^2.28.0"
