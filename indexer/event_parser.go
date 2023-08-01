@@ -57,6 +57,10 @@ func ProcessEvents(db *pgxpool.Pool, logs []types.Log) error {
 		}
 
 		p := EventProcessors[l.Topics[0]]
+		if p == nil {
+			log.Printf("Unsuported event %s", l.Topics[0].Hex())
+			continue
+		}
 		args, err := p.ProcessEvent(l)
 		if err != nil {
 			log.Printf("Error processing event %s: %s", l.Topics[0].Hex(), err)
