@@ -6,7 +6,7 @@ authors = ["daoleno <daodaoonline@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 duckdb = "^0.9.2"
 schedule = "^1.2.1"
 google-cloud-bigquery = "^3.13.0"
