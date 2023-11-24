@@ -5,6 +5,8 @@ from google.cloud import bigquery
 from datetime import datetime
 from google.oauth2 import service_account
 from google.cloud import bigquery
+import polars as pl
+
 
 # Initialize BigQuery client
 service_account_path = 'service_account.json'
@@ -73,16 +75,18 @@ def perform_sync_task():
         FROM `{table_ref}`
         WHERE datastream_metadata.source_timestamp > {last_timestamp}
         """
-
-        # Fetch updated data
-        rows = bqclient.query(query).result()
-        table_data = rows.to_arrow(create_bqstorage_client=True)
-
-        # Update DuckDB table with new data
-        cursor.register('table_data', table_data)
-        cursor.execute(f'INSERT INTO {table_id} SELECT * FROM table_data')
-
-        print(f"[{datetime.now()}] Synced table: {table_id}, Rows: {rows.total_rows}")
+        query_job = bqclient.query(query)
+        iterator = query_job.result(page_size=10000)  # Fetch 1000 rows at a time
+        page_num = 0
+        for page in iterator.pages:
+            page_num += 1
+            items = list(page)
+            df = pl.DataFrame({field.name: list(data) for field, data in zip(table_schema, zip(*items))})
+            # insert into duckdb
+            if df.height > 0:  # Check if DataFrame is not empty
+                cursor.register('df', df)
+                cursor.execute(f'INSERT INTO {table_id} SELECT * FROM df')
+                print(f"[{datetime.now()}] Synced table: {table_id}, Page: {page_num}, Rows: {len(items)}")
 
     print(f"[{datetime.now()}] Data sync completed.")
     is_task_running = False

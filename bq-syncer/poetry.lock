@@ -183,8 +183,14 @@ files = [
 [package.dependencies]
 google-auth = ">=2.14.1,<3.0.dev0"
 googleapis-common-protos = ">=1.56.2,<2.0.dev0"
-grpcio = {version = ">=1.49.1,<2.0dev", optional = true, markers = "python_version >= \"3.11\" and extra == \"grpc\""}
-grpcio-status = {version = ">=1.49.1,<2.0.dev0", optional = true, markers = "python_version >= \"3.11\" and extra == \"grpc\""}
+grpcio = [
+    {version = ">=1.49.1,<2.0dev", optional = true, markers = "python_version >= \"3.11\" and extra == \"grpc\""},
+    {version = ">=1.33.2,<2.0dev", optional = true, markers = "python_version < \"3.11\" and extra == \"grpc\""},
+]
+grpcio-status = [
+    {version = ">=1.49.1,<2.0.dev0", optional = true, markers = "python_version >= \"3.11\" and extra == \"grpc\""},
+    {version = ">=1.33.2,<2.0.dev0", optional = true, markers = "python_version < \"3.11\" and extra == \"grpc\""},
+]
 protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0.dev0"
 requests = ">=2.18.0,<3.0.0.dev0"
 
@@ -231,7 +237,10 @@ files = [
 google-api-core = {version = ">=1.31.5,<2.0.dev0 || >2.3.0,<3.0.0dev", extras = ["grpc"]}
 google-cloud-core = ">=1.6.0,<3.0.0dev"
 google-resumable-media = ">=0.6.0,<3.0dev"
-grpcio = {version = ">=1.49.1,<2.0dev", markers = "python_version >= \"3.11\""}
+grpcio = [
+    {version = ">=1.49.1,<2.0dev", markers = "python_version >= \"3.11\""},
+    {version = ">=1.47.0,<2.0dev", markers = "python_version < \"3.11\""},
+]
 packaging = ">=20.0.0"
 proto-plus = ">=1.15.0,<2.0.0dev"
 protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
@@ -531,6 +540,42 @@ files = [
 ]
 
 [[package]]
+name = "polars"
+version = "0.19.15"
+description = "Blazingly fast DataFrame library"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "polars-0.19.15-cp38-abi3-macosx_10_12_x86_64.whl", hash = "sha256:7fc12b2028fd77300710de9dd576804fc629ee734e5cbee01e436f7cc7c87360"},
+    {file = "polars-0.19.15-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:f88e4357af404d057c492c2855eb25e9860c31bedab912f55cb9c4dfe6891949"},
+    {file = "polars-0.19.15-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bf420b34b8f48ff6766bc14c0d4618439f9832561fbdfb29fef2933f7d8eb376"},
+    {file = "polars-0.19.15-cp38-abi3-manylinux_2_24_aarch64.whl", hash = "sha256:e0034a3908eb2c9f7304c134c2bab3eadcc343cacd9fc5ef7b3c7776e7d8d086"},
+    {file = "polars-0.19.15-cp38-abi3-win_amd64.whl", hash = "sha256:4418b17fb9da707645d57628ee4018f351b777154621300e2bbdd732d2394e3e"},
+    {file = "polars-0.19.15.tar.gz", hash = "sha256:9f137bff1734aa5004da9322e828083f6745a926cdcb9ef795d71184411a86dc"},
+]
+
+[package.extras]
+adbc = ["adbc_driver_sqlite"]
+all = ["polars[adbc,cloudpickle,connectorx,deltalake,fsspec,gevent,matplotlib,numpy,pandas,pyarrow,pydantic,pyiceberg,sqlalchemy,timezone,xlsx2csv,xlsxwriter]"]
+cloudpickle = ["cloudpickle"]
+connectorx = ["connectorx (>=0.3.2)"]
+deltalake = ["deltalake (>=0.13.0)"]
+fsspec = ["fsspec"]
+gevent = ["gevent"]
+matplotlib = ["matplotlib"]
+numpy = ["numpy (>=1.16.0)"]
+openpyxl = ["openpyxl (>=3.0.0)"]
+pandas = ["pandas", "pyarrow (>=7.0.0)"]
+pyarrow = ["pyarrow (>=7.0.0)"]
+pydantic = ["pydantic"]
+pyiceberg = ["pyiceberg (>=0.5.0)"]
+pyxlsb = ["pyxlsb (>=1.0)"]
+sqlalchemy = ["pandas", "sqlalchemy"]
+timezone = ["backports.zoneinfo", "tzdata"]
+xlsx2csv = ["xlsx2csv (>=0.8.0)"]
+xlsxwriter = ["xlsxwriter"]
+
+[[package]]
 name = "proto-plus"
 version = "1.22.3"
 description = "Beautiful, Pythonic protocol buffers."
@@ -729,5 +774,5 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.11"
-content-hash = "a3ac38e4d97fcf2cab7d6194d1bdffdae34ee76ce77d056191ad0b279fa7c726"
+python-versions = "^3.10"
+content-hash = "0d5899d1fe20f55fca452f246be7635be648801003f6fbf575841a517509dc07"
