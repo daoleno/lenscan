@@ -1,4 +1,3 @@
-import EventTableView from "@/components/EventTableView";
 import StatCardGrid from "@/components/StatCardGrid";
 import {
   PageHeader,
@@ -18,7 +17,7 @@ export default function Home() {
       <StatCardGrid />
       <div className="mt-6 space-y-6">
         {/* <ChartView /> */}
-        <EventTableView showPagination={false} itemsPerPage={10} />
+        {/* <EventTableView showPagination={false} itemsPerPage={10} /> */}
       </div>
     </div>
   );

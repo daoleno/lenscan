@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Card,
   Table,
@@ -6,29 +8,29 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from "@tremor/react";
-import Link from "next/link";
+} from "@tremor/react"
+import Link from "next/link"
 
-import { age, shortHash } from "@/lib/utils";
+import { age, shortHash } from "@/lib/utils"
 
-import { trpc } from "@/lib/trpc";
-import { useState } from "react";
-import Pagination from "./Pagination";
-import { Loading } from "./loading";
-import { Badge } from "./ui/badge";
+import { trpc } from "@/lib/trpc"
+import { useState } from "react"
+import Pagination from "./Pagination"
+import { Loading } from "./loading"
+import { Badge } from "./ui/badge"
 
 export default function EventTableView({
   showPagination = true,
   itemsPerPage = 25,
 }) {
-  const [cursor, setCursor] = useState(null);
+  const [cursor, setCursor] = useState(null)
   const { data, error, isLoading } = trpc.event.getEvents.useQuery({
     take: itemsPerPage,
     cursor,
-  });
+  })
 
-  if (error) return <div>Error: {error.message}</div>;
-  if (isLoading) return <Loading fixed={false} />;
+  if (error) return <div>Error: {error.message}</div>
+  if (isLoading) return <Loading fixed={false} />
 
   const eventTypes = [
     "Followed",
@@ -36,7 +38,7 @@ export default function EventTableView({
     "CommentCreated",
     "MirrorCreated",
     "Collected",
-  ];
+  ]
 
   return (
     <div>
@@ -121,5 +123,5 @@ export default function EventTableView({
         />
       )}
     </div>
-  );
+  )
 }

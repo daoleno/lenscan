@@ -1,6 +1,6 @@
 import client from "@/apollo";
 import Layout from "@/components/Layout";
-import { trpc } from "@/lib/trpc";
+// import { trpc } from "@/lib/trpc";
 import { ApolloProvider } from "@apollo/client";
 import { LensConfig, LensProvider, production } from "@lens-protocol/react-web";
 import { bindings as wagmiBindings } from "@lens-protocol/wagmi";
@@ -44,4 +44,4 @@ export function App({ Component, pageProps }: AppProps) {
   );
 }
 
-export default trpc.withTRPC(App);
+// export default trpc.withTRPC(App);

@@ -1,15 +1,17 @@
-import { Input } from "@/components/ui/input";
-import { useRouter } from "next/router";
-import { useState } from "react";
+"use client"
+
+import { Input } from "@/components/ui/input"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export function Search() {
-  const [input, setInput] = useState("");
-  const router = useRouter();
+  const [input, setInput] = useState("")
+  const router = useRouter()
   const handleSearch = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    if (input === "") return;
-    router.push(`/profile/${input}`);
-  };
+    e.preventDefault()
+    if (input === "") return
+    router.push(`/profile/${input}`)
+  }
 
   return (
     <form onSubmit={handleSearch}>
@@ -20,5 +22,5 @@ export function Search() {
         onInput={(e) => setInput(e.currentTarget.value)}
       />
     </form>
-  );
+  )
 }
