@@ -1,18 +1,14 @@
+import { getGlobalStats } from "@/app/api/analystics/getGlobalStats";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-import lensClient from "@/lib/lensclient";
 import { formatNumber } from "@/lib/utils";
 import {
   Copy,
-  Flame,
-  Layers,
   Loader2,
   MessageSquare,
   Scroll,
-  UserPlus,
-  Users,
+  Users
 } from "lucide-react";
-import useSWR from "swr";
+
 
 type Categories = {
   title: string;
@@ -20,48 +16,31 @@ type Categories = {
   icon: any;
 }[];
 
-export default function StatCardGrid() {
-  const { data: stats, error } = useSWR(
-    "lens-protocol-global-stats",
-    async () => {
-      return await lensClient.stats.fetch();
-    }
-  );
+export default async function StatCardGrid() {
+  const globalStats = await getGlobalStats();
+
+  // console.log("stats", res)
+  
   const categories: Categories = [
     {
       title: "Profiles",
-      metric: stats?.totalProfiles.toString(),
+      metric: globalStats.totalProfiles.toString(),
       icon: <Users />,
     },
     {
       title: "Posts",
-      metric: stats?.totalPosts.toString(),
+      metric: globalStats.totalPosts.toString(),
       icon: <Scroll />,
     },
     {
-      title: "Follows",
-      metric: stats?.totalFollows.toString(),
-      icon: <UserPlus />,
-    },
-    {
-      title: "Collects",
-      metric: stats?.totalCollects.toString(),
-      icon: <Layers />,
-    },
-    {
       title: "Mirrors",
-      metric: stats?.totalMirrors.toString(),
+      metric: globalStats.totalMirrors.toString(),
       icon: <Copy />,
     },
     {
       title: "Comments",
-      metric: stats?.totalComments.toString(),
+      metric: globalStats.totalComments.toString(),
       icon: <MessageSquare />,
-    },
-    {
-      title: "Burnt Profiles",
-      metric: stats?.totalBurntProfiles.toString(),
-      icon: <Flame />,
     },
   ];
 

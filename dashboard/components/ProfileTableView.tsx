@@ -18,7 +18,7 @@ import { trpc } from "@/lib/trpc";
 import { AlertOctagon, Verified } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import Pagination from "./Pagination";
+import Pagination from "./pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 interface ProfileTableViewProps {

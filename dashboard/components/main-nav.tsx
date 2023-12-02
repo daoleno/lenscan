@@ -1,9 +1,11 @@
-import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
-import { Leaf } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Badge } from "./ui/badge";
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Leaf } from "lucide-react"
+
+import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+
+import { Badge } from "./ui/badge"
 
 const items = [
   {
@@ -11,32 +13,28 @@ const items = [
     href: "/",
   },
   {
-    name: "Momoka",
-    href: "/momoka-txs",
+    name: "Publications",
+    href: "/publications",
   },
   {
-    name: "Events",
-    href: "/events",
+    name: "Momoka",
+    href: "/momoka-txs",
   },
   {
     name: "Profiles",
     href: "/profiles",
   },
-  {
-    name: "Publications",
-    href: "/publications",
-  },
   // {
   //   name: "Analytics",
   //   href: "/analytics",
   // },
-];
+]
 
 export function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
-  const pathname = usePathname();
+  const pathname = usePathname()
   return (
     <div className={cn("mr-4 md:flex", className)} {...props}>
       <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -63,5 +61,5 @@ export function MainNav({
         ))}
       </nav>
     </div>
-  );
+  )
 }

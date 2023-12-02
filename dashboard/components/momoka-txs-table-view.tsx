@@ -15,10 +15,10 @@ import Image from "next/image";
 import { trpc } from "@/lib/trpc";
 import { AlertOctagon, Verified } from "lucide-react";
 import { useState } from "react";
-import Pagination from "./Pagination";
 import { Loading } from "./loading";
 import MomokaDailyTxsChart from "./momoka-daily-txs-charts";
 import MomokaStats from "./momoka-stats";
+import Pagination from "./pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 
