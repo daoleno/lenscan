@@ -6,5 +6,5 @@ export const searchParamsSchema = z.object({
   sort: z.string().optional(),
   app: z.string().optional(),
   publication_type: z.string().optional(),
-  network: z.string().optional(),
+  is_momoka: z.string().optional(),
 })

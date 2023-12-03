@@ -12,7 +12,7 @@ interface PageProps {
 
 export default async function Page({ searchParams }: PageProps) {
   // Parse search params using zod schema
-  const { page, per_page, sort, app, publication_type, is_momoka } =
+  const { page, per_page, sort, app, publication_type, network } =
     searchParamsSchema.parse(searchParams)
 
   // Fallback page for invalid page numbers
@@ -34,6 +34,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   const apps = app?.split(".") ?? []
   const publication_types = publication_type?.split(".") ?? []
+  const networks = network?.split(".") ?? []
 
   const { publications } = await getPublications({
     limit,
@@ -45,21 +46,19 @@ export default async function Page({ searchParams }: PageProps) {
     filter: {
       app: apps,
       publication_type: publication_types,
-      is_momoka: is_momoka,
+      network: networks,
     },
   })
   const maxCount = 1000000
   const pageCount = Math.ceil(Number(maxCount) / limit)
 
   return (
-    <div className="p-8">
-      <PublicationsTable
-        data={publications}
-        pageCount={pageCount}
-        totalCount={maxCount}
-        showToolbar={true}
-        showPagination={true}
-      />
-    </div>
+    <PublicationsTable
+      data={publications}
+      pageCount={pageCount}
+      totalCount={maxCount}
+      showToolbar={true}
+      showPagination={true}
+    />
   )
 }

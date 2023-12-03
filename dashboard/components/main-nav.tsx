@@ -17,12 +17,8 @@ const items = [
     href: "/publications",
   },
   {
-    name: "Momoka",
-    href: "/momoka-txs",
-  },
-  {
-    name: "Profiles",
-    href: "/profiles",
+    name: "Leaderboard",
+    href: "/leaderboard",
   },
   // {
   //   name: "Analytics",
