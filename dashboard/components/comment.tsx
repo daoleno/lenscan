@@ -1,4 +1,7 @@
-import { Comment } from "@lens-protocol/react-web";
+"use client"
+
+import Link from "next/link"
+import { CommentFragment } from "@lens-protocol/client"
 import {
   BarChart,
   CheckCircle2,
@@ -6,45 +9,42 @@ import {
   FileText,
   Focus,
   XCircle,
-} from "lucide-react";
-import Link from "next/link";
-import DynamicReactJson from "./dynamic-react-json";
-import { Badge } from "./ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-("lucide-react");
+} from "lucide-react"
+import ReactJson from "react-json-view"
 
-export default function Comment({ comment }: { comment: Comment }) {
+import { Badge } from "./ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
+
+export default function Comment({ comment }: { comment: CommentFragment }) {
   const overviewItems = [
     { label: "Id", value: comment.id },
-    { label: "Name", value: comment.metadata.name },
+    { label: "Title", value: (comment.metadata as any)?.title || "-" },
     { label: "Type", value: comment.__typename },
-    { label: "CreatedAt At", value: comment.createdAt },
-    { label: "Collect Policy", value: comment.collectPolicy || "-" },
-    { label: "Reference Policy", value: comment.referencePolicy || "-" },
-    { label: "Collect Module", value: comment.collectModule },
-    { label: "Mirrors", value: comment.mirrors || "-" },
-    { label: "Reaction", value: comment.reaction || "-" },
-    { label: "Collected By", value: comment.collectedBy?.address || "-" },
-    { label: "Decryption Criteria", value: comment.decryptionCriteria || "-" },
-  ];
-
-  const checkItems = [
-    { label: "Can Comment", value: comment.canComment.result },
-    { label: "Can Mirror", value: comment.canMirror.result },
-    { label: "Can Observer Decrypt", value: comment.canObserverDecrypt.result },
-    { label: "Hidden", value: comment.hidden },
-    { label: "Is Gated", value: comment.isGated },
-
-    { label: "Has Collected By Me", value: comment.hasCollectedByMe },
+    { label: "App", value: comment.metadata?.appId },
     {
-      label: "Has Optimistic Collected By Me",
-      value: comment.hasOptimisticCollectedByMe,
+      label: "On Polygon",
+      value: comment.momoka?.__typename !== "MomokaInfo" ? "Yes" : "No",
     },
+    { label: "Polygon Tx Hash", value: comment.txHash || "-" },
     {
-      label: "Is Optimistic Mirrored By Me",
-      value: comment.isOptimisticMirroredByMe,
+      label: "On Momoka",
+      value: comment.momoka?.__typename == "MomokaInfo" ? "Yes" : "No",
     },
-  ];
+    { label: "Momoka Proof", value: comment.momoka?.proof || "-" },
+  ]
+
+  const operationItems = [
+    { label: "Can Comment", value: comment.operations.canComment },
+    { label: "Can Mirror", value: comment.operations.canMirror },
+    { label: "Can Act", value: comment.operations.canAct },
+    { label: "Can Decrypt", value: comment.operations.canDecrypt.result },
+    { label: "Has Bookmarked ", value: comment.operations.hasBookmarked },
+    { label: "Has Reported ", value: comment.operations.hasReported },
+    { label: "Has Upvoted ", value: comment.operations.hasUpvoted },
+    { label: "Has Downvoted ", value: comment.operations.hasDownvoted },
+    { label: "Hidden", value: comment.isHidden },
+    { label: "Is Not Interested ", value: comment.operations.isNotInterested },
+  ]
 
   return (
     <div className="flex flex-col space-y-7 py-7">
@@ -53,14 +53,14 @@ export default function Comment({ comment }: { comment: Comment }) {
           <span>Publication</span>
           <span className="ml-2 font-mono">{comment.id}</span>
         </div>
-        <div className="text-sm font-bold text-gray-600">
+        <div className="text-sm font-bold text-muted-foreground">
           <Badge>{comment.__typename}</Badge>
           <span> @ </span>
           <Link
-            href={`/profile/${comment.profile.handle}`}
+            href={`/profile/${comment.by.handle?.localName}`}
             className="font-bold underline underline-offset-4"
           >
-            {comment.profile.handle}
+            {comment.by.handle?.localName}
           </Link>
         </div>
         <div className="ml-1 flex flex-col space-y-1">
@@ -70,19 +70,8 @@ export default function Comment({ comment }: { comment: Comment }) {
             href={`/publication/${comment.commentOn?.id}`}
           >
             {comment.commentOn?.id || "-"}
-            {(comment.commentOn as any).metadata &&
-              ` (${((comment.commentOn as any).metadata as any).name})`}
-          </Link>
-        </div>
-        <div className="ml-1 flex flex-col space-y-1">
-          <span className="text-sm">Main Post</span>
-          <Link
-            className="font-mono underline underline-offset-4"
-            href={`/publication/${comment.mainPost?.id}`}
-          >
-            {comment.mainPost?.id || "-"}
-            {(comment.mainPost as any).metadata &&
-              ` (${((comment.mainPost as any).metadata as any).name})`}
+            {(comment.commentOn.metadata as any)?.title &&
+              ` (${(comment.commentOn.metadata as any).title})`}
           </Link>
         </div>
       </div>
@@ -96,12 +85,12 @@ export default function Comment({ comment }: { comment: Comment }) {
           <CardContent className="grid grid-cols-2 gap-4">
             {overviewItems.map((item, index) => (
               <div key={index} className="flex flex-col space-y-1 font-medium">
-                <span className="text-sm uppercase text-gray-600">
+                <span className="text-sm uppercase text-muted-foreground">
                   {item.label}
                 </span>
                 <span>
                   {typeof item.value === "object" ? (
-                    <DynamicReactJson
+                    <ReactJson
                       name={false}
                       collapsed={true}
                       displayDataTypes={false}
@@ -125,7 +114,7 @@ export default function Comment({ comment }: { comment: Comment }) {
               .filter(([key]) => !key.startsWith("__"))
               .map(([key, value]) => (
                 <div key={key} className="flex flex-col space-y-1 font-medium">
-                  <span className="text-sm uppercase text-gray-600">
+                  <span className="text-sm uppercase text-muted-foreground">
                     {key
                       .replace(/^total/, "")
                       .replace(/([a-z])([A-Z])/g, "$1 $2")}
@@ -141,9 +130,9 @@ export default function Comment({ comment }: { comment: Comment }) {
             <ClipboardCheck />
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-4">
-            {checkItems.map((item, index) => (
+            {operationItems.map((item, index) => (
               <div key={index} className="flex flex-col space-y-1 font-medium">
-                <span className="text-sm uppercase text-gray-600">
+                <span className="text-sm uppercase text-muted-foreground">
                   {item.label}
                 </span>
                 <span className="flex flex-row items-center space-x-2">
@@ -153,6 +142,10 @@ export default function Comment({ comment }: { comment: Comment }) {
                     ) : (
                       <XCircle className="h-4 w-4 text-muted-foreground" />
                     )
+                  ) : item.value === "YES" ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : item.value === "NO" ? (
+                    <XCircle className="h-4 w-4 text-muted-foreground" />
                   ) : (
                     item.value
                   )}
@@ -169,7 +162,7 @@ export default function Comment({ comment }: { comment: Comment }) {
           </CardHeader>
           <CardContent className="overflow-auto">
             {/* <Metadata metadata={comment.metadata} /> */}
-            <DynamicReactJson
+            <ReactJson
               name={false}
               displayDataTypes={false}
               src={comment.metadata}
@@ -178,5 +171,5 @@ export default function Comment({ comment }: { comment: Comment }) {
         </Card>
       </div>
     </div>
-  );
+  )
 }

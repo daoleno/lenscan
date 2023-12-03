@@ -1,4 +1,7 @@
-import { Post } from "@lens-protocol/react-web";
+"use client"
+
+import Link from "next/link"
+import { PostFragment } from "@lens-protocol/client"
 import {
   BarChart,
   CheckCircle2,
@@ -6,47 +9,42 @@ import {
   FileText,
   Focus,
   XCircle,
-} from "lucide-react";
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import { Badge } from "./ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-("lucide-react");
+} from "lucide-react"
+import ReactJson from "react-json-view"
 
-const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
+import { Badge } from "./ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 
-export default function Post({ post }: { post: Post }) {
+export default function Post({ post }: { post: PostFragment }) {
   const overviewItems = [
     { label: "Id", value: post.id },
-    { label: "Name", value: post.metadata.name },
+    { label: "Title", value: post.metadata?.title },
     { label: "Type", value: post.__typename },
-    { label: "CreatedAt At", value: post.createdAt },
-    { label: "Collect Policy", value: post.collectPolicy || "-" },
-    { label: "Reference Policy", value: post.referencePolicy || "-" },
-    { label: "Collect Module", value: post.collectModule },
-    { label: "Mirrors", value: post.mirrors || "-" },
-    { label: "Reaction", value: post.reaction || "-" },
-    { label: "Collected By", value: post.collectedBy?.address || "-" },
-    { label: "Decryption Criteria", value: post.decryptionCriteria || "-" },
-  ];
-
-  const checkItems = [
-    { label: "Can Comment", value: post.canComment.result },
-    { label: "Can Mirror", value: post.canMirror.result },
-    { label: "Can Observer Decrypt", value: post.canObserverDecrypt.result },
-    { label: "Hidden", value: post.hidden },
-    { label: "Is Gated", value: post.isGated },
-
-    { label: "Has Collected By Me", value: post.hasCollectedByMe },
+    { label: "App", value: post.metadata?.appId },
     {
-      label: "Has Optimistic Collected By Me",
-      value: post.hasOptimisticCollectedByMe,
+      label: "On Polygon",
+      value: post.momoka?.__typename !== "MomokaInfo" ? "Yes" : "No",
     },
+    { label: "Polygon Tx Hash", value: post.txHash || "-" },
     {
-      label: "Is Optimistic Mirrored By Me",
-      value: post.isOptimisticMirroredByMe,
+      label: "On Momoka",
+      value: post.momoka?.__typename == "MomokaInfo" ? "Yes" : "No",
     },
-  ];
+    { label: "Momoka Proof", value: post.momoka?.proof || "-" },
+  ]
+
+  const operationItems = [
+    { label: "Can Comment", value: post.operations.canComment },
+    { label: "Can Mirror", value: post.operations.canMirror },
+    { label: "Can Act", value: post.operations.canAct },
+    { label: "Can Decrypt", value: post.operations.canDecrypt.result },
+    { label: "Has Bookmarked ", value: post.operations.hasBookmarked },
+    { label: "Has Reported ", value: post.operations.hasReported },
+    { label: "Has Upvoted ", value: post.operations.hasUpvoted },
+    { label: "Has Downvoted ", value: post.operations.hasDownvoted },
+    { label: "Hidden", value: post.isHidden },
+    { label: "Is Not Interested ", value: post.operations.isNotInterested },
+  ]
 
   return (
     <div className="flex flex-col space-y-7 py-7">
@@ -55,18 +53,17 @@ export default function Post({ post }: { post: Post }) {
           <span>Publication</span>
           <span className="ml-2 font-mono">{post.id}</span>
         </div>
-        <div className="text-sm font-bold text-gray-600">
+        <div className="text-sm font-bold text-muted-foreground">
           <Badge>{post.__typename}</Badge>
           <span> @ </span>
           <Link
-            href={`/profile/${post.profile.handle}`}
+            href={`/profile/${post.by.handle?.localName}`}
             className="font-bold underline underline-offset-4"
           >
-            {post.profile.handle}
+            {post.by.handle?.localName}
           </Link>
         </div>
       </div>
-
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
@@ -76,12 +73,12 @@ export default function Post({ post }: { post: Post }) {
           <CardContent className="grid grid-cols-2 gap-4">
             {overviewItems.map((item, index) => (
               <div key={index} className="flex flex-col space-y-1 font-medium">
-                <span className="text-sm uppercase text-gray-600">
+                <span className="text-sm uppercase text-muted-foreground">
                   {item.label}
                 </span>
-                <span>
+                <span className="overflow-auto">
                   {typeof item.value === "object" ? (
-                    <DynamicReactJson
+                    <ReactJson
                       name={false}
                       collapsed={true}
                       displayDataTypes={false}
@@ -105,7 +102,7 @@ export default function Post({ post }: { post: Post }) {
               .filter(([key]) => !key.startsWith("__"))
               .map(([key, value]) => (
                 <div key={key} className="flex flex-col space-y-1 font-medium">
-                  <span className="text-sm uppercase text-gray-600">
+                  <span className="text-sm uppercase text-muted-foreground">
                     {key
                       .replace(/^total/, "")
                       .replace(/([a-z])([A-Z])/g, "$1 $2")}
@@ -117,13 +114,13 @@ export default function Post({ post }: { post: Post }) {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
-            <CardTitle>Checks</CardTitle>
+            <CardTitle>Operations</CardTitle>
             <ClipboardCheck />
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-4">
-            {checkItems.map((item, index) => (
+            {operationItems.map((item, index) => (
               <div key={index} className="flex flex-col space-y-1 font-medium">
-                <span className="text-sm uppercase text-gray-600">
+                <span className="text-sm uppercase text-muted-foreground">
                   {item.label}
                 </span>
                 <span className="flex flex-row items-center space-x-2">
@@ -133,6 +130,10 @@ export default function Post({ post }: { post: Post }) {
                     ) : (
                       <XCircle className="h-4 w-4 text-muted-foreground" />
                     )
+                  ) : item.value === "YES" ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : item.value === "NO" ? (
+                    <XCircle className="h-4 w-4 text-muted-foreground" />
                   ) : (
                     item.value
                   )}
@@ -149,14 +150,17 @@ export default function Post({ post }: { post: Post }) {
           </CardHeader>
           <CardContent className="overflow-auto">
             {/* <Metadata metadata={post.metadata} /> */}
-            <DynamicReactJson
-              name={false}
-              displayDataTypes={false}
-              src={post.metadata}
-            />
+            {typeof window !== "undefined" && (
+              <ReactJson
+                name={false}
+                displayDataTypes={false}
+                collapsed={true}
+                src={post.metadata}
+              />
+            )}
           </CardContent>
         </Card>
       </div>
     </div>
-  );
+  )
 }

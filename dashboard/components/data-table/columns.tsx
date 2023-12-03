@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { ColumnDef } from "@tanstack/react-table"
 import * as timeago from "timeago.js"
 
@@ -13,7 +14,14 @@ export const columns: ColumnDef<Publication>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Id" />
     ),
-    cell: ({ row }) => <div>{row.getValue("publication_id")}</div>,
+    cell: ({ row }) => (
+      <Link
+        className="underline"
+        href={`/publication/${row.original.publication_id}`}
+      >
+        {row.original.publication_id}
+      </Link>
+    ),
     enableSorting: false,
   },
   {
@@ -21,7 +29,11 @@ export const columns: ColumnDef<Publication>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Profile Id" />
     ),
-    cell: ({ row }) => <div>{row.getValue("profile_id")}</div>,
+    cell: ({ row }) => (
+      <Link className="underline" href={`/profile/${row.original.profile_id}`}>
+        {row.original.profile_id}
+      </Link>
+    ),
     enableSorting: false,
   },
   {
@@ -30,7 +42,9 @@ export const columns: ColumnDef<Publication>[] = [
       <DataTableColumnHeader column={column} title="Network" />
     ),
     cell: ({ row }) => (
-      <div>{row.getValue("is_momoka") ? "momoka" : "polygon"}</div>
+      <div className="capitalize">
+        {row.getValue("is_momoka") ? "momoka" : "polygon"}
+      </div>
     ),
     enableSorting: false,
   },
@@ -39,7 +53,7 @@ export const columns: ColumnDef<Publication>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="App" />
     ),
-    cell: ({ row }) => <div>{row.getValue("app")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("app")}</div>,
     enableSorting: false,
   },
   {
@@ -47,7 +61,11 @@ export const columns: ColumnDef<Publication>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Type" />
     ),
-    cell: ({ row }) => <div>{row.getValue("publication_type")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {row.original.publication_type.toLowerCase()}
+      </div>
+    ),
     enableSorting: false,
   },
   {

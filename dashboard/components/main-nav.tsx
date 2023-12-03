@@ -9,7 +9,7 @@ import { Badge } from "./ui/badge"
 
 const items = [
   {
-    name: "Dashboard",
+    name: "Overview",
     href: "/",
   },
   {

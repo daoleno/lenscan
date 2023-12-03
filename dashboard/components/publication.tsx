@@ -1,27 +1,13 @@
-import { PublicationId, usePublication } from "@lens-protocol/react-web";
-import NotFound from "./404";
-import Comment from "./comment";
-import DynamicReactJson from "./dynamic-react-json";
-import { Loading } from "./loading";
-import Mirror from "./mirror";
-import Post from "./post";
-("lucide-react");
+import lensClient from "@/lib/lensclient"
 
-export default function Publication({ id }: { id: string }) {
-  const {
-    data: pub,
-    loading,
-    error,
-  } = usePublication({ publicationId: id as PublicationId });
+import Comment from "./comment"
+import Mirror from "./mirror"
+import Post from "./post"
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (error) {
-    console.error(error);
-    return <NotFound type="Publication" />;
-  }
+export default async function Publication({ id }: { id: string }) {
+  const pub = await lensClient.publication.fetch({
+    forId: id,
+  })
 
   return (
     <>
@@ -32,8 +18,8 @@ export default function Publication({ id }: { id: string }) {
       ) : pub?.__typename === "Mirror" ? (
         <Mirror mirror={pub} />
       ) : (
-        <DynamicReactJson src={pub} />
+        <div>Unknown publication {pub?.__typename}</div>
       )}
     </>
-  );
+  )
 }

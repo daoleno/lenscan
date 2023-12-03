@@ -1,20 +1,20 @@
-import { Mirror } from "@lens-protocol/react-web";
-import { CheckCircle2, XCircle } from "lucide-react";
-import Link from "next/link";
-import { Badge } from "./ui/badge";
-("lucide-react");
+import Link from "next/link"
+import { MirrorFragment } from "@lens-protocol/client"
+import { CheckCircle2, XCircle } from "lucide-react"
 
-export default function Mirror({ mirror }: { mirror: Mirror }) {
+import { Badge } from "./ui/badge"
+
+export default function Mirror({ mirror }: { mirror: MirrorFragment }) {
   const overviewItems = [
     {
-      label: "Mirror Of",
-      value: `${mirror.mirrorOf?.id} (${mirror.mirrorOf?.metadata?.name})`,
-      href: `/publication/${mirror.mirrorOf?.id}`,
+      label: "Mirror On",
+      value: `${mirror.mirrorOn.id}} (by ${mirror.mirrorOn.by.handle?.localName})`,
+      href: `/publication/${mirror.mirrorOn.id}`,
       type: "link",
     },
-    { label: "Hidden", value: mirror.hidden, type: "boolean" },
+    { label: "Published On", value: mirror.publishedOn?.id, type: "text" },
     { label: "Created At", value: mirror.createdAt, type: "text" },
-  ];
+  ]
   return (
     <div className="flex flex-col space-y-7 py-7">
       <div className="flex flex-col space-y-2">
@@ -26,10 +26,10 @@ export default function Mirror({ mirror }: { mirror: Mirror }) {
           <Badge>{mirror.__typename}</Badge>
           <span> @ </span>
           <Link
-            href={`/profile/${mirror.profile.handle}`}
+            href={`/profile/${mirror.by.handle?.id}`}
             className="font-bold underline underline-offset-4"
           >
-            {mirror.profile.handle}
+            {mirror.by.handle?.localName}
           </Link>
         </div>
       </div>
@@ -58,5 +58,5 @@ export default function Mirror({ mirror }: { mirror: Mirror }) {
       </div>
       {/* <DynamicReactJson src={mirror.mirrorOf} /> */}
     </div>
-  );
+  )
 }
