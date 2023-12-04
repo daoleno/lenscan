@@ -25,8 +25,6 @@ export default async function getPublications(
 ): Promise<{ publications: Publication[] }> {
   const { limit, offset, sort, filter } = params
 
-  console.log(params)
-
   let sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : ""
 
   let conditions = []

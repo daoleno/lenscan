@@ -1,7 +1,7 @@
 import { searchParamsSchema } from "@/lib/validations/params"
-import PublicationsTable from "@/components/publications-table"
+import ProfilesTable from "@/components/profiles-table"
 
-import getPublications from "../api/publications/getPublications"
+import getProfiles from "../api/profiles/getProfiles"
 import { Publication } from "../api/publications/publication"
 
 interface PageProps {
@@ -12,8 +12,7 @@ interface PageProps {
 
 export default async function Page({ searchParams }: PageProps) {
   // Parse search params using zod schema
-  const { page, per_page, sort, app, publication_type, network } =
-    searchParamsSchema.parse(searchParams)
+  const { page, per_page, sort } = searchParamsSchema.parse(searchParams)
 
   // Fallback page for invalid page numbers
   const pageAsNumber = Number(page)
@@ -32,33 +31,25 @@ export default async function Page({ searchParams }: PageProps) {
     "asc" | "desc" | undefined,
   ]) ?? ["block_timestamp", "desc"]
 
-  const apps = app?.split(".") ?? []
-  const publication_types = publication_type?.split(".") ?? []
-  const networks = network?.split(".") ?? []
-
-  const { publications } = await getPublications({
+  const { profiles, totalCount } = await getProfiles({
     limit,
     offset,
     sort: {
       column,
       order,
     },
-    filter: {
-      app: apps,
-      publication_type: publication_types,
-      network: networks,
-    },
   })
-  const maxCount = 1000000
-  const pageCount = Math.ceil(Number(maxCount) / limit)
+  const pageCount = Math.ceil(Number(totalCount) / limit)
 
   return (
-    <PublicationsTable
-      data={publications}
-      pageCount={pageCount}
-      totalCount={maxCount}
-      showToolbar={true}
-      showPagination={true}
-    />
+    <div className="p-8">
+      <ProfilesTable
+        data={profiles}
+        pageCount={pageCount}
+        totalCount={totalCount}
+        showToolbar={false}
+        showPagination={true}
+      />
+    </div>
   )
 }

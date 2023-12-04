@@ -17,8 +17,8 @@ const items = [
     href: "/publications",
   },
   {
-    name: "Leaderboard",
-    href: "/leaderboard",
+    name: "Profiles",
+    href: "/profiles",
   },
   // {
   //   name: "Analytics",

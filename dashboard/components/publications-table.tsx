@@ -1,6 +1,6 @@
 import { Publication } from "@/app/api/publications/publication"
 
-import { columns } from "./data-table/columns"
+import { publicationColumns } from "./data-table/columns"
 import { DataTable } from "./data-table/data-table"
 
 interface PublicationsTableProps {
@@ -22,7 +22,7 @@ export default async function PublicationsTable({
     <div className="flex-1 flex-col gap-3 md:flex">
       <h2 className="text-3xl font-bold tracking-tight">Publications</h2>
       <DataTable
-        columns={columns}
+        columns={publicationColumns}
         data={data}
         pageCount={pageCount}
         totalCount={totalCount}
