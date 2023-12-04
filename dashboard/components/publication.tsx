@@ -1,5 +1,6 @@
 import lensClient from "@/lib/lensclient"
 
+import NotFound from "./404"
 import Comment from "./comment"
 import Mirror from "./mirror"
 import Post from "./post"
@@ -18,7 +19,7 @@ export default async function Publication({ id }: { id: string }) {
       ) : pub?.__typename === "Mirror" ? (
         <Mirror mirror={pub} />
       ) : (
-        <div>Unknown publication {pub?.__typename}</div>
+        <NotFound type="Publication" />
       )}
     </>
   )
