@@ -1,17 +1,15 @@
 "use client"
 
-import client from "@/apollo"
-import Layout from "@/components/Layout"
-import { ApolloProvider } from "@apollo/client"
 import { LensConfig, LensProvider, production } from "@lens-protocol/react-web"
 import { bindings as wagmiBindings } from "@lens-protocol/wagmi"
 import PlausibleProvider from "next-plausible"
 import { createPublicClient, http } from "viem"
 import { polygon } from "viem/chains"
-import { WagmiConfig, createConfig } from "wagmi"
+import { createConfig, WagmiConfig } from "wagmi"
+
+import Layout from "@/components/Layout"
 
 import "styles/globals.css"
-
 
 const config = createConfig({
   autoConnect: true,
@@ -36,19 +34,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ApolloProvider client={client}>
-          <PlausibleProvider
-            customDomain="https://analytics.lenscan.io"
-            domain="lenscan.io"
-            selfHosted
-          >
-            <WagmiConfig config={config}>
-              <LensProvider config={lensConfig}>
-                <Layout>{children}</Layout>
-              </LensProvider>
-            </WagmiConfig>
-          </PlausibleProvider>
-        </ApolloProvider>
+        <PlausibleProvider
+          customDomain="https://analytics.lenscan.io"
+          domain="lenscan.io"
+          selfHosted
+        >
+          <WagmiConfig config={config}>
+            <LensProvider config={lensConfig}>
+              <Layout>{children}</Layout>
+            </LensProvider>
+          </WagmiConfig>
+        </PlausibleProvider>
       </body>
     </html>
   )

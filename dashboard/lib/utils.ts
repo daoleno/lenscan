@@ -64,10 +64,3 @@ export function getIPFSURL(
 
   return uri
 }
-
-export async function getJSONObj(url: string) {
-  const res = await fetch(url)
-  const json = await res.json()
-  console.log("json", json)
-  return json
-}
