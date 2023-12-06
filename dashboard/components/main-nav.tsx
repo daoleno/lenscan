@@ -20,10 +20,10 @@ const items = [
     name: "Profiles",
     href: "/profiles",
   },
-  // {
-  //   name: "Analytics",
-  //   href: "/analytics",
-  // },
+  {
+    name: "Analytics",
+    href: "/analytics",
+  },
 ]
 
 export function MainNav({
