@@ -5,7 +5,7 @@ const nextConfig = {
   // it's required to either transpile the `@lens-protocol` packages or make sure they won't get `imported` during SSR.
   transpilePackages: ["@lens-protocol"],
   experimental: {
-    serverComponentsExternalPackages: ['duckdb-async'],
+    serverComponentsExternalPackages: ['duckdb-async', 'duckdb'],
   },
 };
 
