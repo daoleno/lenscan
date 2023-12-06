@@ -15,7 +15,7 @@ export default async function Publications({
   showToolbar,
   showPagination,
 }: PublicationsProps) {
-  const { page, per_page, sort, app, publication_type, is_momoka } =
+  const { page, per_page, sort, app, publication_type, is_momoka, profile_id } =
     searchParamsSchema.parse(searchParams)
   const pageAsNumber = Number(page)
   const fallbackPage =
@@ -29,7 +29,7 @@ export default async function Publications({
   ]) ?? ["block_timestamp", "desc"]
   const apps = app?.split(".") ?? []
   const publication_types = publication_type?.split(".") ?? []
-  const { publications } = await getPublications({
+  const { publications, totalCount } = await getPublications({
     limit,
     offset,
     sort: {
@@ -40,9 +40,10 @@ export default async function Publications({
       app: apps,
       publication_type: publication_types,
       is_momoka: is_momoka,
+      profile_id: profile_id ? [profile_id] : undefined,
     },
   })
-  const maxCount = 1000000
+  const maxCount = totalCount ?? 1000000
   const pageCount = Math.ceil(Number(maxCount) / limit)
   return (
     <PublicationsTable

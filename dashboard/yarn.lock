@@ -933,9 +933,9 @@
   integrity sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==
 
 "@floating-ui/core@^1.4.2":
-  version "1.5.1"
-  resolved "https://registry.npmmirror.com/@floating-ui/core/-/core-1.5.1.tgz#62707d7ec585d0929f882321a1b1f4ea9c680da5"
-  integrity sha512-QgcKYwzcc8vvZ4n/5uklchy8KVdjJwcOeI+HnnTNclJjs2nYsy23DOCf+sSV1kBwD9yDAoVKCkv/gEPzgQU3Pw==
+  version "1.5.2"
+  resolved "https://registry.npmmirror.com/@floating-ui/core/-/core-1.5.2.tgz#53a0f7a98c550e63134d504f26804f6b83dbc071"
+  integrity sha512-Ii3MrfY/GAIN3OhXNzpCKaLxHQfJF9qvwq/kEJYdqDxeIHa01K8sldugal6TmeeXl+WMvhv9cnVzUTaFFJF09A==
   dependencies:
     "@floating-ui/utils" "^0.1.3"
 
@@ -1540,25 +1540,25 @@
   resolved "https://registry.npmmirror.com/@ledgerhq/connect-kit-loader/-/connect-kit-loader-1.1.2.tgz#d550e3c1f046e4c796f32a75324b03606b7e226a"
   integrity sha512-mscwGroSJQrCTjtNGBu+18FQbZYA4+q6Tyx6K7CXHl6AwgZKbWfZYdgP2F+fyZcRUdGRsMX8QtvU61VcGGtO1A==
 
-"@lens-protocol/api-bindings@0.11.0-alpha.20":
-  version "0.11.0-alpha.20"
-  resolved "https://registry.npmmirror.com/@lens-protocol/api-bindings/-/api-bindings-0.11.0-alpha.20.tgz#19d10b0a5f9aa501544932ca32cc68a03ca95cb5"
-  integrity sha512-tps0RIEZq5TLEMG0xYskQkVVi+lESY5ov9GS60TWKgyac9PhX5218q1csaXbSZ7HKggc9cq6Ok6n/axabosAFA==
+"@lens-protocol/api-bindings@0.11.0-alpha.22":
+  version "0.11.0-alpha.22"
+  resolved "https://registry.npmmirror.com/@lens-protocol/api-bindings/-/api-bindings-0.11.0-alpha.22.tgz#91d4298222788159af1e2d1d34cf5798343713c7"
+  integrity sha512-XTHuwJl08mBFxIGIlmySiOt/QnlI39Z+MXx00WWZiDW0pAIVhhqL2/gA0h5ulMA2r8jbKmhFvHGQdNaVNIKaWg==
   dependencies:
-    "@lens-protocol/domain" "0.11.0-alpha.15"
+    "@lens-protocol/domain" "0.11.0-alpha.17"
     "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
     graphql "^16.8.1"
     graphql-tag "^2.12.6"
     tslib "^2.6.2"
 
-"@lens-protocol/blockchain-bindings@0.10.0-alpha.15":
-  version "0.10.0-alpha.15"
-  resolved "https://registry.npmmirror.com/@lens-protocol/blockchain-bindings/-/blockchain-bindings-0.10.0-alpha.15.tgz#ceface7d06356f16ec7ea438cadd1c07003a1a3b"
-  integrity sha512-HuihnMJk5FwEUjRmmB4P2OOQaS0K7+IBmUj8V8q3xhryLEUZxoYDYFSabtRO4aHllOtUJEYwxUipywBPqicJ7g==
+"@lens-protocol/blockchain-bindings@0.10.0-alpha.17":
+  version "0.10.0-alpha.17"
+  resolved "https://registry.npmmirror.com/@lens-protocol/blockchain-bindings/-/blockchain-bindings-0.10.0-alpha.17.tgz#cde55f958af8d804db0a1f7ae5fef7cab4031fc0"
+  integrity sha512-bO3osljyo07Qy2mEx/yqVq3HqRpwbHcL18wJMXUvwaLtyaJtRgwAjQ892vN38qg3PoeIrEb9C7PASFUnVIuIjg==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/providers" "^5.7.2"
-    "@lens-protocol/domain" "0.11.0-alpha.15"
+    "@lens-protocol/domain" "0.11.0-alpha.17"
     "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
     ethers "^5.7.2"
     tslib "^2.6.2"
@@ -1584,10 +1584,10 @@
     tslib "^2.6.2"
     zod "^3.22.0"
 
-"@lens-protocol/domain@0.11.0-alpha.15":
-  version "0.11.0-alpha.15"
-  resolved "https://registry.npmmirror.com/@lens-protocol/domain/-/domain-0.11.0-alpha.15.tgz#60259ce789110ff104c281b6306cc1c66d0f1f25"
-  integrity sha512-MQrJUmsmk9n6YQDgv9gVSkAyAMk7wxdFhuYxenLaE+2Zc1+/X00S6okDjy3Cb31tFBTmUoh39NygJJQpVYqczg==
+"@lens-protocol/domain@0.11.0-alpha.17":
+  version "0.11.0-alpha.17"
+  resolved "https://registry.npmmirror.com/@lens-protocol/domain/-/domain-0.11.0-alpha.17.tgz#6cf19506a98f9b572d7075dd2c0b63524407cba3"
+  integrity sha512-H5bVQ0p/GYuSs3al0BE+PXh8WPLf6n+7g4bBxRQlexaOcAug3iNAu4fWcJJJQjdARbXh2b5kQKkoCDdEJrpvzA==
   dependencies:
     "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
     tslib "^2.6.2"
@@ -1615,22 +1615,22 @@
   dependencies:
     uuid "^9.0.1"
 
-"@lens-protocol/react-web@^2.0.0-alpha.23":
-  version "2.0.0-alpha.23"
-  resolved "https://registry.npmmirror.com/@lens-protocol/react-web/-/react-web-2.0.0-alpha.23.tgz#9f8281b3c23d4270a18aeefaf0334bd6103211b6"
-  integrity sha512-37mneE9C68zzOaIkHkSKpBk/rUWpoTi5CM7q+BfkdvPsFtKBnpYTNmt2puC8xo8v0WDdwF2yEVQ23YHBG/Y3qQ==
+"@lens-protocol/react-web@^2.0.0-alpha.25":
+  version "2.0.0-alpha.25"
+  resolved "https://registry.npmmirror.com/@lens-protocol/react-web/-/react-web-2.0.0-alpha.25.tgz#790032d68286dd4b506ebfa1cd5ba5f8acdea2bf"
+  integrity sha512-JVtkHHdKzl/jqgXZsf34Ot12K1qrTn5rtho6xAL5P6fJs+7w6dVo1ntu1iqpowFY2lS7aLEi+aWCk/vtqtFAqQ==
   dependencies:
-    "@lens-protocol/api-bindings" "0.11.0-alpha.20"
-    "@lens-protocol/domain" "0.11.0-alpha.15"
-    "@lens-protocol/react" "2.0.0-alpha.23"
+    "@lens-protocol/api-bindings" "0.11.0-alpha.22"
+    "@lens-protocol/domain" "0.11.0-alpha.17"
+    "@lens-protocol/react" "2.0.0-alpha.25"
     "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
-    "@lens-protocol/storage" "0.7.5-alpha.6"
+    "@lens-protocol/storage" "0.7.5-alpha.7"
     tslib "^2.6.2"
 
-"@lens-protocol/react@2.0.0-alpha.23":
-  version "2.0.0-alpha.23"
-  resolved "https://registry.npmmirror.com/@lens-protocol/react/-/react-2.0.0-alpha.23.tgz#591c61604bf47824c1ed5f1fc390f59ff7b83200"
-  integrity sha512-qfYUS4zEGH9znyNWYRtKq9d4CK/rj/dk0Bkv5bY5P0pPpXXpug3yKV7uZK+AuPu0r4NDfRvtQZs6WD8PBgjN2Q==
+"@lens-protocol/react@2.0.0-alpha.25":
+  version "2.0.0-alpha.25"
+  resolved "https://registry.npmmirror.com/@lens-protocol/react/-/react-2.0.0-alpha.25.tgz#430364e48fed18f7d94512c47c0c2bbfa72a3105"
+  integrity sha512-GvLlLX2kueUNxNBBL12gdszWF1KDexrVk7HyEkmshcoCUEIEk6wuuCoYbnVUNBbQDpBZyg9ct23zSH4MluFEow==
   dependencies:
     "@apollo/client" "^3.8.7"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -1640,11 +1640,11 @@
     "@ethersproject/hash" "^5.7.0"
     "@ethersproject/providers" "^5.7.2"
     "@ethersproject/wallet" "^5.7.0"
-    "@lens-protocol/api-bindings" "0.11.0-alpha.20"
-    "@lens-protocol/blockchain-bindings" "0.10.0-alpha.15"
-    "@lens-protocol/domain" "0.11.0-alpha.15"
+    "@lens-protocol/api-bindings" "0.11.0-alpha.22"
+    "@lens-protocol/blockchain-bindings" "0.10.0-alpha.17"
+    "@lens-protocol/domain" "0.11.0-alpha.17"
     "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
-    "@lens-protocol/storage" "0.7.5-alpha.6"
+    "@lens-protocol/storage" "0.7.5-alpha.7"
     graphql "^16.8.1"
     jwt-decode "^3.1.2"
     lodash "^4.17.21"
@@ -1670,10 +1670,19 @@
     tslib "^2.6.2"
     zod "^3.22.0"
 
-"@lens-protocol/wagmi@^3.0.0-alpha.19":
-  version "3.0.0-alpha.19"
-  resolved "https://registry.npmmirror.com/@lens-protocol/wagmi/-/wagmi-3.0.0-alpha.19.tgz#b8d17b95c4b53739f69a9ec01879e1684fe35c26"
-  integrity sha512-tRtNuALrSQ4IA0hrnzg1Bt7ySMZuZKAHUeEoBQFlttyv7l3/sUCC/3UJQA5hm3gbIy/wZspg/qo5y/Aa4rcwzw==
+"@lens-protocol/storage@0.7.5-alpha.7":
+  version "0.7.5-alpha.7"
+  resolved "https://registry.npmmirror.com/@lens-protocol/storage/-/storage-0.7.5-alpha.7.tgz#b123bea49a54b058b28b59a08aaa791aeb3e79d2"
+  integrity sha512-TCUAFOCE1O8yJw53UCBARGlU5FIrqvcLAXBEEdsj5+kmKwGgSCAlbNAn5yL5N5LW4Dk93wNIVDvfxTdoUQHejw==
+  dependencies:
+    "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
+    tslib "^2.6.2"
+    zod "^3.22.4"
+
+"@lens-protocol/wagmi@^3.0.0-alpha.22":
+  version "3.0.0-alpha.22"
+  resolved "https://registry.npmmirror.com/@lens-protocol/wagmi/-/wagmi-3.0.0-alpha.22.tgz#1f4285e44fbe647c01778cdaf704fa79bd500294"
+  integrity sha512-LBxn6y12uNYK/2xSXe0RQEvXOyepqUCxzKnz5dlsJLpvXY0js7IPcqKohvoF5aVeZWGjpqc2QmbpocvPvgdlOw==
   dependencies:
     "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
 
@@ -2164,22 +2173,46 @@
     tslib "^2.5.0"
     webcrypto-core "^1.7.7"
 
-"@prisma/client@^5.6.0":
-  version "5.6.0"
-  resolved "https://registry.npmmirror.com/@prisma/client/-/client-5.6.0.tgz#1c15932250d5658fe0127e62faf4ecd96a877259"
-  integrity sha512-mUDefQFa1wWqk4+JhKPYq8BdVoFk9NFMBXUI8jAkBfQTtgx8WPx02U2HB/XbAz3GSUJpeJOKJQtNvaAIDs6sug==
+"@prisma/client@^5.7.0":
+  version "5.7.0"
+  resolved "https://registry.npmmirror.com/@prisma/client/-/client-5.7.0.tgz#c29dd9a16e100902eb2d2443d90fee2482d2aeac"
+  integrity sha512-cZmglCrfNbYpzUtz7HscVHl38e9CrUs31nrVoGUK1nIPXGgt8hT4jj2s657UXcNdQ/jBUxDgGmHyu2Nyrq1txg==
+
+"@prisma/debug@5.7.0":
+  version "5.7.0"
+  resolved "https://registry.npmmirror.com/@prisma/debug/-/debug-5.7.0.tgz#abdb2060be4fe819e73e2683cf1b039841566198"
+  integrity sha512-tZ+MOjWlVvz1kOEhNYMa4QUGURY+kgOUBqLHYIV8jmCsMuvA1tWcn7qtIMLzYWCbDcQT4ZS8xDgK0R2gl6/0wA==
+
+"@prisma/engines-version@5.7.0-41.79fb5193cf0a8fdbef536e4b4a159cad677ab1b9":
+  version "5.7.0-41.79fb5193cf0a8fdbef536e4b4a159cad677ab1b9"
+  resolved "https://registry.npmmirror.com/@prisma/engines-version/-/engines-version-5.7.0-41.79fb5193cf0a8fdbef536e4b4a159cad677ab1b9.tgz#777827898f1bfe6a76b17fbe7d9600cf543c4cc1"
+  integrity sha512-V6tgRVi62jRwTm0Hglky3Scwjr/AKFBFtS+MdbsBr7UOuiu1TKLPc6xfPiyEN1+bYqjEtjxwGsHgahcJsd1rNg==
+
+"@prisma/engines@5.7.0":
+  version "5.7.0"
+  resolved "https://registry.npmmirror.com/@prisma/engines/-/engines-5.7.0.tgz#a32e232819b66bd9dee7500b455781742dc54b2f"
+  integrity sha512-TkOMgMm60n5YgEKPn9erIvFX2/QuWnl3GBo6yTRyZKk5O5KQertXiNnrYgSLy0SpsKmhovEPQb+D4l0SzyE7XA==
   dependencies:
-    "@prisma/engines-version" "5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee"
+    "@prisma/debug" "5.7.0"
+    "@prisma/engines-version" "5.7.0-41.79fb5193cf0a8fdbef536e4b4a159cad677ab1b9"
+    "@prisma/fetch-engine" "5.7.0"
+    "@prisma/get-platform" "5.7.0"
 
-"@prisma/engines-version@5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee":
-  version "5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee"
-  resolved "https://registry.npmmirror.com/@prisma/engines-version/-/engines-version-5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee.tgz#57b003ab5e1ea1523b5cdd7f06b24ebcf5c7fd8c"
-  integrity sha512-UoFgbV1awGL/3wXuUK3GDaX2SolqczeeJ5b4FVec9tzeGbSWJboPSbT0psSrmgYAKiKnkOPFSLlH6+b+IyOwAw==
+"@prisma/fetch-engine@5.7.0":
+  version "5.7.0"
+  resolved "https://registry.npmmirror.com/@prisma/fetch-engine/-/fetch-engine-5.7.0.tgz#7d2795828b692b02707e7ab6876f6227a68fc309"
+  integrity sha512-zIn/qmO+N/3FYe7/L9o+yZseIU8ivh4NdPKSkQRIHfg2QVTVMnbhGoTcecbxfVubeTp+DjcbjS0H9fCuM4W04w==
+  dependencies:
+    "@prisma/debug" "5.7.0"
+    "@prisma/engines-version" "5.7.0-41.79fb5193cf0a8fdbef536e4b4a159cad677ab1b9"
+    "@prisma/get-platform" "5.7.0"
 
-"@prisma/engines@5.6.0":
-  version "5.6.0"
-  resolved "https://registry.npmmirror.com/@prisma/engines/-/engines-5.6.0.tgz#82c445aa10633bbc0388aa2d6e411a0bd94c9439"
-  integrity sha512-Mt2q+GNJpU2vFn6kif24oRSBQv1KOkYaterQsi0k2/lA+dLvhRX6Lm26gon6PYHwUM8/h8KRgXIUMU0PCLB6bw==
+"@prisma/get-platform@5.7.0":
+  version "5.7.0"
+  resolved "https://registry.npmmirror.com/@prisma/get-platform/-/get-platform-5.7.0.tgz#eb81011f537c2d10c0225278cd5165a82d0b57c8"
+  integrity sha512-ZeV/Op4bZsWXuw5Tg05WwRI8BlKiRFhsixPcAM+5BKYSiUZiMKIi713tfT3drBq8+T0E1arNZgYSA9QYcglWNA==
+  dependencies:
+    "@prisma/debug" "5.7.0"
 
 "@radix-ui/number@1.0.1":
   version "1.0.1"
@@ -3098,12 +3131,17 @@
   resolved "https://registry.npmmirror.com/@types/ms/-/ms-0.7.34.tgz#10964ba0dee6ac4cd462e2795b6bebd407303433"
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
-"@types/node@*", "@types/node@20.10.2":
-  version "20.10.2"
-  resolved "https://registry.npmmirror.com/@types/node/-/node-20.10.2.tgz#32a5e8228357f57714ad28d52229ab04880c2814"
-  integrity sha512-37MXfxkb0vuIlRKHNxwCkb60PNBpR94u4efQuN4JgIAm66zfCDXGSAFCef9XUWFovX2R1ok6Z7MHhtdVXXkkIw==
+"@types/node@*", "@types/node@20.10.3":
+  version "20.10.3"
+  resolved "https://registry.npmmirror.com/@types/node/-/node-20.10.3.tgz#4900adcc7fc189d5af5bb41da8f543cea6962030"
+  integrity sha512-XJavIpZqiXID5Yxnxv3RUDKTN5b81ddNC3ecsA0SoFXz/QU8OGBwZGMomiq0zw+uuqbL/krztv/DINAQ/EV4gg==
   dependencies:
     undici-types "~5.26.4"
+
+"@types/node@18.15.13":
+  version "18.15.13"
+  resolved "https://registry.npmmirror.com/@types/node/-/node-18.15.13.tgz#f64277c341150c979e42b00e4ac289290c9df469"
+  integrity sha512-N+0kuo9KgrUQ1Sn/ifDXsvg0TTleP7rIy4zOBGECxAljqvqfqpTfzx0Q1NUedOixRMBfe2Whhb056a42cWs26Q==
 
 "@types/node@^12.12.54":
   version "12.20.55"
@@ -3122,10 +3160,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@18.2.41":
-  version "18.2.41"
-  resolved "https://registry.npmmirror.com/@types/react/-/react-18.2.41.tgz#9eea044246bdb10510df89ef7f8422a8b6ad8fb9"
-  integrity sha512-CwOGr/PiLiNBxEBqpJ7fO3kocP/2SSuC9fpH5K7tusrg4xPSRT/193rzolYwQnTN02We/ATXKnb6GqA5w4fRxw==
+"@types/react@*", "@types/react@18.2.42":
+  version "18.2.42"
+  resolved "https://registry.npmmirror.com/@types/react/-/react-18.2.42.tgz#6f6b11a904f6d96dda3c2920328a97011a00aba7"
+  integrity sha512-c1zEr96MjakLYus/wPnuWDo1/zErfdU9rNsIGmE+NV71nx88FG9Ttgo5dqorXTu/LImX2f63WBP986gJkMPNbA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -3156,48 +3194,48 @@
     "@types/node" "*"
 
 "@typescript-eslint/parser@^5.4.2 || ^6.0.0":
-  version "6.13.1"
-  resolved "https://registry.npmmirror.com/@typescript-eslint/parser/-/parser-6.13.1.tgz#29d6d4e5fab4669e58bc15f6904b67da65567487"
-  integrity sha512-fs2XOhWCzRhqMmQf0eicLa/CWSaYss2feXsy7xBD/pLyWke/jCIVc2s1ikEAtSW7ina1HNhv7kONoEfVNEcdDQ==
+  version "6.13.2"
+  resolved "https://registry.npmmirror.com/@typescript-eslint/parser/-/parser-6.13.2.tgz#390b79cc9a57a5f904d197a201cc4b6bc4f9afb9"
+  integrity sha512-MUkcC+7Wt/QOGeVlM8aGGJZy1XV5YKjTpq9jK6r6/iLsGXhBVaGP5N0UYvFsu9BFlSpwY9kMretzdBH01rkRXg==
   dependencies:
-    "@typescript-eslint/scope-manager" "6.13.1"
-    "@typescript-eslint/types" "6.13.1"
-    "@typescript-eslint/typescript-estree" "6.13.1"
-    "@typescript-eslint/visitor-keys" "6.13.1"
+    "@typescript-eslint/scope-manager" "6.13.2"
+    "@typescript-eslint/types" "6.13.2"
+    "@typescript-eslint/typescript-estree" "6.13.2"
+    "@typescript-eslint/visitor-keys" "6.13.2"
     debug "^4.3.4"
 
-"@typescript-eslint/scope-manager@6.13.1":
-  version "6.13.1"
-  resolved "https://registry.npmmirror.com/@typescript-eslint/scope-manager/-/scope-manager-6.13.1.tgz#58c7c37c6a957d3d9f59bc4f64c2888e0cac1d70"
-  integrity sha512-BW0kJ7ceiKi56GbT2KKzZzN+nDxzQK2DS6x0PiSMPjciPgd/JRQGMibyaN2cPt2cAvuoH0oNvn2fwonHI+4QUQ==
+"@typescript-eslint/scope-manager@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.npmmirror.com/@typescript-eslint/scope-manager/-/scope-manager-6.13.2.tgz#5fa4e4adace028dafac212c770640b94e7b61052"
+  integrity sha512-CXQA0xo7z6x13FeDYCgBkjWzNqzBn8RXaE3QVQVIUm74fWJLkJkaHmHdKStrxQllGh6Q4eUGyNpMe0b1hMkXFA==
   dependencies:
-    "@typescript-eslint/types" "6.13.1"
-    "@typescript-eslint/visitor-keys" "6.13.1"
+    "@typescript-eslint/types" "6.13.2"
+    "@typescript-eslint/visitor-keys" "6.13.2"
 
-"@typescript-eslint/types@6.13.1":
-  version "6.13.1"
-  resolved "https://registry.npmmirror.com/@typescript-eslint/types/-/types-6.13.1.tgz#b56f26130e7eb8fa1e429c75fb969cae6ad7bb5c"
-  integrity sha512-gjeEskSmiEKKFIbnhDXUyiqVma1gRCQNbVZ1C8q7Zjcxh3WZMbzWVfGE9rHfWd1msQtPS0BVD9Jz9jded44eKg==
+"@typescript-eslint/types@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.npmmirror.com/@typescript-eslint/types/-/types-6.13.2.tgz#c044aac24c2f6cefb8e921e397acad5417dd0ae6"
+  integrity sha512-7sxbQ+EMRubQc3wTfTsycgYpSujyVbI1xw+3UMRUcrhSy+pN09y/lWzeKDbvhoqcRbHdc+APLs/PWYi/cisLPg==
 
-"@typescript-eslint/typescript-estree@6.13.1":
-  version "6.13.1"
-  resolved "https://registry.npmmirror.com/@typescript-eslint/typescript-estree/-/typescript-estree-6.13.1.tgz#d01dda78d2487434d1c503853fa00291c566efa4"
-  integrity sha512-sBLQsvOC0Q7LGcUHO5qpG1HxRgePbT6wwqOiGLpR8uOJvPJbfs0mW3jPA3ujsDvfiVwVlWUDESNXv44KtINkUQ==
+"@typescript-eslint/typescript-estree@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.npmmirror.com/@typescript-eslint/typescript-estree/-/typescript-estree-6.13.2.tgz#ae556ee154c1acf025b48d37c3ef95a1d55da258"
+  integrity sha512-SuD8YLQv6WHnOEtKv8D6HZUzOub855cfPnPMKvdM/Bh1plv1f7Q/0iFUDLKKlxHcEstQnaUU4QZskgQq74t+3w==
   dependencies:
-    "@typescript-eslint/types" "6.13.1"
-    "@typescript-eslint/visitor-keys" "6.13.1"
+    "@typescript-eslint/types" "6.13.2"
+    "@typescript-eslint/visitor-keys" "6.13.2"
     debug "^4.3.4"
     globby "^11.1.0"
     is-glob "^4.0.3"
     semver "^7.5.4"
     ts-api-utils "^1.0.1"
 
-"@typescript-eslint/visitor-keys@6.13.1":
-  version "6.13.1"
-  resolved "https://registry.npmmirror.com/@typescript-eslint/visitor-keys/-/visitor-keys-6.13.1.tgz#c4b692dcc23a4fc60685b718f10fde789d65a540"
-  integrity sha512-NDhQUy2tg6XGNBGDRm1XybOHSia8mcXmlbKWoQP+nm1BIIMxa55shyJfZkHpEBN62KNPLrocSM2PdPcaLgDKMQ==
+"@typescript-eslint/visitor-keys@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.npmmirror.com/@typescript-eslint/visitor-keys/-/visitor-keys-6.13.2.tgz#e0a4a80cf842bb08e6127b903284166ac4a5594c"
+  integrity sha512-OGznFs0eAQXJsp+xSd6k/O1UbFi/K/L7WjqeRoFE7vadjAF9y0uppXhYNQNEqygjou782maGClOoZwPqF0Drlw==
   dependencies:
-    "@typescript-eslint/types" "6.13.1"
+    "@typescript-eslint/types" "6.13.2"
     eslint-visitor-keys "^3.4.1"
 
 "@ungap/structured-clone@^1.2.0":
@@ -3205,53 +3243,31 @@
   resolved "https://registry.npmmirror.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@wagmi/connectors@3.1.5":
-  version "3.1.5"
-  resolved "https://registry.npmmirror.com/@wagmi/connectors/-/connectors-3.1.5.tgz#88a6beaa0339004958b02caf694305c82a6432cc"
-  integrity sha512-aE4rWZbivqWa9HqjiLDPtwROH2b1Az+lBVMeZ3o/aFxGNGNEkdrSAMOUG15/UFy3VnN6HqGOtTobOBZ10JhfNQ==
+"@wagmi/connectors@3.1.6":
+  version "3.1.6"
+  resolved "https://registry.npmmirror.com/@wagmi/connectors/-/connectors-3.1.6.tgz#fdb139249fac710b1accf8ac1472e6e3b104b981"
+  integrity sha512-71ZW9ETmzFJbetMfGAUEtJtTyDGetAT/pkdsMwyvH+MBPoZuqHUQ7NxgvhSo9ddsAzsEbJJLCaJdZodj3CbosA==
   dependencies:
     "@coinbase/wallet-sdk" "^3.6.6"
     "@ledgerhq/connect-kit-loader" "^1.1.0"
     "@safe-global/safe-apps-provider" "^0.17.1"
     "@safe-global/safe-apps-sdk" "^8.0.0"
-    "@walletconnect/ethereum-provider" "2.10.2"
+    "@walletconnect/ethereum-provider" "2.10.6"
     "@walletconnect/legacy-provider" "^2.0.0"
     "@walletconnect/modal" "2.6.2"
     "@walletconnect/utils" "2.10.2"
     abitype "0.8.7"
     eventemitter3 "^4.0.7"
 
-"@wagmi/core@1.4.7":
-  version "1.4.7"
-  resolved "https://registry.npmmirror.com/@wagmi/core/-/core-1.4.7.tgz#ac6b2a69929654a5e09480884c9fb6150968e866"
-  integrity sha512-PiOIGni8ArQoPmuDylHX38zMt2nPnTYRIluIqiduKyGCM61X/tf10a0rafUMOOphDPudZu1TacNDhCSeoh/LEA==
+"@wagmi/core@1.4.8":
+  version "1.4.8"
+  resolved "https://registry.npmmirror.com/@wagmi/core/-/core-1.4.8.tgz#aa5addebf0edebd7a415e13fd34f8390cd480822"
+  integrity sha512-zIkyw8ZJlMwb04+yohQVMWKjcX5FFlM30tRDanr6dQ+qlYqtUoB70CJGpSRtCYmbK3JlYxH21JNykjOZzdM88Q==
   dependencies:
-    "@wagmi/connectors" "3.1.5"
+    "@wagmi/connectors" "3.1.6"
     abitype "0.8.7"
     eventemitter3 "^4.0.7"
     zustand "^4.3.1"
-
-"@walletconnect/core@2.10.2":
-  version "2.10.2"
-  resolved "https://registry.npmmirror.com/@walletconnect/core/-/core-2.10.2.tgz#a1bf6e3e87b33f9df795ce0970d8ddd400fdc8a3"
-  integrity sha512-JQz/xp3SLEpTeRQctdck2ugSBVEpMxoSE+lFi2voJkZop1hv6P+uqr6E4PzjFluAjeAnKlT1xvra0aFWjPWVcw==
-  dependencies:
-    "@walletconnect/heartbeat" "1.2.1"
-    "@walletconnect/jsonrpc-provider" "1.0.13"
-    "@walletconnect/jsonrpc-types" "1.0.3"
-    "@walletconnect/jsonrpc-utils" "1.0.8"
-    "@walletconnect/jsonrpc-ws-connection" "1.0.13"
-    "@walletconnect/keyvaluestorage" "^1.0.2"
-    "@walletconnect/logger" "^2.0.1"
-    "@walletconnect/relay-api" "^1.0.9"
-    "@walletconnect/relay-auth" "^1.0.4"
-    "@walletconnect/safe-json" "^1.0.2"
-    "@walletconnect/time" "^1.0.2"
-    "@walletconnect/types" "2.10.2"
-    "@walletconnect/utils" "2.10.2"
-    events "^3.3.0"
-    lodash.isequal "4.5.0"
-    uint8arrays "^3.1.0"
 
 "@walletconnect/core@2.10.6":
   version "2.10.6"
@@ -3303,22 +3319,7 @@
   dependencies:
     tslib "1.14.1"
 
-"@walletconnect/ethereum-provider@2.10.2":
-  version "2.10.2"
-  resolved "https://registry.npmmirror.com/@walletconnect/ethereum-provider/-/ethereum-provider-2.10.2.tgz#d5aca538fbcbbf7dd771bceb2430de30f06411de"
-  integrity sha512-QMYFZ6+rVq2CJLdIPdKK0j1Qm66UA27oQU5V2SrL8EVwl7wFfm0Bq7fnL+qAWeDpn612dNeNErpk/ROa1zWlWg==
-  dependencies:
-    "@walletconnect/jsonrpc-http-connection" "^1.0.7"
-    "@walletconnect/jsonrpc-provider" "^1.0.13"
-    "@walletconnect/jsonrpc-types" "^1.0.3"
-    "@walletconnect/jsonrpc-utils" "^1.0.8"
-    "@walletconnect/sign-client" "2.10.2"
-    "@walletconnect/types" "2.10.2"
-    "@walletconnect/universal-provider" "2.10.2"
-    "@walletconnect/utils" "2.10.2"
-    events "^3.3.0"
-
-"@walletconnect/ethereum-provider@^2.1.2", "@walletconnect/ethereum-provider@^2.4.7":
+"@walletconnect/ethereum-provider@2.10.6", "@walletconnect/ethereum-provider@^2.1.2", "@walletconnect/ethereum-provider@^2.4.7":
   version "2.10.6"
   resolved "https://registry.npmmirror.com/@walletconnect/ethereum-provider/-/ethereum-provider-2.10.6.tgz#53720771cc2d6accd452916a853ac927f26acbaa"
   integrity sha512-bBQ+yUfxLv8VxNttgNKY7nED35gSVayO/BnLHbNKvyV1gpvSCla5mWB9MsXuQs70MK0g+/qtgRVSrOtdSubaNQ==
@@ -3386,17 +3387,6 @@
     "@walletconnect/environment" "^1.0.1"
     "@walletconnect/jsonrpc-types" "^1.0.3"
     tslib "1.14.1"
-
-"@walletconnect/jsonrpc-ws-connection@1.0.13":
-  version "1.0.13"
-  resolved "https://registry.npmmirror.com/@walletconnect/jsonrpc-ws-connection/-/jsonrpc-ws-connection-1.0.13.tgz#23b0cdd899801bfbb44a6556936ec2b93ef2adf4"
-  integrity sha512-mfOM7uFH4lGtQxG+XklYuFBj6dwVvseTt5/ahOkkmpcAEgz2umuzu7fTR+h5EmjQBdrmYyEBOWADbeaFNxdySg==
-  dependencies:
-    "@walletconnect/jsonrpc-utils" "^1.0.6"
-    "@walletconnect/safe-json" "^1.0.2"
-    events "^3.3.0"
-    tslib "1.14.1"
-    ws "^7.5.1"
 
 "@walletconnect/jsonrpc-ws-connection@1.0.14":
   version "1.0.14"
@@ -3547,21 +3537,6 @@
   dependencies:
     tslib "1.14.1"
 
-"@walletconnect/sign-client@2.10.2":
-  version "2.10.2"
-  resolved "https://registry.npmmirror.com/@walletconnect/sign-client/-/sign-client-2.10.2.tgz#33300a9cfe42487473f66b73c99535f6b26f8c54"
-  integrity sha512-vviSLV3f92I0bReX+OLr1HmbH0uIzYEQQFd1MzIfDk9PkfFT/LLAHhUnDaIAMkIdippqDcJia+5QEtT4JihL3Q==
-  dependencies:
-    "@walletconnect/core" "2.10.2"
-    "@walletconnect/events" "^1.0.1"
-    "@walletconnect/heartbeat" "1.2.1"
-    "@walletconnect/jsonrpc-utils" "1.0.8"
-    "@walletconnect/logger" "^2.0.1"
-    "@walletconnect/time" "^1.0.2"
-    "@walletconnect/types" "2.10.2"
-    "@walletconnect/utils" "2.10.2"
-    events "^3.3.0"
-
 "@walletconnect/sign-client@2.10.6":
   version "2.10.6"
   resolved "https://registry.npmmirror.com/@walletconnect/sign-client/-/sign-client-2.10.6.tgz#722d2c2844565e2826dce6a6d3a36c9b3ca1ea91"
@@ -3606,21 +3581,6 @@
     "@walletconnect/jsonrpc-types" "1.0.3"
     "@walletconnect/keyvaluestorage" "^1.1.1"
     "@walletconnect/logger" "^2.0.1"
-    events "^3.3.0"
-
-"@walletconnect/universal-provider@2.10.2":
-  version "2.10.2"
-  resolved "https://registry.npmmirror.com/@walletconnect/universal-provider/-/universal-provider-2.10.2.tgz#85c8da39f65da8fe33f65f62689e703607b5ddc5"
-  integrity sha512-wFgI0LbQ3D56sgaUMsgOHCM5m8WLxiC71BGuCKQfApgsbNMVKugYVy2zWHyUyi8sqTQHI+uSaVpDev4UHq9LEw==
-  dependencies:
-    "@walletconnect/jsonrpc-http-connection" "^1.0.7"
-    "@walletconnect/jsonrpc-provider" "1.0.13"
-    "@walletconnect/jsonrpc-types" "^1.0.2"
-    "@walletconnect/jsonrpc-utils" "^1.0.7"
-    "@walletconnect/logger" "^2.0.1"
-    "@walletconnect/sign-client" "2.10.2"
-    "@walletconnect/types" "2.10.2"
-    "@walletconnect/utils" "2.10.2"
     events "^3.3.0"
 
 "@walletconnect/universal-provider@2.10.6":
@@ -3816,6 +3776,11 @@ aes-js@3.0.0:
   version "3.0.0"
   resolved "https://registry.npmmirror.com/aes-js/-/aes-js-3.0.0.tgz#e21df10ad6c2053295bcbb8dab40b09dbea87e4d"
   integrity sha512-H7wUZRn8WpTq9jocdxQ2c8x2sKo9ZVmzfRE13GiNJXfp7NcKYEdvl3vspKjXox6RIG2VtaRe4JFvxG4rqp2Zuw==
+
+aes-js@4.0.0-beta.5:
+  version "4.0.0-beta.5"
+  resolved "https://registry.npmmirror.com/aes-js/-/aes-js-4.0.0-beta.5.tgz#8d2452c52adedebc3a3e28465d858c11ca315873"
+  integrity sha512-G965FqalsNyrPqgEGON7nIx1e/OVENSgiEIzyC63haUMuvNnwIgIjMs52hlTCKhkBny7A2ORNlfY9Zu+jmGk1Q==
 
 aes-js@^3.1.2:
   version "3.1.2"
@@ -4371,9 +4336,9 @@ camelcase@^5.0.0:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001538, caniuse-lite@^1.0.30001565:
-  version "1.0.30001565"
-  resolved "https://registry.npmmirror.com/caniuse-lite/-/caniuse-lite-1.0.30001565.tgz#a528b253c8a2d95d2b415e11d8b9942acc100c4f"
-  integrity sha512-xrE//a3O7TP0vaJ8ikzkD2c2NgcVUvsEe2IvFTntV4Yd1Z9FVzh+gW+enX96L0psrbaFMcVcH2l90xNuGDWc8w==
+  version "1.0.30001566"
+  resolved "https://registry.npmmirror.com/caniuse-lite/-/caniuse-lite-1.0.30001566.tgz#61a8e17caf3752e3e426d4239c549ebbb37fef0d"
+  integrity sha512-ggIhCsTxmITBAMmK8yZjEhCO5/47jKXPu6Dha/wuCS4JePVL+3uiDEBuhu2aIoT+bqTOR8L76Ip1ARL9xYsEJA==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -5048,9 +5013,9 @@ duplexify@^4.1.2:
     stream-shift "^1.0.0"
 
 electron-to-chromium@^1.4.601:
-  version "1.4.601"
-  resolved "https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.601.tgz#cac69868548aee89961ffe63ff5a7716f0685b75"
-  integrity sha512-SpwUMDWe9tQu8JX5QCO1+p/hChAi9AE9UpoC3rcHVc+gdCGlbT3SGb5I1klgb952HRIyvt9wZhSz9bNBYz9swA==
+  version "1.4.605"
+  resolved "https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.605.tgz#d01f4e342b896d9ca7fae25d322e9ff4f0e41194"
+  integrity sha512-V52j+P5z6cdRqTjPR/bYNxx7ETCHIkm5VIGuyCy3CMrfSnbEpIlLnk5oHmZo7gYvDfh2TfHeanB6rawyQ23ktg==
 
 elliptic@6.5.4:
   version "6.5.4"
@@ -5520,6 +5485,19 @@ ethers@^5.7.1, ethers@^5.7.2:
     "@ethersproject/wallet" "5.7.0"
     "@ethersproject/web" "5.7.1"
     "@ethersproject/wordlists" "5.7.0"
+
+ethers@^6.9.0:
+  version "6.9.0"
+  resolved "https://registry.npmmirror.com/ethers/-/ethers-6.9.0.tgz#a4534bdcdfde306aee94ef32f3d5c70d7e33fcb9"
+  integrity sha512-pmfNyQzc2mseLe91FnT2vmNaTt8dDzhxZ/xItAV7uGsF4dI4ek2ufMu3rAkgQETL/TIs0GS5A+U05g9QyWnv3Q==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.0"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@types/node" "18.15.13"
+    aes-js "4.0.0-beta.5"
+    tslib "2.4.0"
+    ws "8.5.0"
 
 eventemitter3@^4.0.1, eventemitter3@^4.0.7:
   version "4.0.7"
@@ -7906,22 +7884,22 @@ prelude-ls@^1.2.1:
   resolved "https://registry.npmmirror.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier-plugin-tailwindcss@^0.5.7:
-  version "0.5.7"
-  resolved "https://registry.npmmirror.com/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.5.7.tgz#d05dc42c6f2167e3bf2c20e9f71a1fff4232b5d9"
-  integrity sha512-4v6uESAgwCni6YF6DwJlRaDjg9Z+al5zM4JfngcazMy4WEf/XkPS5TEQjbD+DZ5iNuG6RrKQLa/HuX2SYzC3kQ==
+prettier-plugin-tailwindcss@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmmirror.com/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.5.9.tgz#fdc2bd95a02b64702ebd2d6c7ddd300198de3cc6"
+  integrity sha512-9x3t1s2Cjbut2QiP+O0mDqV3gLXTe2CgRlQDgucopVkUdw26sQi53p/q4qvGxMLBDfk/dcTV57Aa/zYwz9l8Ew==
 
 prettier@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmmirror.com/prettier/-/prettier-3.1.0.tgz#c6d16474a5f764ea1a4a373c593b779697744d5e"
   integrity sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==
 
-prisma@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.npmmirror.com/prisma/-/prisma-5.6.0.tgz#ae2c27fdfb4d53be7f7dafb50d6b8b7f55c93aa5"
-  integrity sha512-EEaccku4ZGshdr2cthYHhf7iyvCcXqwJDvnoQRAJg5ge2Tzpv0e2BaMCp+CbbDUwoVTzwgOap9Zp+d4jFa2O9A==
+prisma@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.npmmirror.com/prisma/-/prisma-5.7.0.tgz#3c1c56d392b5d1137de954edefa4533fa092663e"
+  integrity sha512-0rcfXO2ErmGAtxnuTNHQT9ztL0zZheQjOI/VNJzdq87C3TlGPQtMqtM+KCwU6XtmkoEr7vbCQqA7HF9IY0ST+Q==
   dependencies:
-    "@prisma/engines" "5.6.0"
+    "@prisma/engines" "5.7.0"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -8901,10 +8879,10 @@ tailwindcss-animate@^1.0.7:
   resolved "https://registry.npmmirror.com/tailwindcss-animate/-/tailwindcss-animate-1.0.7.tgz#318b692c4c42676cc9e67b19b78775742388bef4"
   integrity sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==
 
-tailwindcss@^3.3.5:
-  version "3.3.5"
-  resolved "https://registry.npmmirror.com/tailwindcss/-/tailwindcss-3.3.5.tgz#22a59e2fbe0ecb6660809d9cc5f3976b077be3b8"
-  integrity sha512-5SEZU4J7pxZgSkv7FP1zY8i2TIAOooNZ1e/OGtxIEv6GltpoiXUqWvLy89+a10qYTB1N5Ifkuw9lqQkN9sscvA==
+tailwindcss@^3.3.6:
+  version "3.3.6"
+  resolved "https://registry.npmmirror.com/tailwindcss/-/tailwindcss-3.3.6.tgz#4dd7986bf4902ad385d90d45fd4b2fa5fab26d5f"
+  integrity sha512-AKjF7qbbLvLaPieoKeTjG1+FyNZT6KaJMJPFeQyLfIp7l82ggH1fbHJSsYIvnbTFQOlkh+gBYpyby5GT1LIdLw==
   dependencies:
     "@alloc/quick-lru" "^5.2.0"
     arg "^5.0.2"
@@ -9070,6 +9048,11 @@ tslib@1.14.1, tslib@^1.9.0:
   resolved "https://registry.npmmirror.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
+tslib@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.npmmirror.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
+  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
+
 tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.5.0, tslib@^2.6.1, tslib@^2.6.2, tslib@~2.6.0:
   version "2.6.2"
   resolved "https://registry.npmmirror.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
@@ -9163,10 +9146,10 @@ typedarray-to-buffer@3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@5.3.2:
-  version "5.3.2"
-  resolved "https://registry.npmmirror.com/typescript/-/typescript-5.3.2.tgz#00d1c7c1c46928c5845c1ee8d0cc2791031d4c43"
-  integrity sha512-6l+RyNy7oAHDfxC4FzSJcz9vnjTKxrLpDG5M2Vu4SHRVNg6xzqZp6LYSR9zjqQTu8DU/f5xwxUdADOkbrIX2gQ==
+typescript@5.3.3:
+  version "5.3.3"
+  resolved "https://registry.npmmirror.com/typescript/-/typescript-5.3.3.tgz#b3ce6ba258e72e6305ba66f5c9b452aaee3ffe37"
+  integrity sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==
 
 ua-parser-js@^1.0.35:
   version "1.0.37"
@@ -9436,15 +9419,15 @@ viem@^1.0.0, viem@^1.19.11:
     isows "1.0.3"
     ws "8.13.0"
 
-wagmi@^1.4.7:
-  version "1.4.7"
-  resolved "https://registry.npmmirror.com/wagmi/-/wagmi-1.4.7.tgz#4236007e3d01359c4281cce34b7884ddcae3fa02"
-  integrity sha512-/k8gA9S6RnwU6Qroxs630jAFvRIx+DSKpCP1owgAEGWc7D2bAJHljwRSCRTGENz48HyJ4V3R7KYV1yImxPvM3A==
+wagmi@^1.4.8:
+  version "1.4.8"
+  resolved "https://registry.npmmirror.com/wagmi/-/wagmi-1.4.8.tgz#0094c37d730e1ac35a884280835114dd9ad69b2b"
+  integrity sha512-WoumwBB3Lw6QhVNxiN2m7jY2rzhKnUx7toDR5OsAVwpqlt6j9UrbNWfj6LKQE33fu7t0pSh0FAuXp1s33RCthA==
   dependencies:
     "@tanstack/query-sync-storage-persister" "^4.27.1"
     "@tanstack/react-query" "^4.28.0"
     "@tanstack/react-query-persist-client" "^4.28.0"
-    "@wagmi/core" "1.4.7"
+    "@wagmi/core" "1.4.8"
     abitype "0.8.7"
     use-sync-external-store "^1.2.0"
 
@@ -9603,6 +9586,11 @@ ws@8.14.2, ws@^8.12.0, ws@^8.13.0, ws@^8.5.0:
   version "8.14.2"
   resolved "https://registry.npmmirror.com/ws/-/ws-8.14.2.tgz#6c249a806eb2db7a20d26d51e7709eab7b2e6c7f"
   integrity sha512-wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g==
+
+ws@8.5.0:
+  version "8.5.0"
+  resolved "https://registry.npmmirror.com/ws/-/ws-8.5.0.tgz#bfb4be96600757fe5382de12c670dab984a1ed4f"
+  integrity sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==
 
 ws@^7.4.5, ws@^7.5.1:
   version "7.5.9"

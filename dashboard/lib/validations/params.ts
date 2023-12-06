@@ -7,4 +7,5 @@ export const searchParamsSchema = z.object({
   app: z.string().optional(),
   publication_type: z.string().optional(),
   is_momoka: z.string().optional(),
+  profile_id: z.string().optional(),
 })

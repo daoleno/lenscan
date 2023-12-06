@@ -89,7 +89,7 @@ export default function ProfileSummaryCard({
           </CardHeader>
 
           <CardContent className="flex flex-col space-y-3 overflow-scroll">
-            {profile.metadata?.attributes!.map(
+            {profile.metadata?.attributes?.map(
               ({ key, value }) =>
                 value !== "[]" && (
                   <div

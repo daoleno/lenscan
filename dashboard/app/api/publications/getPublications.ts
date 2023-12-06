@@ -11,6 +11,7 @@ type getPublicationsFilter = {
   app?: string[]
   publication_type?: string[]
   is_momoka?: string
+  profile_id?: string[]
 }
 
 type getPublicationsParams = {
@@ -22,7 +23,10 @@ type getPublicationsParams = {
 
 export default async function getPublications(
   params: getPublicationsParams
-): Promise<{ publications: Publication[] }> {
+): Promise<{
+  totalCount: number | undefined
+  publications: Publication[]
+}> {
   const { limit, offset, sort, filter } = params
 
   let sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : ""
@@ -50,7 +54,16 @@ export default async function getPublications(
   console.log(sql)
   const publications = await duckdb.all(sql)
 
+  // Get total count if we have profile_id filter
+  let totalCount
+  if (filter && filter.profile_id) {
+    const sql = `SELECT COUNT(*) AS count FROM publication_record ${filterCondition}`
+    const result = await duckdb.all(sql)
+    totalCount = result[0].count
+  }
+
   return {
+    totalCount,
     publications: publications as Publication[],
   }
 }
