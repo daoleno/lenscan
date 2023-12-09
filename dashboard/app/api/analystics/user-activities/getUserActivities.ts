@@ -1,4 +1,4 @@
-import duckdb from "@/lib/duckdb"
+import { duckdb, toParquetSql } from "@/lib/duckdb"
 
 import "server-only"
 
@@ -23,8 +23,7 @@ export async function getUserActivities(rangeKey: DateRangeKey = "ALL") {
     ORDER BY day
   `
 
-  console.log(sql)
-  const activities = await duckdb.all(sql)
+  const activities = await duckdb.all(toParquetSql(sql))
 
   activities.forEach((a) => {
     a.count = Number(a.count)

@@ -1,4 +1,4 @@
-import duckdb from "@/lib/duckdb"
+import { duckdb, toParquetSql } from "@/lib/duckdb"
 
 import "server-only"
 
@@ -15,7 +15,7 @@ export async function getContentLanguageDistribution() {
     ORDER BY frequency DESC;
   `
 
-  const result = await duckdb.all(sql)
+  const result = await duckdb.all(toParquetSql(sql))
 
   // convert bigint to number
   result.forEach((row) => {

@@ -1,4 +1,4 @@
-import duckdb from "@/lib/duckdb"
+import { duckdb, toParquetSql } from "@/lib/duckdb"
 
 import { Publication } from "./publication"
 
@@ -51,14 +51,13 @@ export default async function getPublications(
     ? " WHERE " + conditions.join(" AND ")
     : ""
   const sql = `SELECT * FROM publication_record ${filterCondition} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`
-  console.log(sql)
-  const publications = await duckdb.all(sql)
+  const publications = await duckdb.all(toParquetSql(sql))
 
   // Get total count if we have profile_id filter
   let totalCount
   if (filter && filter.profile_id) {
     const sql = `SELECT COUNT(*) AS count FROM publication_record ${filterCondition}`
-    const result = await duckdb.all(sql)
+    const result = await duckdb.all(toParquetSql(sql))
     totalCount = result[0].count
   }
 

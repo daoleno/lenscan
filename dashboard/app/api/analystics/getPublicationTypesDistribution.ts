@@ -1,4 +1,4 @@
-import duckdb from "@/lib/duckdb"
+import { duckdb, toParquetSql } from "@/lib/duckdb"
 
 export type PublicationTypesDistribution = {
   publication_type: string
@@ -18,8 +18,7 @@ export async function getPublicationTypesDistribution() {
     count DESC;
   `
 
-  console.log(sql)
-  const pubs = await duckdb.all(sql)
+  const pubs = await duckdb.all(toParquetSql(sql))
 
   pubs.forEach((a) => {
     a.count = Number(a.count)

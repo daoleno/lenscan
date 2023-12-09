@@ -1,4 +1,4 @@
-import duckdb from "@/lib/duckdb"
+import { duckdb, parquetPath } from "@/lib/duckdb"
 
 import "server-only"
 
@@ -14,17 +14,17 @@ export async function getTopContributors() {
   let sql = `
     WITH publication_counts AS (
         SELECT profile_id, COUNT(*) AS publication_count
-        FROM publication_record
+        FROM read_parquet('${parquetPath}/publication_record.parquet')
         GROUP BY profile_id
     ), 
     reaction_counts AS (
         SELECT actioned_by_profile_id AS profile_id, COUNT(*) AS reaction_count
-        FROM publication_reaction
+        FROM read_parquet('${parquetPath}/publication_reaction.parquet')
         GROUP BY actioned_by_profile_id
     ),
     mention_counts AS (
         SELECT profile_id, COUNT(*) AS mention_count
-        FROM publication_mention
+        FROM read_parquet('${parquetPath}/publication_mention.parquet')
         GROUP BY profile_id
     ),
     combined_counts AS (

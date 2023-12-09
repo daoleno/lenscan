@@ -1,4 +1,4 @@
-import duckdb from "@/lib/duckdb"
+import { duckdb, toParquetSql } from "@/lib/duckdb"
 
 import { Profile } from "./profile"
 
@@ -20,10 +20,10 @@ export default async function getProfiles(
 
   let sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : ""
   const sql = `SELECT * FROM profile_record ${sortOrder} LIMIT ${limit} OFFSET ${offset}`
-  const profiles = await duckdb.all(sql)
+  const profiles = await duckdb.all(toParquetSql(sql))
 
   const totalCount = await duckdb.all(
-    `SELECT COUNT(*) AS count FROM profile_record`
+    toParquetSql(`SELECT COUNT(*) AS count FROM profile_record`)
   )
 
   return {
