@@ -1,26 +1,14 @@
-"use client"
-
-import { useState } from "react"
 import { DonutChart } from "@tremor/react"
-import useSWR from "swr"
 
-import fetcher from "@/lib/fetcher"
+import { getPublicationTypesDistribution } from "@/app/api/analystics/getPublicationTypesDistribution"
 
 import { ChartCard } from "./chart-card"
 
-export default function PublicationTypesDistribution() {
-  const [range, setRange] = useState("ALL")
-  const { data, error } = useSWR(
-    `/api/analystics/publication-types-distribution?range=${range}`,
-    fetcher
-  )
+export default async function PublicationTypesDistribution() {
+  const data = await getPublicationTypesDistribution()
 
   return (
-    <ChartCard
-      chartTitle="Publication Types Distribution"
-      range={range}
-      setRange={setRange}
-    >
+    <ChartCard chartTitle="Publication Types Distribution">
       <DonutChart
         data={data}
         index="publication_type"
