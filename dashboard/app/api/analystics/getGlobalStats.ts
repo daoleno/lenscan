@@ -1,8 +1,14 @@
 import duckdb from "@/lib/duckdb"
 
-import { GlobalStats } from "./globalStats"
-
 import "server-only"
+
+export type GlobalStats = {
+  totalProfiles: number
+  totalPublications: number
+  totalPosts: number
+  totalMirrors: number
+  totalComments: number
+}
 
 export async function getGlobalStats() {
   const stats = await duckdb.all(`SELECT 

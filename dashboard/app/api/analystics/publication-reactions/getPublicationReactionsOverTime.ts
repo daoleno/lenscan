@@ -1,15 +1,30 @@
 import duckdb from "@/lib/duckdb"
 
+import { DateRangeKey, getDateRangeCondition } from "../utils"
+
 import "server-only"
 
-export async function getPublicationReactionsOvertime() {
-  const sql = `
+export type PublicationReactionsOvertime = {
+  reaction_day: string
+  reaction_type: string
+  reaction_count: number
+}[]
+
+export async function getPublicationReactionsOvertime(
+  rangeKey: DateRangeKey = "ALL"
+) {
+  let sql = `
     SELECT
       DATE_TRUNC('day', action_at) AS reaction_day,
       type AS reaction_type,
       COUNT(*) AS reaction_count
     FROM
       publication_reaction
+  `
+
+  sql += getDateRangeCondition(rangeKey, "action_at")
+
+  sql += `
     GROUP BY
       reaction_day, reaction_type
     ORDER BY
@@ -19,13 +34,11 @@ export async function getPublicationReactionsOvertime() {
   console.log(sql)
   const reactionsRaw = await duckdb.all(sql)
 
-  // Convert bigint to number and format date to ISO string
   reactionsRaw.forEach((a) => {
     a.reaction_count = Number(a.reaction_count)
     a.reaction_day = new Date(a.reaction_day).toISOString().split("T")[0] // Format to 'YYYY-MM-DD'
   })
 
-  // Transform data for the AreaChart
   const transformedData = reactionsRaw.reduce(
     (acc, { reaction_day, reaction_type, reaction_count }) => {
       let dayEntry = acc.find((entry: any) => entry.date === reaction_day)
@@ -39,5 +52,5 @@ export async function getPublicationReactionsOvertime() {
     []
   )
 
-  return transformedData
+  return transformedData as PublicationReactionsOvertime
 }
