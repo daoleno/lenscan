@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 export default function Post({ post }: { post: PostFragment }) {
   const overviewItems = [
     { label: "Id", value: post.id },
+    // @ts-ignore
     { label: "Title", value: post.metadata?.title },
     { label: "Type", value: post.__typename },
     { label: "App", value: post.metadata?.appId },

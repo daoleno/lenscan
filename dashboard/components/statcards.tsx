@@ -1,26 +1,20 @@
-import { getGlobalStats } from "@/app/api/analystics/getGlobalStats";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatNumber } from "@/lib/utils";
-import {
-  Copy,
-  Loader2,
-  MessageSquare,
-  Scroll,
-  Users
-} from "lucide-react";
+import { Copy, Loader2, MessageSquare, Scroll, Users } from "lucide-react"
 
+import { formatNumber } from "@/lib/utils"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { getGlobalStats } from "@/app/api/analystics/getGlobalStats"
 
 type Categories = {
-  title: string;
-  metric?: string;
-  icon: any;
-}[];
+  title: string
+  metric?: string
+  icon: any
+}[]
 
-export default async function StatCardGrid() {
-  const globalStats = await getGlobalStats();
+export default async function StatCards() {
+  const globalStats = await getGlobalStats()
 
   // console.log("stats", res)
-  
+
   const categories: Categories = [
     {
       title: "Profiles",
@@ -42,7 +36,7 @@ export default async function StatCardGrid() {
       metric: globalStats.totalComments.toString(),
       icon: <MessageSquare />,
     },
-  ];
+  ]
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -66,5 +60,5 @@ export default async function StatCardGrid() {
         </Card>
       ))}
     </div>
-  );
+  )
 }

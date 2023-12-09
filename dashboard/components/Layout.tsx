@@ -1,9 +1,9 @@
-import { WithChildren } from "../types";
+import { fontSans } from "@/lib/fonts"
+import { cn } from "@/lib/utils"
 
-import { fontSans } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
-import Footer from "./footer";
-import { SiteHeader } from "./site-header";
+import { WithChildren } from "../types"
+import Footer from "./footer"
+import { SiteHeader } from "./site-header"
 
 export default function Layout({ children }: WithChildren) {
   return (
@@ -17,5 +17,5 @@ export default function Layout({ children }: WithChildren) {
       <section className="container flex-grow">{children}</section>
       <Footer />
     </main>
-  );
+  )
 }

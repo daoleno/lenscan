@@ -4,7 +4,7 @@ import {
   PageHeaderHeading,
 } from "@/components/page-header"
 import Publications, { PublicationsProps } from "@/components/publications"
-import StatCardGrid from "@/components/StatCardGrid"
+import StatCards from "@/components/statcards"
 
 export default async function Home() {
   const params: PublicationsProps = {
@@ -23,7 +23,7 @@ export default async function Home() {
           Explore the interesting events happening on the Lens Protocol.
         </PageHeaderDescription>
       </PageHeader>
-      <StatCardGrid />
+      <StatCards />
       <div className="mt-6 space-y-6">
         {/* <ChartView /> */}
         <Publications searchParams={params.searchParams} />
