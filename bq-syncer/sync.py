@@ -34,10 +34,6 @@ args = parser.parse_args()
 dataset_ref = bqclient.dataset("v2_polygon", project="lens-public-data")
 dataset = bqclient.get_dataset(dataset_ref)
 
-# DuckDB connection
-conn = duckdb.connect(database=args.input)
-
-cursor = conn.cursor()
 
 is_task_running = False
 
@@ -87,20 +83,24 @@ def export_tables(conn, output_dir):
         tables = conn.execute(
             "SELECT table_name FROM information_schema.tables WHERE table_schema = 'main'"
         ).fetchall()
+
         if not tables:
             print("No tables found in the database.")
             return
 
-        print(f"Found {len(tables)} tables.")
+        total_tables = len(tables)
+        print(f"Found {total_tables} tables.")
 
         # Export each table to a Parquet file
-        for table in tables:
+        for index, table in enumerate(tables, start=1):
             table_name = table[0]
             parquet_file_path = os.path.join(output_dir, f"{table_name}.parquet")
             conn.execute(
                 f"COPY {table_name} TO '{parquet_file_path}' (FORMAT 'parquet')"
             )
-            print(f"Exported {table_name} to {parquet_file_path}")
+            print(
+                f"[{datetime.now()}] Exported table {index}/{total_tables}: {table_name} to {parquet_file_path}"
+            )
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -125,7 +125,7 @@ def delete_old_dir():
 
 
 def perform_sync_task():
-    global conn, is_task_running
+    global is_task_running
 
     # Check if task is already running
     if is_task_running:
@@ -137,80 +137,94 @@ def perform_sync_task():
     is_task_running = True
     print(f"[{datetime.now()}] Starting data sync...")
 
-    tables = list(bqclient.list_tables(dataset))  # Convert to list only once
-    total_tables = len(tables)
-    for index, table in enumerate(tables, start=1):
-        table_id = table.table_id
-        table_ref = dataset_ref.table(table_id)
+    # Create a new DuckDB connection for each task
+    with duckdb.connect(database=args.input) as conn:
+        cursor = conn.cursor()
 
-        # Check if table exists in DuckDB and create if not
-        cursor.execute(
-            f"SELECT count(*) FROM information_schema.tables WHERE table_name = '{table_id}'"
-        )
-        if cursor.fetchone()[0] == 0:
-            # Fetch the table schema from BigQuery
-            table_schema = bqclient.get_table(table_ref).schema
-            # Convert schema, replacing RECORD type with individual fields
-            converted_schema = convert_schema(table_schema)
-            ddl = f"CREATE TABLE {table_id} ({', '.join(converted_schema)})"
-            cursor.execute(ddl)
+        try:
+            tables = list(bqclient.list_tables(dataset))  # Convert to list only once
+            total_tables = len(tables)
+            for index, table in enumerate(tables, start=1):
+                table_id = table.table_id
+                table_ref = dataset_ref.table(table_id)
 
-        # Attempt to retrieve the last sync timestamp from the DuckDB table
-        last_timestamp_result = cursor.execute(
-            f"SELECT MAX(source_timestamp) FROM {table_id}"
-        ).fetchone()
-        last_timestamp = (
-            last_timestamp_result[0] if last_timestamp_result[0] is not None else 0
-        )
-
-        # Build query to fetch new or updated records from BigQuery
-        # Fetch the table schema from BigQuery
-        table_schema = bqclient.get_table(table_ref).schema
-
-        # Generate list of fields, excluding 'datastream_metadata', but including 'datastream_metadata.source_timestamp'
-        fields = [f.name for f in table_schema if f.name != "datastream_metadata"]
-        fields.append("datastream_metadata.source_timestamp")
-
-        query = f"""
-        SELECT {', '.join(fields)}
-        FROM `{table_ref}`
-        WHERE datastream_metadata.source_timestamp > {last_timestamp}
-        """
-        query_job = bqclient.query(query)
-        iterator = query_job.result(page_size=10000)  # Fetch 1000 rows at a time
-        page_num = 0
-        for page in iterator.pages:
-            page_num += 1
-            items = list(page)
-            df = pl.DataFrame(
-                {
-                    field.name: list(data)
-                    for field, data in zip(table_schema, zip(*items))
-                }
-            )
-            # insert into duckdb
-            if df.height > 0:  # Check if DataFrame is not empty
-                cursor.register("df", df)
-                cursor.execute(f"INSERT INTO {table_id} SELECT * FROM df")
-                print(
-                    f"[{datetime.now()}] Synced table {index}/{total_tables}: {table_id}, Page: {page_num}, Rows: {len(items)}"
+                # Check if table exists in DuckDB and create if not
+                cursor.execute(
+                    f"SELECT count(*) FROM information_schema.tables WHERE table_name = '{table_id}'"
                 )
-            else:
-                print(
-                    f"[{datetime.now()}] No new records found for table {index}/{total_tables}: {table_id}"
+                if cursor.fetchone()[0] == 0:
+                    # Fetch the table schema from BigQuery
+                    table_schema = bqclient.get_table(table_ref).schema
+                    # Convert schema, replacing RECORD type with individual fields
+                    converted_schema = convert_schema(table_schema)
+                    ddl = f"CREATE TABLE {table_id} ({', '.join(converted_schema)})"
+                    cursor.execute(ddl)
+
+                # Attempt to retrieve the last sync timestamp from the DuckDB table
+                last_timestamp_result = cursor.execute(
+                    f"SELECT MAX(source_timestamp) FROM {table_id}"
+                ).fetchone()
+                last_timestamp = (
+                    last_timestamp_result[0]
+                    if last_timestamp_result[0] is not None
+                    else 0
                 )
 
-    print(f"[{datetime.now()}] Data sync completed.")
-    is_task_running = False
+                # Build query to fetch new or updated records from BigQuery
+                # Fetch the table schema from BigQuery
+                table_schema = bqclient.get_table(table_ref).schema
 
-    # export tables to parquet files
-    output_directory = create_output_directory()
-    export_tables(conn, output_directory)
-    update_symbolic_link(output_directory)
+                # Generate list of fields, excluding 'datastream_metadata', but including 'datastream_metadata.source_timestamp'
+                fields = [
+                    f.name for f in table_schema if f.name != "datastream_metadata"
+                ]
+                fields.append("datastream_metadata.source_timestamp")
 
-    # Add this new deletion operation after updating the symbolic link.
-    delete_old_dir()
-    print(f"[{datetime.now()}] Data sync completed.")
+                query = f"""
+                SELECT {', '.join(fields)}
+                FROM `{table_ref}`
+                WHERE datastream_metadata.source_timestamp > {last_timestamp}
+                """
+                query_job = bqclient.query(query)
+                iterator = query_job.result(
+                    page_size=10000
+                )  # Fetch 1000 rows at a time
+                page_num = 0
+                for page in iterator.pages:
+                    page_num += 1
+                    items = list(page)
+                    df = pl.DataFrame(
+                        {
+                            field.name: list(data)
+                            for field, data in zip(table_schema, zip(*items))
+                        }
+                    )
+                    # insert into duckdb
+                    if df.height > 0:  # Check if DataFrame is not empty
+                        cursor.register("df", df)
+                        cursor.execute(f"INSERT INTO {table_id} SELECT * FROM df")
+                        print(
+                            f"[{datetime.now()}] Synced table {index}/{total_tables}: {table_id}, Page: {page_num}, Rows: {len(items)}"
+                        )
+                    else:
+                        print(
+                            f"[{datetime.now()}] No new records found for table {index}/{total_tables}: {table_id}"
+                        )
+
+            is_task_running = False
+
+            # export tables to parquet files
+            output_directory = create_output_directory()
+            export_tables(conn, output_directory)
+            update_symbolic_link(output_directory)
+
+            # Add this new deletion operation after updating the symbolic link.
+            delete_old_dir()
+            print(f"[{datetime.now()}] Data sync completed.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            is_task_running = False
 
 
 # Schedule the task to run every 60 minutes
