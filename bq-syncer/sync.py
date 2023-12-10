@@ -35,7 +35,7 @@ dataset_ref = bqclient.dataset("v2_polygon", project="lens-public-data")
 dataset = bqclient.get_dataset(dataset_ref)
 
 # DuckDB connection
-conn = duckdb.connect(database=args.input, config={"max_memory": "1GB"})
+conn = duckdb.connect(database=args.input)
 
 cursor = conn.cursor()
 
