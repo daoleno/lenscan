@@ -2,7 +2,7 @@ import { Database } from "duckdb-async"
 
 const duckdb = await Database.create(":memory:")
 
-const parquetPath = "v2_polygon"
+const parquetPath = process.env.PARQUET_DIR_PATH
 
 function toParquetSql(sql: string) {
   // Regular expression to find table names in the SQL query
