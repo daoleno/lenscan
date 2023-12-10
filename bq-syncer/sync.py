@@ -222,8 +222,8 @@ def perform_sync_task():
     print(f"[{datetime.now()}] Data sync completed.")
 
 
-# Schedule the task to run every 15 minutes
-schedule.every(15).minutes.do(perform_sync_task)
+# Schedule the task to run every 60 minutes
+schedule.every(60).minutes.do(perform_sync_task)
 
 # Run the task immediately on start
 perform_sync_task()
