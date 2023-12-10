@@ -1,8 +1,0 @@
-contract_address="0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"
-rpc_url="https://polygon-rpc.com"
-pg_dsn="postgres://postgres:postgres@localhost:5432/lenscan"
-start_block=28384641
-step=3000
-step_factor=10
-max_retries=10
-polling_interval=3
