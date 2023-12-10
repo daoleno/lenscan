@@ -1,3 +1,5 @@
+import os
+import shutil
 import time
 from datetime import datetime
 
@@ -18,7 +20,8 @@ dataset_ref = bqclient.dataset("v2_polygon", project="lens-public-data")
 dataset = bqclient.get_dataset(dataset_ref)
 
 # DuckDB connection
-cursor = duckdb.connect(database="v2_polygon.db").cursor()
+conn = duckdb.connect(database="v2_polygon.db")
+cursor = conn.cursor()
 
 is_task_running = False
 
@@ -35,8 +38,86 @@ def convert_schema(table_schema):
     return converted_schema
 
 
+def connect_database(db_name):
+    """
+    Connect to the specified DuckDB database.
+    Return the connection object.
+    """
+    conn = duckdb.connect(db_name)
+    print("Connected to database successfully.")
+    return conn
+
+
+def create_output_directory(base_name):
+    """
+    Create a new directory with a timestamp.
+    Return the directory name.
+    """
+    date_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_directory = f"{base_name}_{date_str}"
+    os.makedirs(output_directory, exist_ok=True)
+    print(f"Output directory set to: {output_directory}")
+    return output_directory
+
+
+def update_symbolic_link(symlink_path, target):
+    """
+    Update the symbolic link to the specified target directory.
+    """
+    if os.path.exists(symlink_path):
+        if os.path.islink(symlink_path):
+            os.unlink(symlink_path)
+    os.symlink(os.path.abspath(target), symlink_path)
+    print(f"Updated symbolic link {symlink_path} to: {target}")
+
+
+def export_tables(conn, output_dir):
+    """
+    Export all tables to Parquet files in the given directory.
+    """
+    try:
+        # Retrieve a list of all tables
+        tables = conn.execute(
+            "SELECT table_name FROM information_schema.tables WHERE table_schema = 'main'"
+        ).fetchall()
+        if not tables:
+            print("No tables found in the database.")
+            return
+
+        print(f"Found {len(tables)} tables.")
+
+        # Export each table to a Parquet file
+        for table in tables:
+            table_name = table[0]
+            parquet_file_path = os.path.join(output_dir, f"{table_name}.parquet")
+            conn.execute(
+                f"COPY {table_name} TO '{parquet_file_path}' (FORMAT 'parquet')"
+            )
+            print(f"Exported {table_name} to {parquet_file_path}")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+def delete_old_dir(symlink_path, base_name):
+    """
+    Delete the old directories that are not linked by the symbolic link.
+    """
+    cur_link_target = os.path.realpath(symlink_path)
+    parent_dir = os.path.dirname(cur_link_target)
+    for item in os.listdir(parent_dir):
+        dir_path = os.path.join(parent_dir, item)
+        if (
+            os.path.isdir(dir_path)
+            and item.startswith(base_name)
+            and os.path.abspath(dir_path) != cur_link_target
+        ):
+            shutil.rmtree(dir_path)
+            print(f"Deleted old directory: {dir_path}")
+
+
 def perform_sync_task():
-    global is_task_running
+    global conn, is_task_running
 
     # Check if task is already running
     if is_task_running:
@@ -113,6 +194,14 @@ def perform_sync_task():
 
     print(f"[{datetime.now()}] Data sync completed.")
     is_task_running = False
+
+    # export tables to parquet files
+    output_directory = create_output_directory("v2_polygon")
+    export_tables(conn, output_directory)
+    update_symbolic_link("v2_polygon", output_directory)
+
+    # Add this new deletion operation after updating the symbolic link.
+    delete_old_dir("v2_polygon", "v2_polygon_")
 
 
 # Schedule the task to run every 15 minutes
