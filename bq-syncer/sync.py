@@ -35,7 +35,8 @@ dataset_ref = bqclient.dataset("v2_polygon", project="lens-public-data")
 dataset = bqclient.get_dataset(dataset_ref)
 
 # DuckDB connection
-conn = duckdb.connect(database=args.input)
+conn = duckdb.connect(database=args.input, config={"max_memory": "1GB"})
+
 cursor = conn.cursor()
 
 is_task_running = False
@@ -51,16 +52,6 @@ def convert_schema(table_schema):
         else:
             converted_schema.append(f"{field.name} {field.field_type}")
     return converted_schema
-
-
-def connect_database(db_name):
-    """
-    Connect to the specified DuckDB database.
-    Return the connection object.
-    """
-    conn = duckdb.connect(db_name)
-    print("Connected to database successfully.")
-    return conn
 
 
 def create_output_directory():
