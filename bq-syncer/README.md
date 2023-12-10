@@ -21,7 +21,7 @@ Run the script using a Python interpreter:
 
 ```sh
 poetry shell
-python sync.py
+python sync.py -i v2_polygon.db -o /tmp/v2_polygon
 ```
 
 ## How it Works
