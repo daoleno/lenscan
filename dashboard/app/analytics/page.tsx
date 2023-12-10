@@ -5,6 +5,8 @@ import PublicationTypesDistribution from "@/components/charts/publication-types-
 import TopContributors from "@/components/charts/top-contributors"
 import UserActivity from "@/components/charts/user-activity"
 
+export const dynamic = "force-dynamic"
+
 export default async function Page() {
   return (
     <div className="grid grid-cols-1 gap-4 p-7 md:grid-cols-2">

@@ -6,6 +6,8 @@ import {
 import Publications, { PublicationsProps } from "@/components/publications"
 import StatCards from "@/components/statcards"
 
+export const dynamic = "force-dynamic"
+
 export default async function Home() {
   const params: PublicationsProps = {
     searchParams: {
