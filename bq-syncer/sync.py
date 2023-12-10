@@ -1,3 +1,4 @@
+import argparse
 import os
 import shutil
 import time
@@ -16,11 +17,25 @@ credentials = service_account.Credentials.from_service_account_file(
 )
 bqclient = bigquery.Client(credentials=credentials, project=credentials.project_id)
 
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description="Connect to DuckDB and export tables.")
+parser.add_argument(
+    "-i", "--input", help="Path to the input database file.", required=True
+)
+parser.add_argument(
+    "-o",
+    "--output",
+    help="Path to the directory to which exports will be saved.",
+    required=True,
+)
+args = parser.parse_args()
+
 dataset_ref = bqclient.dataset("v2_polygon", project="lens-public-data")
 dataset = bqclient.get_dataset(dataset_ref)
 
 # DuckDB connection
-conn = duckdb.connect(database="v2_polygon.db")
+conn = duckdb.connect(database=args.input)
 cursor = conn.cursor()
 
 is_task_running = False
@@ -48,27 +63,28 @@ def connect_database(db_name):
     return conn
 
 
-def create_output_directory(base_name):
+def create_output_directory():
     """
-    Create a new directory with a timestamp.
+    Create a new directory with a timestamp in the specified location.
     Return the directory name.
     """
     date_str = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_directory = f"{base_name}_{date_str}"
+    output_directory = os.path.join(args.output, f"v2_polygon_{date_str}")
     os.makedirs(output_directory, exist_ok=True)
     print(f"Output directory set to: {output_directory}")
     return output_directory
 
 
-def update_symbolic_link(symlink_path, target):
+def update_symbolic_link(output_dir):
     """
     Update the symbolic link to the specified target directory.
     """
+    symlink_path = os.path.join(args.output, "v2_polygon")
     if os.path.exists(symlink_path):
         if os.path.islink(symlink_path):
             os.unlink(symlink_path)
-    os.symlink(os.path.abspath(target), symlink_path)
-    print(f"Updated symbolic link {symlink_path} to: {target}")
+    os.symlink(os.path.abspath(output_dir), symlink_path)
+    print(f"Updated symbolic link {symlink_path} to: {output_dir}")
 
 
 def export_tables(conn, output_dir):
@@ -99,17 +115,18 @@ def export_tables(conn, output_dir):
         print(f"An error occurred: {e}")
 
 
-def delete_old_dir(symlink_path, base_name):
+def delete_old_dir():
     """
     Delete the old directories that are not linked by the symbolic link.
     """
+    symlink_path = os.path.join(args.output, "v2_polygon")
     cur_link_target = os.path.realpath(symlink_path)
     parent_dir = os.path.dirname(cur_link_target)
     for item in os.listdir(parent_dir):
         dir_path = os.path.join(parent_dir, item)
         if (
             os.path.isdir(dir_path)
-            and item.startswith(base_name)
+            and item.startswith("v2_polygon_")
             and os.path.abspath(dir_path) != cur_link_target
         ):
             shutil.rmtree(dir_path)
@@ -164,7 +181,7 @@ def perform_sync_task():
         fields.append("datastream_metadata.source_timestamp")
 
         query = f"""
-        SELECT {', '.join(fields)} 
+        SELECT {', '.join(fields)}
         FROM `{table_ref}`
         WHERE datastream_metadata.source_timestamp > {last_timestamp}
         """
@@ -196,12 +213,13 @@ def perform_sync_task():
     is_task_running = False
 
     # export tables to parquet files
-    output_directory = create_output_directory("v2_polygon")
+    output_directory = create_output_directory()
     export_tables(conn, output_directory)
-    update_symbolic_link("v2_polygon", output_directory)
+    update_symbolic_link(output_directory)
 
     # Add this new deletion operation after updating the symbolic link.
-    delete_old_dir("v2_polygon", "v2_polygon_")
+    delete_old_dir()
+    print(f"[{datetime.now()}] Data sync completed.")
 
 
 # Schedule the task to run every 15 minutes
