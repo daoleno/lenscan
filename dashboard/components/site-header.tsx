@@ -1,11 +1,13 @@
-import Link from "next/link";
+import Image from "next/image"
+import Link from "next/link"
 
-import { MainNav } from "@/components/main-nav";
-import { buttonVariants } from "@/components/ui/button";
-import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { Search } from "./search";
+import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+import { MainNav } from "@/components/main-nav"
+import { buttonVariants } from "@/components/ui/button"
+
+import { Icons } from "./icons"
+import { Search } from "./search"
 
 export function SiteHeader() {
   return (
@@ -41,9 +43,27 @@ export function SiteHeader() {
                 <span className="sr-only">Telegram</span>
               </div>
             </Link>
+            <Link
+              href={siteConfig.links.github}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div
+                className={cn(
+                  buttonVariants({
+                    size: "sm",
+                    variant: "ghost",
+                  }),
+                  "w-9 px-0"
+                )}
+              >
+                <Icons.gitHub className="mr-2 h-5 w-5" />
+                <span className="sr-only">Github</span>
+              </div>
+            </Link>
           </nav>
         </div>
       </div>
     </header>
-  );
+  )
 }

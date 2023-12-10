@@ -10,6 +10,7 @@ export default async function ContentLanguageDistribution() {
   return (
     <ChartCard chartTitle="Content Language Distribution">
       <DonutChart
+        className="mt-24"
         data={data}
         index="language"
         category="frequency"

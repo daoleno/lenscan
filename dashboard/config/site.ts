@@ -8,7 +8,8 @@ export const siteConfig = {
     twitter: "https://twitter.com/dao_leno",
     lenster: "https://lenster.xyz/u/daoleno",
     telegram: "https://t.me/+Zq8XF9cI6GhkMTNl",
+    github: "https://github.com/daoleno/lenscan",
   },
-};
+}
 
-export type SiteConfig = typeof siteConfig;
+export type SiteConfig = typeof siteConfig

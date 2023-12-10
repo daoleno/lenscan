@@ -10,6 +10,7 @@ export default async function PublicationTypesDistribution() {
   return (
     <ChartCard chartTitle="Publication Types Distribution">
       <DonutChart
+        className="mt-24"
         data={data}
         index="publication_type"
         category="count"

@@ -52,7 +52,7 @@ export default async function PublicationsTable({
           {
             id: "is_momoka",
             title: "Network",
-            options: [{ label: "Momoka", value: "false" }],
+            options: [{ label: "Momoka", value: "true" }],
           },
         ]}
         // // Render dynamic searchable filters
