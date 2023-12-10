@@ -7,6 +7,8 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['duckdb-async', 'duckdb'],
   },
+
+  output: 'standalone',
 };
 
 module.exports = nextConfig;
