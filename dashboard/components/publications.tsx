@@ -4,6 +4,7 @@ import getPublications from "@/app/api/publications/getPublications"
 import { Publication } from "@/app/api/publications/publication"
 
 export interface PublicationsProps {
+  title?: string
   searchParams: {
     [key: string]: string | string[] | undefined
   }
@@ -11,6 +12,7 @@ export interface PublicationsProps {
   showPagination?: boolean
 }
 export default async function Publications({
+  title = "Publications",
   searchParams,
   showToolbar,
   showPagination,
@@ -47,6 +49,7 @@ export default async function Publications({
   const pageCount = Math.ceil(Number(maxCount) / limit)
   return (
     <PublicationsTable
+      title={title}
       data={publications}
       pageCount={pageCount}
       totalCount={maxCount}

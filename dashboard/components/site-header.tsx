@@ -8,6 +8,7 @@ import { buttonVariants } from "@/components/ui/button"
 
 import { Icons } from "./icons"
 import { Search } from "./search"
+import { ThemeToggle } from "./theme-toggle"
 
 export function SiteHeader() {
   return (
@@ -61,6 +62,7 @@ export function SiteHeader() {
                 <span className="sr-only">Github</span>
               </div>
             </Link>
+            <ThemeToggle />
           </nav>
         </div>
       </div>

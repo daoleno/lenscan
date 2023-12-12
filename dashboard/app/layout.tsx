@@ -7,7 +7,11 @@ import { createPublicClient, http } from "viem"
 import { polygon } from "viem/chains"
 import { createConfig, WagmiConfig } from "wagmi"
 
-import Layout from "@/components/Layout"
+import { fontSans } from "@/lib/fonts"
+import { cn } from "@/lib/utils"
+import Footer from "@/components/footer"
+import { ThemeProvider } from "@/components/providers"
+import { SiteHeader } from "@/components/site-header"
 
 import "styles/globals.css"
 
@@ -33,18 +37,35 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <PlausibleProvider
-          customDomain="https://analytics.lenscan.io"
-          domain="lenscan.io"
-          selfHosted
+      <head />
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <WagmiConfig config={config}>
-            <LensProvider config={lensConfig}>
-              <Layout>{children}</Layout>
-            </LensProvider>
-          </WagmiConfig>
-        </PlausibleProvider>
+          <PlausibleProvider
+            customDomain="https://analytics.lenscan.io"
+            domain="lenscan.io"
+            selfHosted
+          >
+            <WagmiConfig config={config}>
+              <LensProvider config={lensConfig}>
+                <div className="relative flex min-h-screen flex-col">
+                  <SiteHeader />
+                  <section className="container flex-grow">{children}</section>
+                  <Footer />
+                </div>
+              </LensProvider>
+            </WagmiConfig>
+          </PlausibleProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

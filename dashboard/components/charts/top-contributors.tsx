@@ -1,11 +1,11 @@
 import { BarChart } from "@tremor/react"
 
-import { getTopContributors } from "@/app/api/analystics/getTopContributors"
+import { getTopProfiles } from "@/app/api/analystics/getTopProfiles"
 
 import { ChartCard } from "./chart-card"
 
 export default async function TopContributors() {
-  const data = await getTopContributors()
+  const data = await getTopProfiles()
 
   return (
     <ChartCard chartTitle="Top Contributors">

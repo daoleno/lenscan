@@ -4,6 +4,7 @@ import { publicationColumns } from "./data-table/columns"
 import { DataTable } from "./data-table/data-table"
 
 interface PublicationsTableProps {
+  title: string
   data: Publication[]
   pageCount: number
   totalCount?: number
@@ -12,6 +13,7 @@ interface PublicationsTableProps {
 }
 
 export default async function PublicationsTable({
+  title = "Publications",
   data,
   pageCount,
   totalCount,
@@ -20,7 +22,7 @@ export default async function PublicationsTable({
 }: PublicationsTableProps) {
   return (
     <div className="flex-1 flex-col gap-3 md:flex">
-      <h2 className="text-3xl font-bold tracking-tight">Publications</h2>
+      <h2 className="p-3 text-3xl font-bold tracking-tight">{title}</h2>
       <DataTable
         columns={publicationColumns}
         data={data}
