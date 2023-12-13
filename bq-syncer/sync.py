@@ -174,11 +174,13 @@ def perform_sync_task():
                 # Fetch the table schema from BigQuery
                 table_schema = bqclient.get_table(table_ref).schema
 
-                # Generate list of fields, excluding 'datastream_metadata', but including 'datastream_metadata.source_timestamp'
+                # Generate list of fields, preserving the original schema's order.
                 fields = [
-                    f.name for f in table_schema if f.name != "datastream_metadata"
+                    f.name
+                    if f.name != "datastream_metadata"
+                    else "datastream_metadata.source_timestamp"
+                    for f in table_schema
                 ]
-                fields.append("datastream_metadata.source_timestamp")
 
                 query = f"""
                 SELECT {', '.join(fields)}
