@@ -1,12 +1,19 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
+import {
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip"
 import { ColumnDef } from "@tanstack/react-table"
 import * as timeago from "timeago.js"
 
 import { Profile } from "@/app/api/profiles/profile"
-import { Publication } from "@/app/api/publications/publication"
+import { type Publication } from "@/app/api/publications/getPublications"
 
+import { Tooltip } from "../ui/tooltip"
 import { DataTableColumnHeader } from "./data-table-column-header"
 
 export const publicationColumns: ColumnDef<Publication>[] = [
@@ -28,11 +35,19 @@ export const publicationColumns: ColumnDef<Publication>[] = [
   {
     accessorKey: "profile_id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Profile Id" />
+      <DataTableColumnHeader column={column} title="Profile" />
     ),
     cell: ({ row }) => (
-      <Link className="underline" href={`/profile/${row.original.profile_id}`}>
-        {row.original.profile_id}
+      <Link
+        className="flex items-center gap-2"
+        href={`/profile/${row.original.profile_id}`}
+      >
+        <img
+          src={row.original.profile_picture || "/images/default-profile.png"}
+          alt={row.original.profile_handle}
+          className="h-8 w-8 rounded-full object-cover"
+        />
+        <div className="underline">{row.original.profile_handle}</div>
       </Link>
     ),
     enableSorting: false,
@@ -54,7 +69,36 @@ export const publicationColumns: ColumnDef<Publication>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="App" />
     ),
-    cell: ({ row }) => <div className="capitalize">{row.getValue("app")}</div>,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-1">
+        {[
+          "hey",
+          "tape",
+          "phaver",
+          "orb",
+          "t2",
+          "buttrfly",
+          "dumpling",
+        ].includes(row.original.app) ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Image
+                  src={`/apps/${row.original.app.toLowerCase()}.png`}
+                  width={28}
+                  height={28}
+                  alt={row.original.app}
+                  className="rounded-full object-cover"
+                />
+              </TooltipTrigger>
+              <TooltipContent>{row.original.app}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <div className="capitalize">{row.original.app}</div>
+        )}
+      </div>
+    ),
     enableSorting: false,
   },
   {

@@ -1,4 +1,4 @@
-import { Publication } from "@/app/api/publications/publication"
+import { type Publication } from "@/app/api/publications/getPublications"
 
 import { publicationColumns } from "./data-table/columns"
 import { DataTable } from "./data-table/data-table"
