@@ -31,6 +31,32 @@ export function getDateRangeCondition(
   return dateCondition
 }
 
+export function getPreviousDateRangeCondition(
+  rangeKey: DateRangeKey,
+  filterName: string
+): string {
+  const range = dateRange[rangeKey]
+
+  let previousDateCondition = ""
+  if (range !== 0) {
+    // Get the current date and set the time to the start of the day (midnight)
+    const endDate = new Date()
+    endDate.setHours(0, 0, 0, 0)
+
+    // Calculate the start date of the current period
+    const startDateCurrentPeriod = new Date(endDate.getTime())
+    startDateCurrentPeriod.setDate(endDate.getDate() - range)
+
+    // Calculate the start date of the previous period
+    const startDatePreviousPeriod = new Date(startDateCurrentPeriod.getTime())
+    startDatePreviousPeriod.setDate(startDateCurrentPeriod.getDate() - range)
+
+    previousDateCondition = `WHERE ${filterName} >= '${startDatePreviousPeriod.toISOString()}' AND ${filterName} < '${startDateCurrentPeriod.toISOString()}'`
+  }
+
+  return previousDateCondition
+}
+
 export function getRangeKey(request: NextRequest): string {
   let rangeKey = request.nextUrl.searchParams.get("range") as DateRangeKey
   return ["1D", "1W", "1M", "3M", "1Y", "ALL"].includes(rangeKey)

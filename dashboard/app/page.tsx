@@ -1,6 +1,8 @@
+import DailyProfileStats from "@/components/daily-profile-stats"
+import DailyPublicationStats from "@/components/daily-publication-stats"
+import DauStats from "@/components/dau-stats"
 import Publications, { PublicationsProps } from "@/components/publications"
 import StatCards from "@/components/stat-cards"
-import StatChartCard from "@/components/stat-chart-card"
 import TopProfiles from "@/components/top-profiles"
 
 export default async function Home() {
@@ -15,13 +17,13 @@ export default async function Home() {
     <div className="mt-6 space-y-6">
       <StatCards />
       <div className="flex gap-4">
-        <div className="w-2/3">
+        <div className="w-2/3 ">
           <TopProfiles />
         </div>
         <div className="flex w-full flex-col gap-1.5">
-          <StatChartCard />
-          <StatChartCard />
-          <StatChartCard />
+          <DailyPublicationStats />
+          <DailyProfileStats />
+          <DauStats />
         </div>
       </div>
 
