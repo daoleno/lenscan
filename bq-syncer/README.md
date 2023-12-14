@@ -24,6 +24,13 @@ poetry shell
 python sync.py -i v2_polygon.db -o /tmp/v2_polygon
 ```
 
+Export Sample Data from DuckDB:
+
+```sh
+poetry shell
+python sample.py --db /tmp/v2_polygon.db
+```
+
 ## How it Works
 
 - On script start and every 15 minutes after, the script checks for new or updated rows in each table of the specified BigQuery dataset.
