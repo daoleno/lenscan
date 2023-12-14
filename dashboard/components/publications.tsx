@@ -1,7 +1,8 @@
 import { searchParamsSchema } from "@/lib/validations/params"
 import PublicationsTable from "@/components/publications-table"
-import getPublications from "@/app/api/publications/getPublications"
-import { Publication } from "@/app/api/publications/publication"
+import getPublications, {
+  Publication,
+} from "@/app/api/publications/getPublications"
 
 export interface PublicationsProps {
   title?: string

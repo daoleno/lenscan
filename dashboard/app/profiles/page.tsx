@@ -2,7 +2,7 @@ import { searchParamsSchema } from "@/lib/validations/params"
 import ProfilesTable from "@/components/profiles-table"
 
 import getProfiles from "../api/profiles/getProfiles"
-import { Publication } from "../api/publications/publication"
+import { Publication } from "../api/publications/getPublications"
 
 interface PageProps {
   searchParams: {
