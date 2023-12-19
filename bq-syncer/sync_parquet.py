@@ -63,9 +63,6 @@ def map_bq_type_to_python(bq_type):
 
 
 def sync_table(table_item, index, total_tables):
-    if table_item.table_id != "profile_metadata":
-        return
-
     last_timestamp = 0
     table_id = table_item.table_id
     table_ref = dataset_ref.table(table_id)
