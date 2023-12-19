@@ -25,6 +25,13 @@ parser.add_argument(
     help="Path to the directory to which exports will be saved.",
     required=True,
 )
+parser.add_argument(
+    "-s",
+    "--sample",
+    help="If true, it exports a maximum of 1000 random sample data from each table",
+    action="store_true",
+    default=False,
+)
 args = parser.parse_args()
 dataset_ref = bqclient.dataset("v2_polygon", project="lens-public-data")
 dataset = bqclient.get_dataset(dataset_ref)
@@ -56,7 +63,13 @@ def sync_table(table_item, index, total_tables):
         for f in table.schema
     ]
     try:
+        # Initial query part
         query = f"SELECT {', '.join(fields)} FROM `{table_ref}` WHERE datastream_metadata.source_timestamp > {last_timestamp}"
+
+        # Modify the query if --sample is set
+        if args.sample:
+            query = f"SELECT {', '.join(fields)} FROM `{table_ref}` ORDER BY RAND() LIMIT 1000"
+
         query_job = bqclient.query(query)
         iterator = query_job.result(page_size=10000)
 
