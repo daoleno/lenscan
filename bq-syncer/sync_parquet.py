@@ -7,7 +7,6 @@ import traceback
 from datetime import datetime
 
 import polars as pl
-import pyarrow.parquet as pq
 import schedule
 from google.cloud import bigquery
 from google.oauth2 import service_account
@@ -41,6 +40,9 @@ parser.add_argument(
     type=int,
     default=1,
 )
+parser.add_argument(
+    "-t", "--table", help="Name of specific table to sync", required=False, default=None
+)
 args = parser.parse_args()
 dataset_ref = bqclient.dataset("v2_polygon", project="lens-public-data")
 dataset = bqclient.get_dataset(dataset_ref)
@@ -52,17 +54,27 @@ os.makedirs(output_directory, exist_ok=True)
 
 def map_bq_type_to_python(bq_type):
     type_mapping = {
-        "STRING": str,
-        "BYTES": bytes,
-        "INTEGER": int,
-        "FLOAT": float,
-        "BOOLEAN": bool,
-        "TIMESTAMP": datetime,
+        "STRING": pl.Utf8,
+        "BYTES": pl.Utf8,
+        "INTEGER": pl.Int64,
+        "FLOAT": pl.Float64,
+        "BOOLEAN": pl.Boolean,
+        "TIMESTAMP": pl.Datetime,
+        "DATE": pl.Date,
+        "TIME": pl.Time,
+        "DATETIME": pl.Datetime,
+        "NUMERIC": pl.Float64,
+        "BIGNUMERIC": pl.Float64,
+        "GEOGRAPHY": pl.Utf8,
     }
-    return type_mapping.get(bq_type, str)
+
+    return type_mapping.get(bq_type, pl.Utf8)
 
 
 def sync_table(table_item, index, total_tables):
+    print(
+        f"[{datetime.now()}] Starting data sync of table {index}/{total_tables}: {table_item.table_id}"
+    )
     last_timestamp = 0
     table_id = table_item.table_id
     table_ref = dataset_ref.table(table_id)
@@ -76,16 +88,26 @@ def sync_table(table_item, index, total_tables):
         if "datastream_metadata.source_timestamp" in df_old.columns:
             last_timestamp = df_old["datastream_metadata.source_timestamp"].max()
 
-    # Generate list of fields, preserving the original schema's order.
-    fields = [
-        f.name
-        if f.name != "datastream_metadata"
-        else "datastream_metadata.source_timestamp"
-        for f in table.schema
-    ]
+    # Generate list of fields and their types, preserving the original schema's order.
     try:
+        fields = [
+            (
+                f.name if f.name != "datastream_metadata" else "source_timestamp",
+                pl.Float64
+                if f.name == "datastream_metadata"
+                else map_bq_type_to_python(f.field_type),
+            )
+            for f in table.schema
+        ]
+
         # Initial query part
-        query = f"SELECT {', '.join(fields)} FROM `{table_ref}` WHERE datastream_metadata.source_timestamp > {last_timestamp}"
+        field_names_for_query = [
+            "datastream_metadata.source_timestamp"
+            if field == "source_timestamp"
+            else field
+            for field, _ in fields
+        ]
+        query = f"SELECT {', '.join(field_names_for_query)} FROM `{table_ref}` WHERE datastream_metadata.source_timestamp > {last_timestamp}"
 
         # Modify the query if --sample is set
         if args.sample:
@@ -97,16 +119,32 @@ def sync_table(table_item, index, total_tables):
         pages_received = 0
         for page in iterator.pages:
             pages_received += 1
-            print(
-                f"[{datetime.now()}] Processing table {index}/{total_tables}: {table_id} - Page {pages_received}"
-            )
             items = list(page)
+
             if len(items) == 0:
                 print(
                     f"[{datetime.now()}] No data received for table {index}/{total_tables}: {table_id}"
                 )
                 continue
-            df = pl.DataFrame({field: data for field, data in zip(fields, zip(*items))})
+            # Create DataFrame with explicit types
+            data = {
+                field: [item.get(field, None) for item in items] for field, _ in fields
+            }
+
+            df = pl.DataFrame(
+                {
+                    field: pl.Series(name=field, values=data[field]).map_elements(
+                        lambda x: True
+                        if str(x).lower() == "true"
+                        else False
+                        if str(x).lower() == "false"
+                        else x,
+                        return_dtype=bq_type,
+                    )
+                    for field, bq_type in fields
+                }
+            )
+
             if os.path.exists(parquet_file_path):
                 df_old = pl.read_parquet(parquet_file_path)
                 df = df.select(
@@ -142,7 +180,12 @@ def perform_sync_task():
 
     is_task_running = True
     print(f"[{datetime.now()}] Starting data sync...")
-    tables = list(bqclient.list_tables(dataset))
+    if args.table:  # table is specified
+        table_ref = dataset_ref.table(args.table)
+        table = bqclient.get_table(table_ref)
+        tables = [table]
+    else:
+        tables = list(bqclient.list_tables(dataset))
     total_tables = len(tables)
 
     try:
