@@ -12,6 +12,7 @@ schedule = "^1.2.1"
 google-cloud-bigquery = "^3.13.0"
 polars = "^0.19.15"
 pyarrow = "^14.0.2"
+memray = "^1.11.0"
 
 
 [tool.poetry.group.dev.dependencies]
