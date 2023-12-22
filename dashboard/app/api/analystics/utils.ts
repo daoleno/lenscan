@@ -31,6 +31,25 @@ export function getDateRangeCondition(
   return dateCondition
 }
 
+export function getDateRangeAndCondition(
+  rangeKey: DateRangeKey,
+  filterName: string
+): string {
+  const range = dateRange[rangeKey]
+
+  let dateCondition = ""
+  if (range !== 0) {
+    const currentDate = new Date()
+    const pastDate = new Date(
+      currentDate.setDate(currentDate.getDate() - range)
+    )
+
+    dateCondition = `AND ${filterName} >= '${pastDate.toISOString()}'`
+  }
+
+  return dateCondition
+}
+
 export function getPreviousDateRangeCondition(
   rangeKey: DateRangeKey,
   filterName: string
@@ -64,9 +83,13 @@ export function getRangeKey(request: NextRequest): string {
     : "ALL"
 }
 
-export async function fetchData(getDataFunc: any, rangeKey: string) {
+export async function fetchData(
+  getDataFunc: any,
+  rangeKey: string,
+  profileId: string | null = null
+) {
   try {
-    const data = await getDataFunc(rangeKey)
+    const data = await getDataFunc(rangeKey, profileId)
     return NextResponse.json(data)
   } catch (error) {
     console.error(error)

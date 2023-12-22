@@ -3,11 +3,18 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ProfileFragment } from "@lens-protocol/client"
-import { CheckCircle2, Fingerprint, Tags, XCircle } from "lucide-react"
+import {
+  ActivityIcon,
+  CheckCircle2,
+  Fingerprint,
+  Tags,
+  XCircle,
+} from "lucide-react"
 import Balance from "react-wrap-balancer"
 
 import { getIPFSURL } from "@/lib/utils"
 
+import UserActivity from "./charts/user-activity"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Separator } from "./ui/separator"
 
@@ -18,11 +25,11 @@ export default function ProfileSummaryCard({
 }) {
   const socialStats = ["followers", "following"]
   const activityStats = [
-    "comments",
+    "publications",
     "posts",
+    "comments",
     "mirrors",
     "quotes",
-    "publications",
     "countOpenActions",
   ]
   const reactionStats = [
@@ -91,11 +98,15 @@ export default function ProfileSummaryCard({
             </div>
           </div>
         </div>
+        <div className="py-3">
+          <UserActivity profileId={profile.id} />
+        </div>
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle>Stats</CardTitle>
+            <ActivityIcon />
           </CardHeader>
           <CardContent className="flex items-center justify-between sm:flex-row sm:space-x-6">
             <div className="flex flex-col">

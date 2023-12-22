@@ -8,7 +8,7 @@ import fetcher from "@/lib/fetcher"
 
 import { ChartCard } from "./chart-card"
 
-export default function UserActivity() {
+export default function HashTags() {
   const [range, setRange] = useState("ALL")
   const { data, error } = useSWR(
     `/api/analystics/popular-hashtags?range=${range}`,

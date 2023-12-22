@@ -1,27 +1,37 @@
 "use client"
 
 import { useState } from "react"
-import { LineChart } from "@tremor/react"
+import { BarChart } from "@tremor/react"
 import useSWR from "swr"
 
 import fetcher from "@/lib/fetcher"
 
 import { ChartCard } from "./chart-card"
 
-export default function UserActivity() {
+interface UserActivityProps {
+  profileId?: string | null
+}
+
+export default function UserActivity({ profileId = null }: UserActivityProps) {
   const [range, setRange] = useState("ALL")
-  const { data, error } = useSWR(
-    `/api/analystics/user-activities?range=${range}`,
-    fetcher
-  )
+  const queryString = profileId
+    ? `/api/analystics/user-activity?range=${range}&profile_id=${profileId}`
+    : `/api/analystics/user-activity?range=${range}`
+  const { data, error } = useSWR(queryString, fetcher)
 
   return (
-    <ChartCard chartTitle="Users Activity" range={range} setRange={setRange}>
-      <LineChart
+    <ChartCard
+      chartTitle={profileId ? "Activity" : "Users Activity"}
+      range={range}
+      setRange={setRange}
+    >
+      <BarChart
         data={data}
-        index="date"
-        categories={["count"]}
+        index="day"
+        categories={["posts", "comments", "mirrors", "upvotes", "downvotes"]}
         showAnimation
+        showGridLines={false}
+        stack
       />
     </ChartCard>
   )

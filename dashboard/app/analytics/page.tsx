@@ -2,7 +2,6 @@ import ContentLanguageDistribution from "@/components/charts/content-language-di
 import PopularHashtags from "@/components/charts/hashtags"
 import PublicationReactions from "@/components/charts/publication-reactions"
 import PublicationTypesDistribution from "@/components/charts/publication-types-distribution"
-import TopContributors from "@/components/charts/top-contributors"
 import UserActivity from "@/components/charts/user-activity"
 
 export default async function Page() {
@@ -13,7 +12,7 @@ export default async function Page() {
       <PublicationTypesDistribution />
       <PublicationReactions />
       <ContentLanguageDistribution />
-      <TopContributors />
+      {/* <TopContributors /> */}
     </div>
   )
 }
