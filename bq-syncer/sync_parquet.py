@@ -85,12 +85,12 @@ def sync_table(table_item, index, total_tables):
 
     # If the parquet files exist, get the maximum timestamp from the latest file
     parquet_files = sorted(
-        glob.glob(os.path.join(output_directory, f"{table_id}_*.parquet"))
+        glob.glob(os.path.join(table_directory, f"{table_id}_*.parquet"))
     )
     if parquet_files:
         df_old = pl.read_parquet(parquet_files[-1])  # read the latest file
-        if "datastream_metadata.source_timestamp" in df_old.columns:
-            last_timestamp = df_old["datastream_metadata.source_timestamp"].max()
+        if "source_timestamp" in df_old.columns:
+            last_timestamp = df_old["source_timestamp"].max()
 
     # Generate list of fields and their types, preserving the original schema's order.
     fields = [
