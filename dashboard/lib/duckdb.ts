@@ -13,7 +13,7 @@ function toParquetSql(sql: string) {
 
   // Replace each table name with the read_parquet function
   const convertedSQL = sql.replace(tableNameRegex, function (match, tableName) {
-    return `FROM read_parquet('${parquetPath}/${tableName}.parquet')`
+    return `FROM read_parquet('${parquetPath}/${tableName}/*.parquet')`
   })
   console.log(convertedSQL)
   return convertedSQL

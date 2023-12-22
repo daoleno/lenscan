@@ -12,7 +12,7 @@ type TopProfile = ProfileFragment & { weighted_score: number }
 
 export async function getTopProfiles(rangeKey: DateRangeKey = "ALL") {
   let baseSql = `
-    FROM read_parquet('${parquetPath}/[FILENAME].parquet')
+    FROM read_parquet('${parquetPath}/[FILENAME]/*.parquet')
   `
 
   let sql = `
