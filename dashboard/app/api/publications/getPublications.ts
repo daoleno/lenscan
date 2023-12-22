@@ -79,6 +79,13 @@ export default async function getPublications(
   const sql = `SELECT * FROM publication_record ${filterCondition} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`
   const publications = await duckdb.all(toParquetSql(sql))
 
+  if (!publications.length) {
+    return {
+      totalCount: 0,
+      publications: [],
+    }
+  }
+
   // fetch profile pictures
   const profileIds = publications.map((p) => p.profile_id)
   const profilePictures = await lensClient.profile.fetchAll({

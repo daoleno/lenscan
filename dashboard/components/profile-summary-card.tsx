@@ -6,15 +6,42 @@ import { ProfileFragment } from "@lens-protocol/client"
 import { CheckCircle2, Fingerprint, Tags, XCircle } from "lucide-react"
 import Balance from "react-wrap-balancer"
 
-import { formatNumber, getIPFSURL } from "@/lib/utils"
+import { getIPFSURL } from "@/lib/utils"
 
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
+import { Separator } from "./ui/separator"
 
 export default function ProfileSummaryCard({
   profile,
 }: {
   profile: ProfileFragment
 }) {
+  const socialStats = ["followers", "following"]
+  const activityStats = [
+    "comments",
+    "posts",
+    "mirrors",
+    "quotes",
+    "publications",
+    "countOpenActions",
+  ]
+  const reactionStats = [
+    "upvotes",
+    "downvotes",
+    "upvoted",
+    "downvoted",
+    "collects",
+    // "upvoteReactions",
+    // "downvoteReactions",
+    // "upvoteReacted",
+    // "downvoteReacted",
+  ]
+  const classifiedStats = [
+    { title: "Social", keys: socialStats },
+    { title: "Activity", keys: activityStats },
+    { title: "Reactions", keys: reactionStats },
+  ]
+
   return (
     <>
       <div>
@@ -49,39 +76,53 @@ export default function ProfileSummaryCard({
               )}
             </div>
             <div className="mb-8 flex flex-col px-7">
-              <h2 className="text-3xl font-bold text-gray-900">
+              <h2 className="text-3xl font-bold text-foreground">
                 {profile.metadata?.displayName}
               </h2>
-              <span className="mt-2 text-gray-400 dark:text-gray-400">
+              <span className="mt-2 text-muted-foreground">
                 {profile.id} - #{Number(profile.id)}
               </span>
-              <Balance className="mt-2 text-gray-400 dark:text-gray-400">
+              <Balance className="mt-2 text-muted-foreground">
                 @{profile.handle?.fullHandle}
               </Balance>
-              <p className="mt-2 text-gray-600">{profile.metadata?.bio}</p>
+              <p className="mt-2 text-muted-foreground">
+                {profile.metadata?.bio}
+              </p>
             </div>
-          </div>
-          <div className="grid grid-cols-3 gap-6 py-7 sm:w-1/2 sm:grid-cols-2 lg:grid-cols-4">
-            {Object.entries(profile.stats)
-              .filter(([key]) => key !== "id")
-              .map(([key, value]) => (
-                <Card key={key} className="overflow-scroll rounded-xl">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      {key.replace(/^total/, "")}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {formatNumber(value)}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
           </div>
         </div>
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <CardTitle>Stats</CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-center justify-between sm:flex-row sm:space-x-6">
+            <div className="flex flex-col">
+              {classifiedStats.map(({ title, keys }) => (
+                <div key={title}>
+                  <Separator className="my-4" />
+                  <div className="flex flex-col gap-1" key={title}>
+                    <h2 className="text-sm font-semibold uppercase text-muted-foreground">
+                      {title}
+                    </h2>
+                    <div className="grid grid-cols-3 gap-1">
+                      {keys.map((key) => (
+                        <div className="flex items-center gap-1" key={key}>
+                          <p className="font-bold">{profile.stats[key]}</p>
+                          <p className="text-xs capitalize text-muted-foreground">
+                            {key}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle>Categories</CardTitle>
@@ -96,7 +137,7 @@ export default function ProfileSummaryCard({
                     key={key}
                     className="flex flex-col space-y-1 font-medium"
                   >
-                    <span className="text-sm uppercase text-gray-600">
+                    <span className="text-sm uppercase text-muted-foreground">
                       {key.replace(/([a-z])([A-Z])/g, "$1 $2")}
                     </span>
                     {key.toLocaleLowerCase().includes("website") ? (
@@ -118,7 +159,7 @@ export default function ProfileSummaryCard({
           </CardHeader>
           <CardContent className="flex flex-col space-y-3">
             <div className="flex flex-col space-y-1">
-              <span className="text-sm font-medium uppercase text-gray-600">
+              <span className="text-sm font-medium uppercase text-muted-foreground">
                 Proof of Humanity
               </span>
               {profile.onchainIdentity.proofOfHumanity ? (
@@ -128,7 +169,7 @@ export default function ProfileSummaryCard({
               )}
             </div>
             <div className="flex flex-col space-y-1">
-              <span className="text-sm font-medium uppercase text-gray-600">
+              <span className="text-sm font-medium uppercase text-muted-foreground">
                 ENS Name
               </span>
               <span className="font-medium">
@@ -138,7 +179,7 @@ export default function ProfileSummaryCard({
               </span>
             </div>
             <div className="flex flex-col space-y-1">
-              <span className="text-sm font-medium uppercase text-gray-600">
+              <span className="text-sm font-medium uppercase text-muted-foreground">
                 Sybil.org Verified
               </span>
               {profile.onchainIdentity.sybilDotOrg.verified ? (
@@ -148,7 +189,7 @@ export default function ProfileSummaryCard({
               )}
             </div>
             <div className="flex flex-col space-y-1">
-              <span className="text-sm font-medium uppercase text-gray-600">
+              <span className="text-sm font-medium uppercase text-muted-foreground">
                 Twitter Handle
               </span>
               <span className="font-medium">
