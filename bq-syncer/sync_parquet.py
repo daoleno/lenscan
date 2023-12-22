@@ -1,7 +1,7 @@
 import argparse
 import concurrent.futures
+import glob
 import os
-import sys
 import time
 import traceback
 from datetime import datetime
@@ -77,105 +77,92 @@ def sync_table(table_item, index, total_tables):
     )
     last_timestamp = 0
     table_id = table_item.table_id
+    table_directory = os.path.join(output_directory, table_id)
+    os.makedirs(table_directory, exist_ok=True)  # Ensure the directory exists
+
     table_ref = dataset_ref.table(table_id)
     table = bqclient.get_table(table_ref)  # get table object
 
-    parquet_file_path = os.path.join(output_directory, f"{table_id}.parquet")
-
-    # If the parquet file exists, get the maximum timestamp
-    if os.path.exists(parquet_file_path):
-        df_old = pl.read_parquet(parquet_file_path)
+    # If the parquet files exist, get the maximum timestamp from the latest file
+    parquet_files = sorted(
+        glob.glob(os.path.join(output_directory, f"{table_id}_*.parquet"))
+    )
+    if parquet_files:
+        df_old = pl.read_parquet(parquet_files[-1])  # read the latest file
         if "datastream_metadata.source_timestamp" in df_old.columns:
             last_timestamp = df_old["datastream_metadata.source_timestamp"].max()
 
     # Generate list of fields and their types, preserving the original schema's order.
-    try:
-        fields = [
-            (
-                f.name if f.name != "datastream_metadata" else "source_timestamp",
-                pl.Float64
-                if f.name == "datastream_metadata"
-                else map_bq_type_to_python(f.field_type),
-            )
-            for f in table.schema
-        ]
+    fields = [
+        (
+            f.name if f.name != "datastream_metadata" else "source_timestamp",
+            pl.Float64
+            if f.name == "datastream_metadata"
+            else map_bq_type_to_python(f.field_type),
+        )
+        for f in table.schema
+    ]
 
-        # Initial query part
-        field_names_for_query = [
-            "datastream_metadata.source_timestamp"
-            if field == "source_timestamp"
-            else field
-            for field, _ in fields
-        ]
-        query = f"SELECT {', '.join(field_names_for_query)} FROM `{table_ref}` WHERE datastream_metadata.source_timestamp > {last_timestamp}"
+    # Initial query part
+    field_names_for_query = [
+        "datastream_metadata.source_timestamp" if field == "source_timestamp" else field
+        for field, _ in fields
+    ]
+    query = f"SELECT {', '.join(field_names_for_query)} FROM `{table_ref}` WHERE datastream_metadata.source_timestamp > {last_timestamp}"
 
-        # Modify the query if --sample is set
-        if args.sample:
-            query = f"SELECT {', '.join(fields)} FROM `{table_ref}` ORDER BY RAND() LIMIT 1000"
+    # Modify the query if --sample is set
+    if args.sample:
+        query = (
+            f"SELECT {', '.join(fields)} FROM `{table_ref}` ORDER BY RAND() LIMIT 1000"
+        )
 
-        query_job = bqclient.query(query)
-        iterator = query_job.result(page_size=100000)
+    query_job = bqclient.query(query)
+    iterator = query_job.result(page_size=100000)
 
-        # Configure Arrow writer to append to the .parquet file
-        pages_received = 0
-        for page in iterator.pages:
-            pages_received += 1
-            items = list(page)
-            page_size = len(items)
+    # Configure Arrow writer to append to the .parquet file
+    pages_received = 0
+    for page in iterator.pages:
+        pages_received += 1
+        items = list(page)
+        page_size = len(items)
 
-            if page_size == 0:
-                print(
-                    f"[{datetime.now()}] No data received for table {index}/{total_tables}: {table_id}"
-                )
-                continue
-
-            # Create DataFrame with explicit types
-            data = {
-                field: [item.get(field, None) for item in items] for field, _ in fields
-            }
-
-            df = pl.DataFrame(
-                {
-                    field: pl.Series(name=field, values=data[field]).map_elements(
-                        lambda x: True
-                        if str(x).lower() == "true"
-                        else False
-                        if str(x).lower() == "false"
-                        else x,
-                        return_dtype=bq_type,
-                    )
-                    for field, bq_type in fields
-                }
-            )
-
-            if os.path.exists(parquet_file_path):
-                df_old = pl.read_parquet(parquet_file_path)
-                df = df.select(
-                    [
-                        pl.col(col).cast(df_old[col].dtype)
-                        if col in df_old.columns
-                        else pl.col(col)
-                        for col in df.columns
-                    ]
-                )
-
-                df = pl.concat([df_old, df])
-                df.write_parquet(parquet_file_path)
-            else:
-                df.write_parquet(parquet_file_path)
-
+        if page_size == 0:
             print(
-                f"[{datetime.now()}] Data sync of table {index}/{total_tables}: {table_id} - Received page {pages_received} with size {page_size}."
+                f"[{datetime.now()}] No data received for table {index}/{total_tables}: {table_id}"
             )
+            continue
+
+        # Create DataFrame with explicit types
+        data = {field: [item.get(field, None) for item in items] for field, _ in fields}
+
+        df = pl.DataFrame(
+            {
+                field: pl.Series(name=field, values=data[field]).map_elements(
+                    lambda x: True
+                    if str(x).lower() == "true"
+                    else False
+                    if str(x).lower() == "false"
+                    else x,
+                    return_dtype=bq_type,
+                )
+                for field, bq_type in fields
+            }
+        )
+
+        # Write DataFrame to a new parquet file with timestamp in filename
+        parquet_file_path = os.path.join(
+            table_directory,
+            f"{table_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}.parquet",
+        )
+        df.write_parquet(parquet_file_path)
 
         print(
-            f"[{datetime.now()}] Data sync of table {index}/{total_tables}: {table_id} completed."
+            f"[{datetime.now()}] Data sync of table {index}/{total_tables}: {table_id} - Received page {pages_received} with size {page_size}."
         )
-    except Exception as e:
-        # Print more verbose error information
-        print(f"An error occurred while processing table {table_id}: {e}")
-        traceback.print_exc()  # This prints the stack trace
-        sys.exit(1)
+
+    print(
+        f"[{datetime.now()}] Data sync of table {index}/{total_tables}: {table_id} completed."
+    )
 
 
 def perform_sync_task():
@@ -197,14 +184,19 @@ def perform_sync_task():
         tables = list(bqclient.list_tables(dataset))
     total_tables = len(tables)
 
-    try:
-        with concurrent.futures.ThreadPoolExecutor(
-            max_workers=args.concurrency
-        ) as executor:
-            for index, table_item in enumerate(tables, start=1):
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=args.concurrency
+    ) as executor:
+        for index, table_item in enumerate(tables, start=1):
+            try:
                 executor.submit(sync_table, table_item, index, total_tables)
-    except Exception as e:
-        print(f"An error occurred: {e}")
+            except Exception as e:
+                print(
+                    f"[{datetime.now()}] Failed to sync table {index}/{total_tables}: {table_item.table_id}"
+                )
+                print(e)
+                traceback.print_exc()
+
     is_task_running = False
     print(f"[{datetime.now()}] Data sync completed.")
 
