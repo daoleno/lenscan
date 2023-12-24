@@ -13,8 +13,6 @@ type Categories = {
 export default async function StatCards() {
   const globalStats = await getGlobalStats()
 
-  // console.log("stats", res)
-
   const categories: Categories = [
     {
       title: "Profiles",

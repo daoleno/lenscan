@@ -21,6 +21,10 @@ const items = [
     href: "/profiles",
   },
   {
+    name: "Apps",
+    href: "/apps",
+  },
+  {
     name: "Analytics",
     href: "/analytics",
   },

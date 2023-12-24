@@ -19,8 +19,7 @@ export default async function ProfilesTable({
   showPagination,
 }: ProfilesTableProps) {
   return (
-    <div className="flex-1 flex-col gap-3 md:flex">
-      <h2 className="text-3xl font-bold tracking-tight">Profiles</h2>
+    <div className="my-3 flex-1 flex-col gap-3 md:flex">
       <DataTable
         columns={profileColumns}
         data={data}

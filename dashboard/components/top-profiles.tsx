@@ -8,7 +8,6 @@ import { ScrollArea, ScrollBar } from "./ui/scroll-area"
 
 export default async function TopProfiles() {
   const topProfiles = await getTopProfiles("1M")
-  console.log(topProfiles)
 
   return (
     <Card>

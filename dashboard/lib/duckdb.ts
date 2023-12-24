@@ -5,7 +5,6 @@ const duckdb = await Database.create(":memory:")
 const parquetPath = process.env.PARQUET_DIR_PATH
 
 function toParquetSql(sql: string) {
-  console.log("toParquetSql", sql)
   const tableNameRegex = /(?:FROM|JOIN)\s+([a-zA-Z0-9_]+)/g
 
   const convertedSQL = sql.replace(tableNameRegex, function (match, tableName) {

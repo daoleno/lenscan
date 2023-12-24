@@ -1,4 +1,5 @@
 import { searchParamsSchema } from "@/lib/validations/params"
+import DailyProfileStats from "@/components/daily-profile-stats"
 import ProfilesTable from "@/components/profiles-table"
 
 import getProfiles from "../api/profiles/getProfiles"
@@ -42,7 +43,9 @@ export default async function Page({ searchParams }: PageProps) {
   const pageCount = Math.ceil(Number(totalCount) / limit)
 
   return (
-    <div className="p-8">
+    <div className="flex flex-col gap-3 p-8">
+      <h2 className="text-3xl font-bold tracking-tight">Profiles</h2>
+      <DailyProfileStats enableSpark={false} />
       <ProfilesTable
         data={profiles}
         pageCount={pageCount}

@@ -101,8 +101,6 @@ export default async function getPublications(
     p.profile_handle = profile?.handle?.suggestedFormatted.localName
   })
 
-  console.log("getPublications", sql, publications)
-
   // Get total count if we have profile_id filter
   let totalCount
   if (filter && filter.profile_id) {

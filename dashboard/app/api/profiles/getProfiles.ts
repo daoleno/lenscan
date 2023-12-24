@@ -59,8 +59,6 @@ export default async function getProfiles(
     }
   })
 
-  console.log("profiles", profiles)
-
   return {
     totalCount: totalCount[0].count,
     profiles: profiles as Profile[],
