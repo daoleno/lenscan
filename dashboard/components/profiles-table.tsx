@@ -1,4 +1,4 @@
-import { Profile } from "@/app/api/profiles/profile"
+import { Profile } from "@/app/api/profiles/getProfiles"
 
 import { profileColumns } from "./data-table/columns"
 import { DataTable } from "./data-table/data-table"

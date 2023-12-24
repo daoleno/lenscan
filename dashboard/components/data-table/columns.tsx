@@ -10,7 +10,8 @@ import {
 import { ColumnDef } from "@tanstack/react-table"
 import * as timeago from "timeago.js"
 
-import { Profile } from "@/app/api/profiles/profile"
+import { shortHash } from "@/lib/utils"
+import { Profile } from "@/app/api/profiles/getProfiles"
 import { type Publication } from "@/app/api/publications/getPublications"
 
 import { Tooltip } from "../ui/tooltip"
@@ -146,6 +147,26 @@ export const profileColumns: ColumnDef<Profile>[] = [
     enableSorting: false,
   },
   {
+    accessorKey: "profile_handle",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Handle" />
+    ),
+    cell: ({ row }) => (
+      <Link
+        className="flex items-center gap-2"
+        href={`/profile/${row.original.profile_id}`}
+      >
+        <img
+          src={row.original.profile_picture || "/images/default-profile.png"}
+          alt={row.original.profile_handle}
+          className="h-8 w-8 rounded-full object-cover"
+        />
+        <div className="underline">{row.original.profile_handle}</div>
+      </Link>
+    ),
+    enableSorting: false,
+  },
+  {
     accessorKey: "owned_by",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Owner" />
@@ -155,7 +176,7 @@ export const profileColumns: ColumnDef<Profile>[] = [
         className="underline"
         href={`https://polygonscan.com/address/${row.original.owned_by}`}
       >
-        {row.original.owned_by}
+        {shortHash(row.original.owned_by)}
       </Link>
     ),
     enableSorting: false,
@@ -170,7 +191,7 @@ export const profileColumns: ColumnDef<Profile>[] = [
         href={`https://polygonscan.com/tx/${row.original.tx_hash}`}
         className="underline"
       >
-        {row.original.tx_hash}
+        {shortHash(row.original.tx_hash)}
       </Link>
     ),
     enableSorting: false,
@@ -186,7 +207,7 @@ export const profileColumns: ColumnDef<Profile>[] = [
   {
     accessorKey: "block_timestamp",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Age" />
+      <DataTableColumnHeader column={column} title="Created At" />
     ),
     cell: ({ row }) => (
       <div>{timeago.format(row.getValue("block_timestamp"))}</div>

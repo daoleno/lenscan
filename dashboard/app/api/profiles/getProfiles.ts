@@ -1,6 +1,22 @@
 import { duckdb, toParquetSql } from "@/lib/duckdb"
+import lensClient from "@/lib/lensclient"
+import { getIPFSURL } from "@/lib/utils"
 
-import { Profile } from "./profile"
+export type Profile = {
+  profile_id: string
+  owned_by: string
+  is_burnt: boolean
+  tx_hash: string
+  block_hash: string
+  block_number: number
+  log_index: number
+  tx_index: number
+  block_timestamp: Date
+  source_timestamp: bigint
+
+  profile_picture: string
+  profile_handle: string
+}
 
 type getProfilesSort = {
   column?: string
@@ -25,6 +41,25 @@ export default async function getProfiles(
   const totalCount = await duckdb.all(
     toParquetSql(`SELECT COUNT(*) AS count FROM profile_record`)
   )
+
+  // fetch profile other metadata
+  const profileIds = profiles.map((p) => p.profile_id)
+  const fullProfiles = await lensClient.profile.fetchAll({
+    where: {
+      profileIds,
+    },
+  })
+
+  // merge
+  profiles.forEach((p) => {
+    const fullProfile = fullProfiles.items.find((fp) => fp.id === p.profile_id)
+    if (fullProfile) {
+      p.profile_picture = getIPFSURL(fullProfile?.metadata?.picture as any)
+      p.profile_handle = fullProfile?.handle?.suggestedFormatted.localName
+    }
+  })
+
+  console.log("profiles", profiles)
 
   return {
     totalCount: totalCount[0].count,

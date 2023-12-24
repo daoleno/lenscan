@@ -67,7 +67,10 @@ export default function ProfileSummaryCard({
         <div className="flex flex-col items-center justify-between gap-7 sm:mx-32 sm:flex-row">
           <div className="-mt-16 flex w-full flex-col sm:w-2/5">
             <div className="mb-5 flex px-5">
-              <LensAvatar profile={profile} />
+              <LensAvatar
+                profileId={profile.id}
+                profilePicture={profile.metadata?.picture}
+              />
             </div>
             <h2 className="text-3xl font-bold text-foreground">
               {profile.metadata?.displayName}

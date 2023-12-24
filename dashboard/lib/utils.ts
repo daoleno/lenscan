@@ -43,13 +43,27 @@ export function formatEventType(type: string | null) {
 }
 
 const ipfsGateway = "https://lens.infura-ipfs.io"
+
+export function processIPFSURL(uri: string) {
+  if (uri && uri.startsWith("ipfs://")) {
+    const cid = uri.replace("ipfs://", "")
+    return `${ipfsGateway}/ipfs/${cid}`
+  }
+  return uri
+}
+
 export function getIPFSURL(
-  picture: ProfilePictureSetFragment | NftImageFragment | null
+  picture: ProfilePictureSetFragment | NftImageFragment | string | null
 ) {
+  if (typeof picture === "string") {
+    return processIPFSURL(picture)
+  }
+
   let uri
   if (!picture) {
     return uri
   }
+
   if (picture.__typename === "ImageSet") {
     uri = picture?.optimized?.uri
   }
@@ -57,10 +71,5 @@ export function getIPFSURL(
     uri = picture.image.optimized?.uri
   }
 
-  if (uri && uri.startsWith("ipfs://")) {
-    const cid = uri.replace("ipfs://", "")
-    return `${ipfsGateway}/ipfs/${cid}`
-  }
-
-  return uri
+  return processIPFSURL(uri)
 }

@@ -88,13 +88,13 @@ export default async function getPublications(
 
   // fetch profile pictures
   const profileIds = publications.map((p) => p.profile_id)
-  const profilePictures = await lensClient.profile.fetchAll({
+  const fullProfiles = await lensClient.profile.fetchAll({
     where: {
       profileIds,
     },
   })
   publications.forEach((p) => {
-    const profile = profilePictures.items.find(
+    const profile = fullProfiles.items.find(
       (profile) => profile.id === p.profile_id
     )
     p.profile_picture = getIPFSURL(profile?.metadata?.picture as any)

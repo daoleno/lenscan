@@ -1,15 +1,21 @@
 import Image from "next/image"
-import { ProfileFragment } from "@lens-protocol/client"
 
 import { getLenny } from "@/lib/lenny"
 import { getIPFSURL } from "@/lib/utils"
 
-export async function LensAvatar({ profile }: { profile: ProfileFragment }) {
-  const lenny = await getLenny(profile.id)
+export interface LensAvatarProps {
+  profileId: string
+  profilePicture?: any
+}
+export async function LensAvatar({
+  profileId,
+  profilePicture,
+}: LensAvatarProps) {
+  const lenny = await getLenny(profileId)
 
   return (
     <div>
-      {!profile.metadata?.picture ? (
+      {!profilePicture ? (
         <Image
           src={lenny.image}
           alt="Lenny Avatar"
@@ -20,7 +26,7 @@ export async function LensAvatar({ profile }: { profile: ProfileFragment }) {
       ) : (
         <img
           className="h-32 w-32 rounded-full object-cover"
-          src={getIPFSURL(profile.metadata.picture)}
+          src={getIPFSURL(profilePicture)}
           alt="profile"
         />
       )}
