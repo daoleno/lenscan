@@ -1,5 +1,6 @@
 "use client"
 
+import Script from "next/script"
 import { LensConfig, LensProvider, production } from "@lens-protocol/react-web"
 import { bindings as wagmiBindings } from "@lens-protocol/wagmi"
 import PlausibleProvider from "next-plausible"
@@ -66,6 +67,13 @@ export default function RootLayout({
             </WagmiConfig>
           </PlausibleProvider>
         </ThemeProvider>
+
+        <Script
+          id="goatcounter"
+          data-goatcounter="https://lenscan.goatcounter.com/count"
+          async
+          src="//gc.zgo.at/count.js"
+        ></Script>
       </body>
     </html>
   )
