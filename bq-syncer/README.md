@@ -18,6 +18,19 @@ Before running the script, make sure you have downloaded the service account JSO
 ## Running the Script
 
 Run the script using a Python interpreter:
+Export all tables into parquet directory:
+
+```sh
+python sync_parquet.py -o  test/
+
+# sync a specific table
+python sync_parquet.py -o  test/ -t v2_polygon
+
+# concurrent sync
+python sync_parquet.py -o  test/ -c 4
+```
+
+Export all tables into a single DuckDB database and parquet directory:
 
 ```sh
 poetry shell
@@ -33,7 +46,7 @@ python sample.py --db /tmp/v2_polygon.db
 
 ## How it Works
 
-- On script start and every 15 minutes after, the script checks for new or updated rows in each table of the specified BigQuery dataset.
+- On script start and at every scheduled interval, the script checks for new or updated rows in each table of the specified BigQuery dataset.
 - Checks whether each table exists in the DuckDB database, creating it if not.
 - Retrieves the BigQuery table schema, converts it from RECORD to individual fields and creates the table in DuckDB with this schema if it does not already exist.
 - Retrieves the maximum `source_timestamp` value from the DuckDB table and fetches all rows from the BigQuery table that have a `source_timestamp` greater than this.
