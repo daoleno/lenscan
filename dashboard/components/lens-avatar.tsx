@@ -26,7 +26,7 @@ export async function LensAvatar({
       ) : (
         <img
           className="h-32 w-32 rounded-full object-cover"
-          src={getIPFSURL(profilePicture)}
+          src={getIPFSURL(profilePicture) || ""}
           alt="profile"
         />
       )}

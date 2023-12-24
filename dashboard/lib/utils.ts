@@ -44,7 +44,7 @@ export function formatEventType(type: string | null) {
 
 const ipfsGateway = "https://lens.infura-ipfs.io"
 
-export function processIPFSURL(uri: string) {
+export function processIPFSURL(uri: string | null | undefined) {
   if (uri && uri.startsWith("ipfs://")) {
     const cid = uri.replace("ipfs://", "")
     return `${ipfsGateway}/ipfs/${cid}`

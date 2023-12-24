@@ -57,7 +57,7 @@ export default function ProfileSummaryCard({
           {profile.metadata?.coverPicture ? (
             <img
               className="w-full object-cover"
-              src={getIPFSURL(profile.metadata.coverPicture)}
+              src={getIPFSURL(profile.metadata.coverPicture) || ""}
               alt="cover"
             />
           ) : (
@@ -114,7 +114,9 @@ export default function ProfileSummaryCard({
                     <div className="grid grid-cols-3 gap-1">
                       {keys.map((key) => (
                         <div className="flex items-center gap-1" key={key}>
-                          <p className="font-bold">{profile.stats[key]}</p>
+                          <p className="font-bold">
+                            {(profile.stats as any)[key]}
+                          </p>
                           <p className="text-xs capitalize text-muted-foreground">
                             {key}
                           </p>
