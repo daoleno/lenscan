@@ -1,5 +1,5 @@
-import Image from "next/image"
 import Link from "next/link"
+import { FaTelegram } from "react-icons/fa"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -20,7 +20,7 @@ export function SiteHeader() {
           <div className="ml-auto flex items-center space-x-4">
             <Search />
           </div>
-          <nav className="flex items-center space-x-1">
+          <nav className="flex items-center">
             <Link
               href={siteConfig.links.telegram}
               target="_blank"
@@ -31,16 +31,10 @@ export function SiteHeader() {
                   buttonVariants({
                     size: "sm",
                     variant: "ghost",
-                  }),
-                  "w-9 px-0"
+                  })
                 )}
               >
-                <Image
-                  src="/telegram-fill.svg"
-                  alt="Telegram"
-                  width={20}
-                  height={20}
-                />
+                <FaTelegram className="h-5 w-5" />
                 <span className="sr-only">Telegram</span>
               </div>
             </Link>
@@ -54,11 +48,10 @@ export function SiteHeader() {
                   buttonVariants({
                     size: "sm",
                     variant: "ghost",
-                  }),
-                  "w-9 px-0"
+                  })
                 )}
               >
-                <Icons.gitHub className="mr-2 h-5 w-5" />
+                <Icons.gitHub className="h-5 w-5" />
                 <span className="sr-only">Github</span>
               </div>
             </Link>

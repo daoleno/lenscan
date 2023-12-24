@@ -39,7 +39,7 @@ export function MainNav({
     <div className={cn("mr-4 md:flex", className)} {...props}>
       <Link href="/" className="mr-6 flex items-center space-x-2">
         <Leaf className="h-6 w-6" />
-        <span className="font-bold sm:inline-block">
+        <span className="flex gap-1 font-bold sm:inline-block">
           {siteConfig.name}
           <Badge variant="outline" className="ml-1">
             beta
