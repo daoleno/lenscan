@@ -10,9 +10,13 @@ import { ChartCard } from "./chart-card"
 
 interface UserActivityProps {
   profileId?: string | null
+  className?: string
 }
 
-export default function UserActivity({ profileId = null }: UserActivityProps) {
+export default function UserActivity({
+  profileId = null,
+  className,
+}: UserActivityProps) {
   const [range, setRange] = useState("ALL")
   const queryString = profileId
     ? `/api/analystics/user-activity?range=${range}&profile_id=${profileId}`
@@ -24,6 +28,7 @@ export default function UserActivity({ profileId = null }: UserActivityProps) {
       chartTitle={profileId ? "Activity" : "Users Activity"}
       range={range}
       setRange={setRange}
+      className={className}
     >
       <BarChart
         data={data}

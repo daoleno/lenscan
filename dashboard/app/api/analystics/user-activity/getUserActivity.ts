@@ -68,8 +68,6 @@ export async function getUserActivity(
             day;
       `
 
-  console.log("--->", sql)
-
   const activities = await duckdb.all(sql)
 
   activities.forEach((a) => {

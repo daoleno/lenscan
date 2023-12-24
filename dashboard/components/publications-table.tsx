@@ -21,7 +21,7 @@ export default async function PublicationsTable({
   showPagination,
 }: PublicationsTableProps) {
   return (
-    <div className="flex-1 flex-col gap-3 md:flex">
+    <div className="my-3 flex-1 flex-col gap-3 md:flex">
       <h2 className="p-3 text-3xl font-bold tracking-tight">{title}</h2>
       <DataTable
         columns={publicationColumns}

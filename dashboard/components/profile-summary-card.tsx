@@ -1,6 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-
-import Image from "next/image"
 import Link from "next/link"
 import { ProfileFragment } from "@lens-protocol/client"
 import {
@@ -15,6 +13,9 @@ import Balance from "react-wrap-balancer"
 import { getIPFSURL } from "@/lib/utils"
 
 import UserActivity from "./charts/user-activity"
+import LennyCard from "./lenny-card"
+import { LensAvatar } from "./lens-avatar"
+import SocialCard from "./social-card"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Separator } from "./ui/separator"
 
@@ -63,44 +64,34 @@ export default function ProfileSummaryCard({
             <div className="h-full w-full bg-gradient-to-r from-rose-100 to-teal-100" />
           )}
         </div>
-        <div className="flex flex-col sm:flex-row">
-          <div className="-mt-16 flex flex-col sm:w-1/2 ">
+        <div className="flex flex-col items-center justify-between gap-7 sm:mx-32 sm:flex-row">
+          <div className="-mt-16 flex w-full flex-col sm:w-2/5">
             <div className="mb-5 flex px-5">
-              {profile.metadata?.picture ? (
-                <img
-                  className="h-32 w-32 rounded-full object-cover"
-                  src={getIPFSURL(profile.metadata.picture)}
-                  alt="profile"
-                />
-              ) : (
-                <Image
-                  src="/images/default-profile.png"
-                  alt="profile"
-                  width={128}
-                  height={128}
-                  className="h-32 w-32 rounded-full object-cover"
-                />
-              )}
+              <LensAvatar profile={profile} />
             </div>
-            <div className="mb-8 flex flex-col px-7">
-              <h2 className="text-3xl font-bold text-foreground">
-                {profile.metadata?.displayName}
-              </h2>
-              <span className="mt-2 text-muted-foreground">
-                {profile.id} - #{Number(profile.id)}
-              </span>
-              <Balance className="mt-2 text-muted-foreground">
-                @{profile.handle?.fullHandle}
-              </Balance>
-              <p className="mt-2 text-muted-foreground">
-                {profile.metadata?.bio}
-              </p>
+            <h2 className="text-3xl font-bold text-foreground">
+              {profile.metadata?.displayName}
+            </h2>
+            <span className="mt-2 text-muted-foreground">
+              {profile.id} - #{Number(profile.id)}
+            </span>
+            <Balance className="mt-2 text-muted-foreground">
+              @{profile.handle?.fullHandle}
+            </Balance>
+            <Balance className="mt-2 text-muted-foreground">
+              {profile.metadata?.bio}
+            </Balance>
+            <div className="mt-2">
+              <SocialCard
+                profileHandle={profile.handle?.localName}
+                profileId={profile.id}
+                address={profile.handle?.ownedBy}
+              />
             </div>
           </div>
+          <LennyCard profileId={profile.id} className="mt-3" />
         </div>
-        <div className="py-3">
-          <UserActivity profileId={profile.id} />
-        </div>
+        <UserActivity className="my-7" profileId={profile.id} />
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <Card>

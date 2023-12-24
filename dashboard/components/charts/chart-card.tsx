@@ -14,6 +14,7 @@ interface AnalyticsProps {
   range?: string
   setRange?: (range: string) => void
   children: ReactNode
+  className?: string
 }
 
 export const ChartCard: FC<AnalyticsProps> = ({
@@ -21,9 +22,10 @@ export const ChartCard: FC<AnalyticsProps> = ({
   range,
   setRange,
   children,
+  className,
 }) => {
   return (
-    <Card>
+    <Card className={cn(className)}>
       <CardHeader>
         <CardTitle className="text-md flex items-center justify-between">
           <div>{chartTitle}</div>
