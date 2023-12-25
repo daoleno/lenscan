@@ -28,12 +28,12 @@ export default async function TopProfiles() {
                   backgroundImage: `url(${
                     profile.metadata?.picture
                       ? getIPFSURL(profile.metadata.picture)
-                      : null
+                      : profile.lenny_img
                   })`,
                 }}
               >
                 <span className="absolute bottom-0 m-2 inline-block rounded-full bg-muted px-2 py-1 text-sm font-bold text-muted-foreground">
-                  {profile.metadata?.displayName}
+                  {profile.metadata?.displayName || profile.handle?.localName}
                 </span>
               </div>
 

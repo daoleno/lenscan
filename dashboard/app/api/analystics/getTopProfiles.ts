@@ -4,11 +4,15 @@ import "server-only"
 
 import { ProfileFragment } from "@lens-protocol/client"
 
+import { getLenny } from "@/lib/lenny"
 import lensClient from "@/lib/lensclient"
 
 import { DateRangeKey, getDateRangeCondition } from "./utils"
 
-type TopProfile = ProfileFragment & { weighted_score: number }
+type TopProfile = ProfileFragment & {
+  weighted_score: number
+  lenny_img: string
+}
 
 export async function getTopProfiles(rangeKey: DateRangeKey = "ALL") {
   let baseSql = `
@@ -64,13 +68,17 @@ export async function getTopProfiles(rangeKey: DateRangeKey = "ALL") {
   })
 
   // add weighted score to profiles
-  const profiles = fetchResults.items.map((profile) => {
+  const profiles = []
+
+  for (let profile of fetchResults.items) {
     const contributor = topProfiles.find((c) => c.profile_id === profile.id)
-    return {
+    const lennyImg = await getLenny(profile.id)
+    profiles.push({
       ...profile,
+      lenny_img: lennyImg.image,
       weighted_score: Math.round(contributor?.weighted_score),
-    }
-  })
+    })
+  }
 
   return profiles as TopProfile[]
 }
