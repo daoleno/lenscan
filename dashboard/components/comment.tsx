@@ -49,7 +49,7 @@ export default function Comment({ comment }: { comment: CommentFragment }) {
   return (
     <div className="flex flex-col space-y-7 py-7">
       <div className="flex flex-col space-y-2">
-        <div className="flex items-center text-2xl font-bold text-gray-800">
+        <div className="flex items-center text-2xl font-bold">
           <span>Publication</span>
           <span className="ml-2 font-mono">{comment.id}</span>
         </div>

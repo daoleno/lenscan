@@ -10,17 +10,17 @@ const navigation = [
   {
     name: "Twitter",
     href: siteConfig.links.twitter,
-    icon: <FaXTwitter className="h-5 w-5" />,
+    icon: <FaXTwitter className="h-4 w-4" />,
   },
   {
     name: "Lenster",
     href: siteConfig.links.lenster,
-    icon: <Icons.hey className="h-5 w-5" />,
+    icon: <Icons.hey className="h-4 w-4" />,
   },
   {
     name: "Telegram",
     href: siteConfig.links.telegram,
-    icon: <FaTelegram className="h-5 w-5" />,
+    icon: <FaTelegram className="h-4 w-4" />,
   },
 ]
 

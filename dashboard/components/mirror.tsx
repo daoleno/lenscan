@@ -18,11 +18,11 @@ export default function Mirror({ mirror }: { mirror: MirrorFragment }) {
   return (
     <div className="flex flex-col space-y-7 py-7">
       <div className="flex flex-col space-y-2">
-        <div className="flex items-center text-2xl font-bold text-gray-800">
+        <div className="flex items-center text-2xl font-bold">
           <span>Publication</span>
           <span className="ml-2 font-mono">{mirror.id}</span>
         </div>
-        <div className="text-sm font-bold text-gray-600">
+        <div className="text-sm font-bold text-muted-foreground">
           <Badge>{mirror.__typename}</Badge>
           <span> @ </span>
           <Link
