@@ -5,6 +5,8 @@ import Publications, { PublicationsProps } from "@/components/publications"
 import StatCards from "@/components/stat-cards"
 import TopProfiles from "@/components/top-profiles"
 
+export const revalidate = 900
+
 export default async function Home() {
   const params: PublicationsProps = {
     searchParams: {
@@ -16,7 +18,7 @@ export default async function Home() {
   return (
     <div className="mt-6 space-y-6">
       <StatCards />
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <div className="w-2/3 ">
           <TopProfiles />
         </div>
@@ -28,7 +30,6 @@ export default async function Home() {
       </div>
 
       <div className="mt-6 space-y-6">
-        {/* <ChartView /> */}
         <Publications
           title="Recent Publications"
           searchParams={params.searchParams}

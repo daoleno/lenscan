@@ -3,7 +3,6 @@
 import Script from "next/script"
 import { LensConfig, LensProvider, production } from "@lens-protocol/react-web"
 import { bindings as wagmiBindings } from "@lens-protocol/wagmi"
-import PlausibleProvider from "next-plausible"
 import { createPublicClient, http } from "viem"
 import { polygon } from "viem/chains"
 import { createConfig, WagmiConfig } from "wagmi"
@@ -51,21 +50,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <PlausibleProvider
-            customDomain="https://analytics.lenscan.io"
-            domain="lenscan.io"
-            selfHosted
-          >
-            <WagmiConfig config={config}>
-              <LensProvider config={lensConfig}>
-                <div className="relative flex min-h-screen flex-col">
-                  <SiteHeader />
-                  <section className="container flex-grow">{children}</section>
-                  <Footer />
-                </div>
-              </LensProvider>
-            </WagmiConfig>
-          </PlausibleProvider>
+          <WagmiConfig config={config}>
+            <LensProvider config={lensConfig}>
+              <div className="relative flex min-h-screen flex-col">
+                <SiteHeader />
+                <section className="container flex-grow">{children}</section>
+                <Footer />
+              </div>
+            </LensProvider>
+          </WagmiConfig>
         </ThemeProvider>
 
         <Script
