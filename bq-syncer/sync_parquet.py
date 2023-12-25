@@ -76,31 +76,63 @@ def get_file_size(file_path):
     return os.path.getsize(file_path)
 
 
-def merge_files(table_directory, table_id):
-    """Merge files in the table directory with each size less than 1GB."""
+def merge_files(
+    table_directory, table_id, max_group_size=2 * (10**9), max_file_size=1 * (10**9)
+):
+    """Merge files in given directory with a memory limit."""
     parquet_files = glob.glob(os.path.join(table_directory, f"{table_id}_*.parquet"))
 
-    # Filter out files larger than 1GB
-    small_files = [file for file in parquet_files if get_file_size(file) < 1e9]
+    current_group = []
+    current_group_file_paths = []  # this will hold file paths for deletion
+    current_group_size = 0
 
-    # If there is one or no file, no need to merge
-    if len(small_files) <= 1:
-        return
+    for file_path in parquet_files:
+        df = pl.read_parquet(file_path)
 
-    df = pl.concat(
-        [pl.scan_parquet(file) for file in small_files]
-    ).collect()  # Add collect() here
-    merged_file_name = os.path.join(
-        table_directory,
-        f"{table_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}_merged.parquet",
-    )
-    df.write_parquet(merged_file_name)
+        # Skip if single DataFrame already exceeds max_file_size
+        if df.estimated_size() > max_file_size:
+            print(
+                f"Skipping file {file_path}. Size exceeds the maximum limit per file."
+            )
+            continue
 
-    # Delete the old files
-    for file in small_files:
-        os.remove(file)
+        # If the addition of this df would exceed the max_group_size
+        # then process current_group and start a new group
+        if current_group_size + df.estimated_size() > max_group_size:
+            if current_group:  # only write/merge if there's data to write
+                df_merge = pl.concat(current_group)
+                merged_file_name = os.path.join(
+                    table_directory,
+                    f"{table_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}_merged.parquet",
+                )
+                df_merge.write_parquet(merged_file_name)
+                print(f"[{datetime.now()}] Merged file saved as {merged_file_name}.")
 
-    print(f"[{datetime.now()}] Merged {len(small_files)} files into {merged_file_name}")
+                # Remove old files
+                for old_file_path in current_group_file_paths:
+                    os.remove(old_file_path)
+
+            # Start a new group
+            current_group = [df]
+            current_group_file_paths = [file_path]  # reset the file paths list
+            current_group_size = df.estimated_size()
+        else:
+            current_group.append(df)
+            current_group_file_paths.append(file_path)
+            current_group_size += df.estimated_size()
+
+    # Don't forget the last group if it is not empty
+    if current_group:
+        df_merge = pl.concat(current_group)
+        merged_file_name = os.path.join(
+            table_directory,
+            f"{table_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}_merged.parquet",
+        )
+        df_merge.write_parquet(merged_file_name)
+        print(f"[{datetime.now()}] Merged file saved as {merged_file_name}.")
+
+        for old_file_path in current_group_file_paths:
+            os.remove(old_file_path)
 
 
 def sync_table(table_item, index, total_tables):
