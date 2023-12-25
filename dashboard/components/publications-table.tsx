@@ -4,6 +4,7 @@ import { type Publication } from "@/app/api/publications/getPublications"
 
 import { publicationColumns } from "./data-table/columns"
 import { DataTable } from "./data-table/data-table"
+import { DataTableLoading } from "./data-table/data-table-loading"
 
 interface PublicationsTableProps {
   title: string
@@ -25,7 +26,7 @@ export default async function PublicationsTable({
   return (
     <div className="my-3 flex-1 flex-col gap-3 md:flex">
       <h2 className="p-3 text-3xl font-bold tracking-tight">{title}</h2>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<DataTableLoading columnCount={6} rowCount={10} />}>
         <DataTable
           columns={publicationColumns}
           data={data}
