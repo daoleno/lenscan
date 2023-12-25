@@ -24,6 +24,10 @@ export default function TopApps({ className }: TopAppsProps) {
       setRange={setRange}
       className={className}
     >
+      <div className="mb-3 flex flex-row justify-between text-sm font-semibold text-muted-foreground">
+        <span>Name</span>
+        <span>Publications</span>
+      </div>
       <BarList data={data} showAnimation />
     </ChartCard>
   )
