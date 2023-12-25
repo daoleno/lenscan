@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { ScrollArea, ScrollBar } from "./ui/scroll-area"
 
 export default async function TopProfiles() {
-  const topProfiles = await getTopProfiles("1M")
+  const topProfiles = await getTopProfiles("ALL")
 
   return (
     <Card>
