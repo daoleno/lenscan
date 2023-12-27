@@ -179,6 +179,7 @@ def sync_table(table_item, index, total_tables):
             for field, _ in fields
         ]
         query = f"SELECT {', '.join(field_names_for_query)} FROM `{table_ref}` WHERE datastream_metadata.source_timestamp > {last_timestamp} ORDER BY datastream_metadata.source_timestamp ASC"
+        print(f"[{datetime.now()}] Query: {query}")
 
         # Modify the query if --sample is set
         if args.sample:
