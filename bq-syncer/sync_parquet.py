@@ -271,7 +271,7 @@ def perform_sync_task():
     print(f"[{datetime.now()}] Data sync completed.")
 
 
-schedule.every(60).minutes.do(perform_sync_task)
+schedule.every(12).hours.do(perform_sync_task)
 
 perform_sync_task()
 
