@@ -1,10 +1,9 @@
+import Image from "next/image"
 import Link from "next/link"
 import { FaTelegram } from "react-icons/fa"
 import { FaXTwitter } from "react-icons/fa6"
 
 import { siteConfig } from "@/config/site"
-
-import { Icons } from "./icons"
 
 const navigation = [
   {
@@ -13,9 +12,9 @@ const navigation = [
     icon: <FaXTwitter className="h-4 w-4" />,
   },
   {
-    name: "Lenster",
+    name: "Hey",
     href: siteConfig.links.lenster,
-    icon: <Icons.hey className="h-4 w-4" />,
+    icon: <Image src="/apps/hey.png" width="20" height="20" alt="hey" />,
   },
   {
     name: "Telegram",

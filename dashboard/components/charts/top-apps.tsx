@@ -6,6 +6,8 @@ import useSWR from "swr"
 
 import fetcher from "@/lib/fetcher"
 
+import { Error } from "../error"
+import { Loader } from "../loader"
 import { ChartCard } from "./chart-card"
 
 interface TopAppsProps {
@@ -13,9 +15,19 @@ interface TopAppsProps {
 }
 
 export default function TopApps({ className }: TopAppsProps) {
-  const [range, setRange] = useState("ALL")
+  const [range, setRange] = useState("1D")
   const queryString = `/api/analystics/topapps?range=${range}`
-  const { data, error } = useSWR(queryString, fetcher)
+  const { data: rawData, error } = useSWR(queryString, fetcher)
+  if (error) return <Error msg={error.message} />
+  if (!rawData) return <Loader fixed={false} />
+
+  // only get name, value from data
+  const data: any = rawData.map((item: any) => {
+    return {
+      name: item.name,
+      value: item.value,
+    }
+  })
 
   return (
     <ChartCard

@@ -63,7 +63,7 @@ export const Icons = {
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
     </svg>
   ),
-  hey: (props: IconProps) => (
+  lenster: (props: IconProps) => (
     <svg
       width="350"
       height="350"

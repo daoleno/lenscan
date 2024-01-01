@@ -2,6 +2,8 @@ import { duckdb, toParquetSql } from "@/lib/duckdb"
 
 import "server-only"
 
+import { apps } from "@/config/apps"
+
 import { DateRangeKey, getDateRangeCondition } from "../utils"
 
 export async function getTotalApps() {
@@ -17,6 +19,9 @@ export async function getTotalApps() {
 export type TopApps = {
   name: string
   value: number
+  description?: string
+  icon?: string
+  url?: string
 }[]
 
 export async function getTopApps(rangeKey: DateRangeKey) {
@@ -33,6 +38,15 @@ export async function getTopApps(rangeKey: DateRangeKey) {
     r.value = Number(r.value)
     if (!r.name) {
       r.name = "other"
+    }
+
+    const allApps = apps.find(
+      (app) => app.name.toLowerCase() === r.name.toLowerCase()
+    )
+    if (allApps) {
+      r.description = allApps.description
+      r.icon = allApps.icon
+      r.url = allApps.url
     }
   })
 
