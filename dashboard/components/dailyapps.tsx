@@ -7,7 +7,7 @@ import { Button } from "./ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 
 export default async function DailyApps() {
-  const dailyApps = await (await getTopApps("ALL")).splice(0, 4)
+  const dailyApps = await (await getTopApps("1D")).splice(0, 4)
 
   return (
     <Card>
