@@ -34,7 +34,9 @@ export default async function DailyApps() {
                   src={app.icon || "/images/default-profile.png"}
                 />
                 <div className="ml-4 mr-8 flex flex-grow flex-col sm:gap-0">
-                  <span className="text-lg font-bold">{app.name}</span>
+                  <span className="text-lg font-bold capitalize">
+                    {app.name}
+                  </span>
                   <span
                     className="text-sm"
                     style={{
