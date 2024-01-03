@@ -28,6 +28,10 @@ const items = [
     name: "Analytics",
     href: "/analytics",
   },
+  {
+    name: "Developer",
+    href: "/developer",
+  },
 ]
 
 export function MainNav({
