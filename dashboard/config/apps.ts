@@ -1,4 +1,4 @@
-export const recommendApps = [
+export const recommendedApps = [
   {
     name: "Orb",
     description: "Mobile experience with a focus on creators and communities ",
@@ -50,4 +50,4 @@ export const recommendApps = [
   },
 ]
 
-export const apps = [...recommendApps]
+export const apps = [...recommendedApps]

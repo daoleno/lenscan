@@ -3,12 +3,12 @@ import { SparkAreaChart } from "@tremor/react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
   getDauGrowthPercentages,
-  getDauStats,
-} from "@/app/api/analystics/dau/getDailyActiveUser"
+  getNetworkUserStats,
+} from "@/app/api/analystics/active-users/getDailyActiveUser"
 
 export default async function DauStats() {
   const dateRange = "1M"
-  const chartdata = await getDauStats(dateRange)
+  const chartdata = await getNetworkUserStats(dateRange)
   const totalCount = chartdata.reduce((acc, cur) => {
     return acc + cur.total
   }, 0)

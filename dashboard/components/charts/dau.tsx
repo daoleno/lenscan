@@ -13,27 +13,24 @@ interface UserActivityProps {
   className?: string
 }
 
-export default function UserActivity({
-  profileId = null,
-  className,
-}: UserActivityProps) {
+export default function DAU({ className }: UserActivityProps) {
   const [range, setRange] = useState("ALL")
-  const queryString = profileId
-    ? `/api/analystics/user-activity?range=${range}&profile_id=${profileId}`
-    : `/api/analystics/user-activity?range=${range}`
+  const queryString = `/api/analystics/active-users?range=${range}&statType=DAU`
   const { data, error } = useSWR(queryString, fetcher)
+
+  console.log("data", data)
 
   return (
     <ChartCard
-      chartTitle={profileId ? "Activity" : "Users Activity"}
+      chartTitle="Daily Active Users"
       range={range}
       setRange={setRange}
       className={className}
     >
       <BarChart
-        data={data}
-        index="day"
-        categories={["posts", "comments", "mirrors", "upvotes", "downvotes"]}
+        data={data?.stats}
+        index="time"
+        categories={data?.apps}
         // showAnimation
         showGridLines={false}
         stack

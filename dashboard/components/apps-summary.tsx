@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 
-import { recommendApps } from "@/config/apps"
+import { recommendedApps } from "@/config/apps"
 import { getTotalApps } from "@/app/api/analystics/topapps/getAppStats"
 
 import { Button } from "./ui/button"
@@ -21,7 +21,7 @@ export default async function AppsSummary() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {recommendApps.map((app) => (
+        {recommendedApps.map((app) => (
           <Card key="1" className="w-full">
             <CardContent className="flex items-center p-4 sm:flex-row">
               <Image
