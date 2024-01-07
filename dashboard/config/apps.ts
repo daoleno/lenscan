@@ -35,14 +35,19 @@ export const recommendApps = [
     icon: "/apps/dumpling.png",
     url: "https://www.dumpling.lol/",
   },
-]
-
-export const apps = [
-  ...recommendApps,
   {
     name: "Phaver",
     description: "Social Without Silos",
     icon: "/apps/phaver.svg",
     url: "https://phaver.com/",
   },
+  {
+    name: "Kaira",
+    description:
+      "Kaira is a Web3 social media app offering creators and consumers can earn rewards based on a complementary economy model",
+    icon: "/apps/kaira.png",
+    url: "https://kaira.network/",
+  },
 ]
+
+export const apps = [...recommendApps]

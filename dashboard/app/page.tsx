@@ -18,8 +18,10 @@ export default async function Home() {
   return (
     <div className="mt-6 space-y-6">
       <StatCards />
-      <div className="grid grid-cols-2 items-stretch gap-4">
-        <DailyApps />
+      <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-3">
+        <div className="sm:col-span-2">
+          <DailyApps />
+        </div>
         <div className="grid gap-3">
           <DailyPublicationStats />
           <DailyProfileStats />

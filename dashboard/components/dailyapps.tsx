@@ -22,7 +22,7 @@ export default async function DailyApps() {
         </CardTitle>
       </CardHeader>
       <div className="w-full whitespace-nowrap">
-        <CardContent className="grid grid-cols-2 gap-7">
+        <CardContent className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-7">
           {dailyApps.map((app) => (
             <Card key={app.name}>
               <CardContent className="flex items-center p-4 sm:flex-row">
