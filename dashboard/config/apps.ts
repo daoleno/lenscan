@@ -48,6 +48,13 @@ export const recommendedApps = [
     icon: "/apps/kaira.png",
     url: "https://kaira.network/",
   },
+  {
+    name: "U3",
+    description:
+      "U3 is building the front page of the decentralized social. A place to discover and explore the best of web3",
+    icon: "/apps/u3.png",
+    url: "https://u3.xyz/",
+  },
 ]
 
 export const apps = [...recommendedApps]
