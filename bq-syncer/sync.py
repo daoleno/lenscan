@@ -24,10 +24,7 @@ parser.add_argument(
     "-i", "--input", help="Path to the input database file.", required=True
 )
 parser.add_argument(
-    "-o",
-    "--output",
-    help="Path to the directory to which exports will be saved.",
-    required=True,
+    "-o", "--output", help="Path to the directory to which exports will be saved."
 )
 args = parser.parse_args()
 
