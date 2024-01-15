@@ -136,6 +136,7 @@ def process_table(table, conn, dataset_ref, bqclient, idx):
     try:
         table_id = table.table_id
         table_ref = dataset_ref.table(table_id)
+        table_schema = bqclient.get_table(table_ref).schema
 
         cursor = conn.cursor()
 
@@ -146,7 +147,6 @@ def process_table(table, conn, dataset_ref, bqclient, idx):
         if cursor.fetchone()[0] == 0:
             # Create table in DuckDB
             logging.info(f"Creating table: {table_id}")
-            table_schema = bqclient.get_table(table_ref).schema
             converted_schema = convert_schema(table_schema)
             ddl = f"CREATE TABLE {table_id} ({', '.join(converted_schema)})"
             cursor.execute(ddl)
