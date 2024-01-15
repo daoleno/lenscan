@@ -169,6 +169,7 @@ def process_table(table, conn, dataset_ref, bqclient, idx):
     SELECT {', '.join(fields)}
     FROM `{table_ref}`
     WHERE datastream_metadata.source_timestamp > {last_timestamp}
+    ORDER BY datastream_metadata.source_timestamp ASC
     """
     query_job = bqclient.query(query)
     pageNum = 0
