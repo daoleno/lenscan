@@ -227,7 +227,7 @@ def perform_sync_task():
 
 
 # Schedule the task to run every 60 minutes
-schedule.every(60).minutes.do(perform_sync_task)
+schedule.every(12).hours.do(perform_sync_task)
 
 # Run the task immediately on start
 perform_sync_task()
