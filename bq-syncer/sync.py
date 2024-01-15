@@ -215,13 +215,15 @@ def perform_sync_task():
 
             is_task_running = False
 
-            # export tables to parquet files
-            output_directory = create_output_directory()
-            export_tables(conn, output_directory)
-            update_symbolic_link(output_directory)
+            if args.output:
+                # export tables to parquet files
+                output_directory = create_output_directory()
+                export_tables(conn, output_directory)
+                update_symbolic_link(output_directory)
 
-            # Add this new deletion operation after updating the symbolic link.
-            delete_old_dir()
+                # Add this new deletion operation after updating the symbolic link.
+                delete_old_dir()
+
             print(f"[{datetime.now()}] Data sync completed.")
 
         except Exception as e:
