@@ -172,5 +172,10 @@ export async function getAppUserStats(
     statEntry[appCategory] += Number(stat.users)
   })
 
+  // ensure the app name is camel case
+  result.apps = result.apps.map(
+    (app) => app.charAt(0).toUpperCase() + app.slice(1)
+  )
+
   return result as AppUserStats
 }
