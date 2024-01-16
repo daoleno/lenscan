@@ -1,4 +1,4 @@
-import { duckdb, toParquetSql } from "@/lib/duckdb"
+import { duckdb } from "@/lib/duckdb"
 
 import "server-only"
 
@@ -8,9 +8,7 @@ import { DateRangeKey, getDateRangeCondition } from "../utils"
 
 export async function getTotalApps() {
   const result = await duckdb.all(
-    toParquetSql(
-      `SELECT COUNT(DISTINCT app) AS count FROM publication_metadata;`
-    )
+    `SELECT COUNT(DISTINCT app) AS count FROM publication_metadata;`
   )
   console.log(result)
   return result[0] ? Number(result[0].count) : 0
@@ -31,7 +29,7 @@ export async function getTopApps(rangeKey: DateRangeKey) {
   sql += getDateRangeCondition(rangeKey, "timestamp")
   sql += ` GROUP BY name ORDER BY value DESC LIMIT 50;`
 
-  const result = await duckdb.all(toParquetSql(sql))
+  const result = await duckdb.all(sql)
 
   // convert bigint to number and check if name is empty
   result.forEach((r) => {

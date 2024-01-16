@@ -1,4 +1,4 @@
-import { duckdb, toParquetSql } from "@/lib/duckdb"
+import { duckdb } from "@/lib/duckdb"
 import lensClient from "@/lib/lensclient"
 import { getIPFSURL } from "@/lib/utils"
 
@@ -34,12 +34,12 @@ export default async function getProfiles(
 ): Promise<{ totalCount: number; profiles: Profile[] }> {
   const { limit, offset, sort } = params
 
-  let sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : ""
+  const sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : ""
   const sql = `SELECT * FROM profile_record ${sortOrder} LIMIT ${limit} OFFSET ${offset}`
-  const profiles = await duckdb.all(toParquetSql(sql))
+  const profiles = await duckdb.all(sql)
 
   const totalCount = await duckdb.all(
-    toParquetSql(`SELECT COUNT(*) AS count FROM profile_record`)
+    `SELECT COUNT(*) AS count FROM profile_record`
   )
 
   // fetch profile other metadata
