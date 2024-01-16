@@ -1,8 +1,9 @@
 import { Database } from "duckdb-async"
 
-const accessMode = 0 // 1 = read/write, 0 = read-only
-const duckdb = await Database.create(process.env.DUCKDB_PATH, {
-  access_mode: "READ_ONLY",
-})
+const readonly = 1 // 1 = readonly, 0 = readwrite
+const duckdb = await Database.create(
+  process.env.DUCKDB_PATH as string,
+  readonly
+)
 
 export { duckdb }
