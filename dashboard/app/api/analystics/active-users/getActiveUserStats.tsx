@@ -151,12 +151,18 @@ export async function getAppUserStats(
 
   // Initialize the result structure
   const result = {
-    apps: [...topApps, "others"],
+    apps: topApps.map((app) => app.charAt(0).toUpperCase() + app.slice(1)), // Capitalize first letter
     stats: [] as any[],
   }
 
   userStats.forEach((stat) => {
-    const appCategory = topApps.includes(stat.app) ? stat.app : "others"
+    // Ensure stat.app is a string and not null or undefined
+    const appName =
+      stat.app && typeof stat.app === "string"
+        ? stat.app.charAt(0).toUpperCase() + stat.app.slice(1)
+        : "Others"
+
+    const appCategory = result.apps.includes(appName) ? appName : "Others"
 
     // Find or create the stat entry for the time unit
     let statEntry = result.stats.find(
@@ -169,13 +175,11 @@ export async function getAppUserStats(
     }
 
     // Add the user count to the appropriate app category
-    statEntry[appCategory] += Number(stat.users)
+    statEntry[appCategory] = (statEntry[appCategory] || 0) + Number(stat.users)
   })
 
-  // ensure the app name is camel case
-  result.apps = result.apps.map(
-    (app) => app.charAt(0).toUpperCase() + app.slice(1)
-  )
+  // Add "Others" to handle apps not in the topApps list
+  result.apps.push("Others")
 
   return result as AppUserStats
 }

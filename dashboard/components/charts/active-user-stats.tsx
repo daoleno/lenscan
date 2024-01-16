@@ -19,6 +19,8 @@ export default function ActiveUserStats({
   const [range, setRange] = useState("ALL")
   const data = allStats[range]
 
+  console.log(data)
+
   return (
     <ChartCard
       chartTitle={title}
