@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
   getDauGrowthPercentages,
   getNetworkUserStats,
-} from "@/app/api/analystics/active-users/getDailyActiveUser"
+} from "@/app/api/analystics/active-users/getActiveUserStats"
 
 export default async function DauStats() {
   const dateRange = "1M"
