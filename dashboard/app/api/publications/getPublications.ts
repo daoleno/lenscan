@@ -1,4 +1,4 @@
-import { duckdb, toParquetSql } from "@/lib/duckdb"
+import { duckdb } from "@/lib/duckdb"
 import lensClient from "@/lib/lensclient"
 import { getIPFSURL } from "@/lib/utils"
 
@@ -55,9 +55,9 @@ export default async function getPublications(
 }> {
   const { limit, offset, sort, filter } = params
 
-  let sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : ""
+  const sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : ""
 
-  let conditions = []
+  const conditions = []
   if (filter) {
     for (const key in filter) {
       const value = filter[key as keyof getPublicationsFilter]
@@ -73,11 +73,11 @@ export default async function getPublications(
     }
   }
 
-  let filterCondition = conditions.length
+  const filterCondition = conditions.length
     ? " WHERE " + conditions.join(" AND ")
     : ""
   const sql = `SELECT * FROM publication_record ${filterCondition} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`
-  const publications = await duckdb.all(toParquetSql(sql))
+  const publications = await duckdb.all(sql)
 
   if (!publications.length) {
     return {
@@ -105,7 +105,7 @@ export default async function getPublications(
   let totalCount
   if (filter && filter.profile_id) {
     const sql = `SELECT COUNT(*) AS count FROM publication_record ${filterCondition}`
-    const result = await duckdb.all(toParquetSql(sql))
+    const result = await duckdb.all(sql)
     totalCount = result[0].count
   }
 

@@ -1,4 +1,4 @@
-import { duckdb, toParquetSql } from "@/lib/duckdb"
+import { duckdb } from "@/lib/duckdb"
 
 import { DateRangeKey, getDateRangeCondition } from "../utils"
 
@@ -23,7 +23,7 @@ export async function getPopularHashtags(rangeKey: DateRangeKey = "ALL") {
     LIMIT 20
   `
 
-  const hashtags = await duckdb.all(toParquetSql(sql))
+  const hashtags = await duckdb.all(sql)
 
   hashtags.forEach((a) => {
     a.count = Number(a.count)

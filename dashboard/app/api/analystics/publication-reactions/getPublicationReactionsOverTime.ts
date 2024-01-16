@@ -1,4 +1,4 @@
-import { duckdb, toParquetSql } from "@/lib/duckdb"
+import { duckdb } from "@/lib/duckdb"
 
 import { DateRangeKey, getDateRangeCondition } from "../utils"
 
@@ -31,7 +31,7 @@ export async function getPublicationReactionsOvertime(
       reaction_day;
   `
 
-  const reactionsRaw = await duckdb.all(toParquetSql(sql))
+  const reactionsRaw = await duckdb.all(sql)
 
   reactionsRaw.forEach((a) => {
     a.reaction_count = Number(a.reaction_count)

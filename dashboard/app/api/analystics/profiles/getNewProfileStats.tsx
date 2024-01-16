@@ -1,4 +1,4 @@
-import { duckdb, toParquetSql } from "@/lib/duckdb"
+import { duckdb } from "@/lib/duckdb"
 
 import "server-only"
 
@@ -28,7 +28,7 @@ export async function getDailyNewProfileStats(rangeKey: DateRangeKey) {
     ORDER BY day
   `
 
-  const activities = await duckdb.all(toParquetSql(sql))
+  const activities = await duckdb.all(sql)
 
   const chartData = activities.map((a) => ({
     day: new Date(a.day).toLocaleDateString(),
@@ -59,8 +59,8 @@ export async function getProfilesGrowthPercentage(
   )
 
   // Execute queries
-  const currentPeriodData = await duckdb.all(toParquetSql(currentPeriodSql))
-  const previousPeriodData = await duckdb.all(toParquetSql(previousPeriodSql))
+  const currentPeriodData = await duckdb.all(currentPeriodSql)
+  const previousPeriodData = await duckdb.all(previousPeriodSql)
 
   // Extract total counts
   const currentTotal = Number(currentPeriodData[0].total || 0)

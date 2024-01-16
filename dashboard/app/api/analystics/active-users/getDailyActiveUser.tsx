@@ -1,4 +1,4 @@
-import { duckdb, toParquetSql } from "@/lib/duckdb"
+import { duckdb } from "@/lib/duckdb"
 
 import {
   DateRangeKey,
@@ -17,7 +17,7 @@ export async function getNetworkUserStats(
   rangeKey: DateRangeKey,
   statType: "DAU" | "MAU" = "DAU"
 ) {
-  let timeUnit = statType === "DAU" ? "day" : "month"
+  const timeUnit = statType === "DAU" ? "day" : "month"
 
   let sql = `
     SELECT 
@@ -32,7 +32,7 @@ export async function getNetworkUserStats(
     ORDER BY ${timeUnit}
   `
 
-  const userStats = await duckdb.all(toParquetSql(sql))
+  const userStats = await duckdb.all(sql)
 
   const chartData = userStats.map((a) => ({
     time: new Date(a[timeUnit]).toLocaleDateString(),
@@ -63,8 +63,8 @@ export async function getDauGrowthPercentages(rangeKey: DateRangeKey) {
   )
 
   // Execute queries
-  const currentPeriodData = await duckdb.all(toParquetSql(currentPeriodSql))
-  const previousPeriodData = await duckdb.all(toParquetSql(previousPeriodSql))
+  const currentPeriodData = await duckdb.all(currentPeriodSql)
+  const previousPeriodData = await duckdb.all(previousPeriodSql)
 
   // Extract total counts
   const currentTotal = Number(currentPeriodData[0].total || 0)
@@ -105,7 +105,7 @@ export async function getAppUserStats(
   rangeKey: DateRangeKey,
   statType: "DAU" | "MAU"
 ) {
-  let timeUnit = statType === "DAU" ? "day" : "month"
+  const timeUnit = statType === "DAU" ? "day" : "month"
 
   // Fetch user stats per app for each time unit
   let userStatsSql = `
@@ -120,16 +120,16 @@ export async function getAppUserStats(
     GROUP BY ${timeUnit}, app
     ORDER BY ${timeUnit}, app
   `
-  const userStats = await duckdb.all(toParquetSql(userStatsSql))
+  const userStats = await duckdb.all(userStatsSql)
 
   // Initialize the result structure
-  let result = {
+  const result = {
     apps: [...topApps, "others"],
     stats: [] as any[],
   }
 
   userStats.forEach((stat) => {
-    let appCategory = topApps.includes(stat.app) ? stat.app : "others"
+    const appCategory = topApps.includes(stat.app) ? stat.app : "others"
 
     // Find or create the stat entry for the time unit
     let statEntry = result.stats.find(
