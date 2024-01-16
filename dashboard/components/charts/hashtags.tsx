@@ -1,28 +1,11 @@
-"use client"
+import { getAllPopularHashtags } from "@/app/api/analystics/popular-hashtags/getPopularHashtags"
 
-import { useState } from "react"
-import { BarChart } from "@tremor/react"
-import useSWR from "swr"
+import HashTagsStats from "./hashtags-stats"
 
-import fetcher from "@/lib/fetcher"
+export const revalidate = 60 * 60 * 5
 
-import { ChartCard } from "./chart-card"
+export default async function HashTags() {
+  const allStats = await getAllPopularHashtags()
 
-export default function HashTags() {
-  const [range, setRange] = useState("ALL")
-  const { data, error } = useSWR(
-    `/api/analystics/popular-hashtags?range=${range}`,
-    fetcher
-  )
-
-  return (
-    <ChartCard chartTitle="Popular Hashtags" range={range} setRange={setRange}>
-      <BarChart
-        data={data}
-        index="hashtag"
-        categories={["count"]}
-        showAnimation
-      />
-    </ChartCard>
-  )
+  return <HashTagsStats allStats={allStats} />
 }

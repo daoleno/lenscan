@@ -4,7 +4,7 @@ import "server-only"
 
 import { DateRangeKey, getDateRangeAndCondition } from "../utils"
 
-export type UserActivity = {
+export type UserActivityStats = {
   day: string
   posts: number
   comments: number
@@ -13,7 +13,21 @@ export type UserActivity = {
   downvotes: number
 }
 
-export async function getUserActivity(
+export async function getAllUserActivity(): Promise<{
+  [key in DateRangeKey]?: UserActivityStats[]
+}> {
+  const rangeKeys: DateRangeKey[] = ["1D", "1W", "1M", "3M", "1Y", "ALL"]
+  const allUserActivityStats: { [key in DateRangeKey]?: UserActivityStats[] } =
+    {}
+
+  for (const rangeKey of rangeKeys) {
+    allUserActivityStats[rangeKey] = await getUserActivityStats(rangeKey)
+  }
+
+  return allUserActivityStats
+}
+
+export async function getUserActivityStats(
   rangeKey: DateRangeKey = "ALL",
   profileId: string | null = null
 ) {
@@ -77,5 +91,5 @@ export async function getUserActivity(
     a.day = new Date(a.day).toLocaleDateString()
   })
 
-  return activities as UserActivity[]
+  return activities as UserActivityStats[]
 }

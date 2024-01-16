@@ -4,6 +4,8 @@ import { getContentLanguageDistribution } from "@/app/api/analystics/getContentL
 
 import { ChartCard } from "./chart-card"
 
+export const revalidate = 60 * 60 * 5
+
 export default async function ContentLanguageDistribution() {
   const data = await getContentLanguageDistribution()
 

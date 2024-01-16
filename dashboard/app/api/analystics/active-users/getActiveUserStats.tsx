@@ -13,6 +13,20 @@ export type UserStats = {
   total: number // Total count of active users
 }
 
+export async function getAllNetworkUserStats(
+  statType: "DAU" | "MAU" = "DAU"
+): Promise<{ [key in DateRangeKey]?: UserStats[] }> {
+  const rangeKeys: DateRangeKey[] = ["1D", "1W", "1M", "3M", "1Y", "ALL"]
+  const allStats: { [key in DateRangeKey]?: UserStats[] } = {}
+
+  for (const rangeKey of rangeKeys) {
+    const userStatsForRange = await getNetworkUserStats(rangeKey, statType)
+    allStats[rangeKey] = userStatsForRange
+  }
+
+  return allStats
+}
+
 export async function getNetworkUserStats(
   rangeKey: DateRangeKey,
   statType: "DAU" | "MAU" = "DAU"
@@ -100,6 +114,20 @@ const topApps = [
   "lenster",
   "u3",
 ]
+
+export async function getAllAppUserStats(
+  statType: "DAU" | "MAU"
+): Promise<{ [key in DateRangeKey]?: AppUserStats }> {
+  const rangeKeys: DateRangeKey[] = ["1D", "1W", "1M", "3M", "1Y", "ALL"]
+  const allStats: { [key in DateRangeKey]?: AppUserStats } = {}
+
+  for (const rangeKey of rangeKeys) {
+    const userStatsForRange = await getAppUserStats(rangeKey, statType)
+    allStats[rangeKey] = userStatsForRange
+  }
+
+  return allStats
+}
 
 export async function getAppUserStats(
   rangeKey: DateRangeKey,
