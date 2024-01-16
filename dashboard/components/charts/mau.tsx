@@ -1,40 +1,21 @@
-"use client"
+import { getAllAppUserStats } from "@/app/api/analystics/active-users/getActiveUserStats"
 
-import { useState } from "react"
-import { BarChart } from "@tremor/react"
-import useSWR from "swr"
+import ActiveUserStats from "./active-user-stats"
 
-import fetcher from "@/lib/fetcher"
-
-import { ChartCard } from "./chart-card"
-
-interface UserActivityProps {
-  profileId?: string | null
+interface DAUStaticProps {
   className?: string
 }
 
-export default function MAU({ className }: UserActivityProps) {
-  const [range, setRange] = useState("ALL")
-  const queryString = `/api/analystics/active-users?range=${range}&statType=MAU`
-  const { data, error } = useSWR(queryString, fetcher)
+export const revalidate = 60 * 60 * 5
 
-  console.log("data", data)
+export default async function MAU({ className }: DAUStaticProps) {
+  const allStats = await getAllAppUserStats("MAU")
 
   return (
-    <ChartCard
-      chartTitle="Monthly Active Users"
-      range={range}
-      setRange={setRange}
+    <ActiveUserStats
+      title="Monthly Active Users"
+      allStats={allStats}
       className={className}
-    >
-      <BarChart
-        data={data?.stats}
-        index="time"
-        categories={data?.apps}
-        // showAnimation
-        showGridLines={false}
-        stack
-      />
-    </ChartCard>
+    />
   )
 }

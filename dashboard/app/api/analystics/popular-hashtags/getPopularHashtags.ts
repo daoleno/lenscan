@@ -9,6 +9,19 @@ export type Hashtag = {
   count: number
 }
 
+export async function getAllPopularHashtags(): Promise<{
+  [key in DateRangeKey]?: Hashtag[]
+}> {
+  const rangeKeys: DateRangeKey[] = ["1D", "1W", "1M", "3M", "1Y", "ALL"]
+  const allPopularHashtags: { [key in DateRangeKey]?: Hashtag[] } = {}
+
+  for (const rangeKey of rangeKeys) {
+    allPopularHashtags[rangeKey] = await getPopularHashtags(rangeKey)
+  }
+
+  return allPopularHashtags
+}
+
 export async function getPopularHashtags(rangeKey: DateRangeKey = "ALL") {
   let sql = `
     SELECT hashtag, COUNT(*) AS count

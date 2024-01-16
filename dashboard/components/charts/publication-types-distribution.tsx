@@ -4,6 +4,8 @@ import { getPublicationTypesDistribution } from "@/app/api/analystics/getPublica
 
 import { ChartCard } from "./chart-card"
 
+export const revalidate = 60 * 60 * 5
+
 export default async function PublicationTypesDistribution() {
   const data = await getPublicationTypesDistribution()
 

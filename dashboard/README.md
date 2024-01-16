@@ -9,9 +9,8 @@ Clone the project to your local machine.
 ```bash
 git clone https://github.com/daoleno/lenscan
 cd lenscan/dashboard
-
-yarn install
-yarn dev
+bun install
+bun dev
 ```
 
 ## Contributing

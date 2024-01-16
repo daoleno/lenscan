@@ -5,7 +5,7 @@ import DauStats from "@/components/dau-stats"
 import Publications, { PublicationsProps } from "@/components/publications"
 import StatCards from "@/components/stat-cards"
 
-export const revalidate = 900
+export const revalidate = 60 * 60 * 5
 
 export default async function Home() {
   const params: PublicationsProps = {
