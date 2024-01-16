@@ -26,6 +26,7 @@ COPY . .
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
+ENV DUCKDB_PATH=lens-public-data/v2_polygon.db
 
 RUN yarn build
 

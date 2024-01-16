@@ -16,7 +16,7 @@ bun dev
 ## Build Docker Image
 
 ```bash
-docker build --build-arg DUCKDB_PATH=/path/to/v2_polygon.db -t lenscan .
+docker build -t lenscan .
 ```
 
 ## Contributing
