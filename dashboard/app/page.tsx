@@ -1,3 +1,4 @@
+import { RevalidateTime } from "@/config/ssr"
 import DailyProfileStats from "@/components/daily-profile-stats"
 import DailyPublicationStats from "@/components/daily-publication-stats"
 import DailyApps from "@/components/dailyapps"
@@ -5,7 +6,7 @@ import DauStats from "@/components/dau-stats"
 import Publications, { PublicationsProps } from "@/components/publications"
 import StatCards from "@/components/stat-cards"
 
-export const revalidate = 60 * 60 * 5
+export const revalidate = RevalidateTime
 
 export default async function Home() {
   const params: PublicationsProps = {

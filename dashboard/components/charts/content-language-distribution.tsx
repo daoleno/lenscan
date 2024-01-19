@@ -1,10 +1,11 @@
 import { DonutChart } from "@tremor/react"
 
+import { RevalidateTime } from "@/config/ssr"
 import { getContentLanguageDistribution } from "@/app/api/analystics/getContentLanguageDistribution"
 
 import { ChartCard } from "./chart-card"
 
-export const revalidate = 60 * 60 * 5
+export const revalidate = RevalidateTime
 
 export default async function ContentLanguageDistribution() {
   const data = await getContentLanguageDistribution()
