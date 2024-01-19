@@ -1,7 +1,8 @@
+import { RevalidateTime } from "@/config/ssr"
 import AppsSummary from "@/components/apps-summary"
 import TopApps from "@/components/charts/top-apps"
 
-export const revalidate = 60 * 60 * 5
+export const revalidate = RevalidateTime
 
 export default function Page() {
   return (
