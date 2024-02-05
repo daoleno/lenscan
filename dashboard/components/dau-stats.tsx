@@ -7,21 +7,18 @@ import {
 } from "@/app/api/analystics/active-users/getActiveUserStats"
 
 export default async function DauStats() {
-  const dateRange = "1M"
-  const chartdata = await getNetworkUserStats(dateRange)
-  const totalCount = chartdata.reduce((acc, cur) => {
-    return acc + cur.total
-  }, 0)
-  const growth = await getDauGrowthPercentages(dateRange)
+  const chartdata = await getNetworkUserStats("1Y", "MAU")
+  const curMonthCount = chartdata[chartdata.length - 1].total
+  const growth = await getDauGrowthPercentages("1M")
   return (
     <Card className="px-4">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <span>Active Users</span>
-        <span className="px-3 text-xs text-muted-foreground">{dateRange}</span>
+        <span className="px-3 text-xs text-muted-foreground">{"1M"}</span>
       </CardHeader>
       <CardContent className="flex items-center justify-between gap-7">
         <div>
-          <div className="text-2xl font-bold">{totalCount}</div>
+          <div className="text-2xl font-bold">{curMonthCount}</div>
           <p className="text-xs text-muted-foreground">
             {growth}% from last month
           </p>
