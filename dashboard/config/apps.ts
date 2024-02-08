@@ -43,9 +43,8 @@ export const recommendedApps = [
   },
   {
     name: "Kaira",
-    description:
-      "Kaira is a Web3 social media app offering creators and consumers can earn rewards based on a complementary economy model",
-    icon: "/apps/kaira.png",
+    description: "Revolutionizing social media with DeFi magic 🪄",
+    icon: "/apps/kaira.jpg",
     url: "https://kaira.network/",
   },
   {
@@ -54,6 +53,12 @@ export const recommendedApps = [
       "U3 is building the front page of the decentralized social. A place to discover and explore the best of web3",
     icon: "/apps/u3.png",
     url: "https://u3.xyz/",
+  },
+  {
+    name: "Yup",
+    description: "Decentralized Social All-In-One",
+    icon: "/apps/yup.svg",
+    url: "https://yup.io/",
   },
 ]
 

@@ -111,8 +111,8 @@ const topApps = [
   "kaira",
   "t2.world",
   "tape",
+  "yup",
   "lenster",
-  "u3",
 ]
 
 export async function getAllAppUserStats(
