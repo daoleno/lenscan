@@ -112,6 +112,7 @@ const topApps = [
   "t2.world",
   "tape",
   "lenster",
+  "u3",
 ]
 
 export async function getAllAppUserStats(

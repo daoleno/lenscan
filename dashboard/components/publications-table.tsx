@@ -44,6 +44,7 @@ export default async function PublicationsTable({
                 { label: "Tape", value: "tape" },
                 { label: "Phaver", value: "phaver" },
                 { label: "Orb", value: "orb" },
+                { label: "U3", value: "u3" },
               ],
             },
             {
