@@ -42,6 +42,15 @@ bqclient = bigquery.Client(credentials=credentials, project=credentials.project_
 dataset_ref = bqclient.dataset("v2_polygon", project="lens-public-data")
 dataset = bqclient.get_dataset(dataset_ref)
 
+
+supported_tables = {
+    "publication_metadata",
+    "publication_record",
+    "publication_hashtag",
+    "profile_record",
+}
+
+
 is_task_running = False
 
 
@@ -166,15 +175,19 @@ def perform_sync_task():
     sample_size = args.sample_size
     with ConnectionPool(conninfo=pg_dsn, min_size=1, max_size=100) as pool:
         try:
-            tables = list(bqclient.list_tables(dataset))
-            logging.info(f"Found {len(tables)} tables in BigQuery.")
+            all_tables = list(bqclient.list_tables(dataset))
+            # Filter tables to include only the supported ones
+            tables = [
+                table for table in all_tables if table.table_id in supported_tables
+            ]
+            logging.info(f"Found {len(tables)} supported tables in BigQuery.")
 
             with ThreadPoolExecutor(max_workers=args.concurrency) as executor:
                 for idx, table in enumerate(tables, start=1):
                     executor.submit(
                         process_table,
                         table,
-                        pool,  #
+                        pool,
                         dataset_ref,
                         bqclient,
                         idx,
