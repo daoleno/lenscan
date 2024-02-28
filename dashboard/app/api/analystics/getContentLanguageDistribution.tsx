@@ -1,4 +1,5 @@
-import { duckdb } from "@/lib/duckdb"
+import db from "@/lib/db"
+import { sql } from "drizzle-orm"
 
 import "server-only"
 
@@ -8,18 +9,17 @@ export type ContentLanguageDistribution = {
 }
 
 export async function getContentLanguageDistribution() {
-  const sql = `
+  const statement = `
       SELECT language, COUNT(*) AS frequency
       FROM publication_metadata
       GROUP BY language
       ORDER BY frequency DESC;
   `
 
-  const result = await duckdb.all(sql)
+  const result = await db.execute(sql.raw(statement)) as ContentLanguageDistribution[]
 
-  // convert bigint to number
-  result.forEach((row) => {
-    row.frequency = Number(row.frequency)
-  })
-  return result as ContentLanguageDistribution[]
+  return result.map((a) => ({
+    ...a,
+    frequency: Number(a.frequency),
+  }))
 }

@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
 import { BarChart } from "@tremor/react"
+import { useState } from "react"
 
 import { ChartCard } from "./chart-card"
 
@@ -18,8 +18,6 @@ export default function ActiveUserStats({
 }: ActiveUserStatsProps) {
   const [range, setRange] = useState("ALL")
   const data = allStats[range]
-
-  console.log(data)
 
   return (
     <ChartCard

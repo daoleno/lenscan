@@ -1,12 +1,11 @@
-import { Copy, Loader2, MessageSquare, Scroll, Users } from "lucide-react"
+import { Copy, MessageSquare, Scroll, Users } from "lucide-react"
 
-import { formatNumber } from "@/lib/utils"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getGlobalStats } from "@/app/api/analystics/getGlobalStats"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 type Categories = {
   title: string
-  metric?: string
+  metric: string
   icon: any
 }[]
 
@@ -16,22 +15,22 @@ export default async function StatCards() {
   const categories: Categories = [
     {
       title: "Profiles",
-      metric: globalStats.totalProfiles.toString(),
+      metric: globalStats.totalProfiles,
       icon: <Users />,
     },
     {
       title: "Posts",
-      metric: globalStats.totalPosts.toString(),
+      metric: globalStats.totalPosts,
       icon: <Scroll />,
     },
     {
       title: "Mirrors",
-      metric: globalStats.totalMirrors.toString(),
+      metric: globalStats.totalMirrors,
       icon: <Copy />,
     },
     {
       title: "Comments",
-      metric: globalStats.totalComments.toString(),
+      metric: globalStats.totalComments,
       icon: <MessageSquare />,
     },
   ]
@@ -48,11 +47,7 @@ export default async function StatCards() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {category.metric ? (
-                formatNumber(category.metric)
-              ) : (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
+                {category.metric}
             </div>
           </CardContent>
         </Card>

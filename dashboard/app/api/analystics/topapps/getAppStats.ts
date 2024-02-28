@@ -1,52 +1,52 @@
-import { duckdb } from "@/lib/duckdb"
+import "server-only";
 
-import "server-only"
+import { apps } from "@/config/apps";
 
-import { apps } from "@/config/apps"
-
-import { DateRangeKey, getDateRangeCondition } from "../utils"
+import db from "@/lib/db";
+import { sql } from "drizzle-orm";
+import { DateRangeKey, getDateRangeCondition } from "../utils";
 
 export async function getTotalApps() {
-  const result = await duckdb.all(
-    `SELECT COUNT(DISTINCT app) AS count FROM publication_metadata;`
-  )
-  console.log(result)
-  return result[0] ? Number(result[0].count) : 0
+	const result = await db.execute(
+		sql`SELECT COUNT(DISTINCT app) AS count FROM publication_metadata;`,
+	);
+	console.log(result);
+	return result[0] ? Number(result[0].count) : 0;
 }
 
 export type TopApps = {
-  name: string
-  value: number
-  description?: string
-  icon?: string
-  url?: string
-}[]
+	name: string;
+	value: number;
+	description?: string;
+	icon?: string;
+	url?: string;
+}[];
 
 export async function getTopApps(rangeKey: DateRangeKey) {
-  let sql = `
+	let statement = `
   SELECT app AS name, COUNT(*) AS value FROM publication_metadata
-  `
-  sql += getDateRangeCondition(rangeKey, "timestamp")
-  sql += ` GROUP BY name ORDER BY value DESC LIMIT 50;`
+  `;
+	statement += getDateRangeCondition(rangeKey, "timestamp");
+	statement += ` GROUP BY name ORDER BY value DESC LIMIT 50;`;
 
-  const result = await duckdb.all(sql)
+	const result = (await db.execute(sql.raw(statement))) as TopApps;
 
-  // convert bigint to number and check if name is empty
-  result.forEach((r) => {
-    r.value = Number(r.value)
-    if (!r.name) {
-      r.name = "other"
-    }
+	// convert bigint to number and check if name is empty
+	result.forEach((r) => {
+		r.value = Number(r.value);
+		if (!r.name) {
+			r.name = "other";
+		}
 
-    const allApps = apps.find(
-      (app) => app.name.toLowerCase() === r.name.toLowerCase()
-    )
-    if (allApps) {
-      r.description = allApps.description
-      r.icon = allApps.icon
-      r.url = allApps.url
-    }
-  })
+		const allApps = apps.find(
+			(app) => app.name.toLowerCase() === r.name.toLowerCase(),
+		);
+		if (allApps) {
+			r.description = allApps.description;
+			r.icon = allApps.icon;
+			r.url = allApps.url;
+		}
+	});
 
-  return result as TopApps
+	return result as TopApps;
 }

@@ -1,7 +1,8 @@
-import { duckdb } from "@/lib/duckdb"
 
 import "server-only"
 
+import db from "@/lib/db"
+import { sql } from "drizzle-orm"
 import {
   DateRangeKey,
   getDateRangeCondition,
@@ -14,21 +15,21 @@ export type NewProfileStat = {
 }
 
 export async function getDailyNewProfileStats(rangeKey: DateRangeKey) {
-  let sql = `
+  let statement = `
     SELECT 
       DATE_TRUNC('day', block_timestamp)::date as day, 
       COUNT(*) AS newProfiles
     FROM profile_record
   `
 
-  sql += getDateRangeCondition(rangeKey, "block_timestamp")
+  statement += getDateRangeCondition(rangeKey, "block_timestamp")
 
-  sql += `
+  statement += `
     GROUP BY day
     ORDER BY day
   `
 
-  const activities = await duckdb.all(sql)
+  const activities = await db.execute(sql.raw(statement)) as NewProfileStat[]
 
   const chartData = activities.map((a) => ({
     day: new Date(a.day).toLocaleDateString(),
@@ -59,8 +60,8 @@ export async function getProfilesGrowthPercentage(
   )
 
   // Execute queries
-  const currentPeriodData = await duckdb.all(currentPeriodSql)
-  const previousPeriodData = await duckdb.all(previousPeriodSql)
+  const currentPeriodData = await db.execute(sql.raw(currentPeriodSql))
+  const previousPeriodData = await db.execute(sql.raw(previousPeriodSql))
 
   // Extract total counts
   const currentTotal = Number(currentPeriodData[0].total || 0)

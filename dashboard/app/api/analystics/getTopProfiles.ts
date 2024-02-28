@@ -1,21 +1,21 @@
-import { duckdb } from "@/lib/duckdb"
+import "server-only";
 
-import "server-only"
+import { ProfileFragment } from "@lens-protocol/client";
 
-import { ProfileFragment } from "@lens-protocol/client"
+import { getLenny } from "@/lib/lenny";
+import lensClient from "@/lib/lensclient";
 
-import { getLenny } from "@/lib/lenny"
-import lensClient from "@/lib/lensclient"
-
-import { DateRangeKey, getDateRangeCondition } from "./utils"
+import db from "@/lib/db";
+import { sql } from "drizzle-orm";
+import { DateRangeKey, getDateRangeCondition } from "./utils";
 
 type TopProfile = ProfileFragment & {
-  weighted_score: number
-  lenny_img: string
-}
+	weighted_score: number;
+	lenny_img: string;
+};
 
 export async function getTopProfiles(rangeKey: DateRangeKey = "ALL") {
-  let sql = `
+	let statement = `
   WITH publication_counts AS (
     SELECT profile_id, COUNT(*) AS publication_count
     FROM publication_record
@@ -45,36 +45,36 @@ export async function getTopProfiles(rangeKey: DateRangeKey = "ALL") {
     FULL OUTER JOIN reaction_counts r ON p.profile_id = r.profile_id
     FULL OUTER JOIN mention_counts m ON p.profile_id = m.profile_id
   )
-  `
+  `;
 
-  sql += `
+	statement += `
     SELECT profile_id, publication_count, reaction_count, mention_count, weighted_score
     FROM combined_counts
     ORDER BY weighted_score DESC
     LIMIT 5
-  `
+  `;
 
-  const topProfiles = await duckdb.all(sql)
-  if (!topProfiles.length) return []
+	const topProfiles = (await db.execute(sql.raw(statement))) as any[];
+	if (!topProfiles.length) return [];
 
-  const fetchResults = await lensClient.profile.fetchAll({
-    where: {
-      profileIds: topProfiles.map((c) => c.profile_id),
-    },
-  })
+	const fetchResults = await lensClient.profile.fetchAll({
+		where: {
+			profileIds: topProfiles.map((c) => c.profile_id),
+		},
+	});
 
-  // add weighted score to profiles
-  const profiles = []
+	// add weighted score to profiles
+	const profiles = [];
 
-  for (const profile of fetchResults.items) {
-    const contributor = topProfiles.find((c) => c.profile_id === profile.id)
-    const lennyImg = await getLenny(profile.id)
-    profiles.push({
-      ...profile,
-      lenny_img: lennyImg.image,
-      weighted_score: Math.round(contributor?.weighted_score),
-    })
-  }
+	for (const profile of fetchResults.items) {
+		const contributor = topProfiles.find((c) => c.profile_id === profile.id);
+		const lennyImg = await getLenny(profile.id);
+		profiles.push({
+			...profile,
+			lenny_img: lennyImg.image,
+			weighted_score: Math.round(contributor?.weighted_score),
+		});
+	}
 
-  return profiles as TopProfile[]
+	return profiles as TopProfile[];
 }

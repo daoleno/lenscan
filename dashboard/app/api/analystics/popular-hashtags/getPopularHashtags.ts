@@ -1,46 +1,44 @@
-import { duckdb } from "@/lib/duckdb"
+import db from "@/lib/db";
+import { DateRangeKey, getDateRangeCondition } from "../utils";
 
-import { DateRangeKey, getDateRangeCondition } from "../utils"
-
-import "server-only"
+import { sql } from "drizzle-orm";
+import "server-only";
 
 export type Hashtag = {
-  hashtag: string
-  count: number
-}
+	hashtag: string;
+	count: number;
+};
 
 export async function getAllPopularHashtags(): Promise<{
-  [key in DateRangeKey]?: Hashtag[]
+	[key in DateRangeKey]?: Hashtag[];
 }> {
-  const rangeKeys: DateRangeKey[] = ["1D", "1W", "1M", "3M", "1Y", "ALL"]
-  const allPopularHashtags: { [key in DateRangeKey]?: Hashtag[] } = {}
+	const rangeKeys: DateRangeKey[] = ["1D", "1W", "1M", "3M", "1Y", "ALL"];
+	const allPopularHashtags: { [key in DateRangeKey]?: Hashtag[] } = {};
 
-  for (const rangeKey of rangeKeys) {
-    allPopularHashtags[rangeKey] = await getPopularHashtags(rangeKey)
-  }
+	for (const rangeKey of rangeKeys) {
+		allPopularHashtags[rangeKey] = await getPopularHashtags(rangeKey);
+	}
 
-  return allPopularHashtags
+	return allPopularHashtags;
 }
 
 export async function getPopularHashtags(rangeKey: DateRangeKey = "ALL") {
-  let sql = `
+	let statement = `
     SELECT hashtag, COUNT(*) AS count
     FROM publication_hashtag
-  `
+  `;
 
-  sql += getDateRangeCondition(rangeKey, "timestamp")
+	statement += getDateRangeCondition(rangeKey, "timestamp");
 
-  sql += `
+	statement += `
     GROUP BY hashtag
     ORDER BY count DESC
     LIMIT 20
-  `
+  `;
 
-  const hashtags = await duckdb.all(sql)
-
-  hashtags.forEach((a) => {
-    a.count = Number(a.count)
-  })
-
-  return hashtags as Hashtag[]
+	const hashtags = (await db.execute(sql.raw(statement))) as Hashtag[];
+	return hashtags.map((a) => ({
+		...a,
+		count: Number(a.count),
+	}));
 }

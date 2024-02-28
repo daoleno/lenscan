@@ -1,40 +1,40 @@
-import { duckdb } from "@/lib/duckdb"
+import "server-only";
 
-import "server-only"
-
-import { DateRangeKey, getDateRangeAndCondition } from "../utils"
+import db from "@/lib/db";
+import { sql } from "drizzle-orm";
+import { DateRangeKey, getDateRangeAndCondition } from "../utils";
 
 export type UserActivityStats = {
-  day: string
-  posts: number
-  comments: number
-  mirrors: number
-  upvotes: number
-  downvotes: number
-}
+	day: string;
+	posts: number;
+	comments: number;
+	mirrors: number;
+	upvotes: number;
+	downvotes: number;
+};
 
 export async function getAllUserActivity(): Promise<{
-  [key in DateRangeKey]?: UserActivityStats[]
+	[key in DateRangeKey]?: UserActivityStats[];
 }> {
-  const rangeKeys: DateRangeKey[] = ["1D", "1W", "1M", "3M", "1Y", "ALL"]
-  const allUserActivityStats: { [key in DateRangeKey]?: UserActivityStats[] } =
-    {}
+	const rangeKeys: DateRangeKey[] = ["1D", "1W", "1M", "3M", "1Y", "ALL"];
+	const allUserActivityStats: { [key in DateRangeKey]?: UserActivityStats[] } =
+		{};
 
-  for (const rangeKey of rangeKeys) {
-    allUserActivityStats[rangeKey] = await getUserActivityStats(rangeKey)
-  }
+	for (const rangeKey of rangeKeys) {
+		allUserActivityStats[rangeKey] = await getUserActivityStats(rangeKey);
+	}
 
-  return allUserActivityStats
+	return allUserActivityStats;
 }
 
 export async function getUserActivityStats(
-  rangeKey: DateRangeKey = "ALL",
-  profileId: string | null = null
+	rangeKey: DateRangeKey = "ALL",
+	profileId: string | null = null,
 ) {
-  const groupByProfile = profileId ? ", profile_id" : ""
-  const groupByActionedProfile = profileId ? ", actioned_by_profile_id" : ""
+	const groupByProfile = profileId ? ", profile_id" : "";
+	const groupByActionedProfile = profileId ? ", actioned_by_profile_id" : "";
 
-  const sql = `
+	const statement = `
     WITH publication_stats AS (
       SELECT
         DATE_TRUNC('day', block_timestamp)::date AS day,
@@ -74,22 +74,24 @@ export async function getUserActivityStats(
       publication_stats p
     FULL OUTER JOIN
       reaction_stats r ON p.day = r.day ${
-        profileId ? "AND p.profile_id = r.actioned_by_profile_id" : ""
-      }
+				profileId ? "AND p.profile_id = r.actioned_by_profile_id" : ""
+			}
     ORDER BY
       day;
-    `
+    `;
 
-  const activities = await duckdb.all(sql)
+	const activities = (await db.execute(
+		sql.raw(statement),
+	)) as UserActivityStats[];
 
-  activities.forEach((a) => {
-    a.posts = Number(a.posts)
-    a.comments = Number(a.comments)
-    a.mirrors = Number(a.mirrors)
-    a.upvotes = Number(a.upvotes)
-    a.downvotes = Number(a.downvotes)
-    a.day = new Date(a.day).toLocaleDateString()
-  })
+	activities.forEach((a) => {
+		a.posts = Number(a.posts);
+		a.comments = Number(a.comments);
+		a.mirrors = Number(a.mirrors);
+		a.upvotes = Number(a.upvotes);
+		a.downvotes = Number(a.downvotes);
+		a.day = new Date(a.day).toLocaleDateString();
+	});
 
-  return activities as UserActivityStats[]
+	return activities;
 }

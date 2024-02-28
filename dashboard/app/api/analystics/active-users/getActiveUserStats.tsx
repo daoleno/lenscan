@@ -1,5 +1,5 @@
-import { duckdb } from "@/lib/duckdb"
-
+import db from "@/lib/db"
+import { sql } from "drizzle-orm"
 import {
   DateRangeKey,
   getDateRangeCondition,
@@ -33,20 +33,20 @@ export async function getNetworkUserStats(
 ) {
   const timeUnit = statType === "DAU" ? "day" : "month"
 
-  let sql = `
+  let statement = `
     SELECT 
       DATE_TRUNC('${timeUnit}', block_timestamp)::date as ${timeUnit}, 
       COUNT(DISTINCT CASE WHEN is_momoka THEN profile_id END) AS momoka,
       COUNT(DISTINCT CASE WHEN NOT is_momoka THEN profile_id END) AS polygon
     FROM publication_record
   `
-  sql += getDateRangeCondition(rangeKey, "block_timestamp")
-  sql += `
+  statement += getDateRangeCondition(rangeKey, "block_timestamp")
+  statement += `
     GROUP BY ${timeUnit}
     ORDER BY ${timeUnit}
   `
 
-  const userStats = await duckdb.all(sql)
+  const userStats = await db.execute(sql.raw(statement)) as any[]
 
   const chartData = userStats.map((a) => ({
     time: new Date(a[timeUnit]).toLocaleDateString(),
@@ -77,8 +77,8 @@ export async function getDauGrowthPercentages(rangeKey: DateRangeKey) {
   )
 
   // Execute queries
-  const currentPeriodData = await duckdb.all(currentPeriodSql)
-  const previousPeriodData = await duckdb.all(previousPeriodSql)
+  const currentPeriodData = await db.execute(sql.raw(currentPeriodSql))
+  const previousPeriodData = await db.execute(sql.raw(previousPeriodSql))
 
   // Extract total counts
   const currentTotal = Number(currentPeriodData[0].total || 0)
@@ -148,7 +148,7 @@ export async function getAppUserStats(
     GROUP BY ${timeUnit}, app
     ORDER BY ${timeUnit}, app
   `
-  const userStats = await duckdb.all(userStatsSql)
+  const userStats = await db.execute(sql.raw(userStatsSql)) as any[]
 
   // Initialize the result structure
   const result = {
