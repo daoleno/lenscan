@@ -10,7 +10,6 @@ export async function getTotalApps() {
 	const result = await db.execute(
 		sql`SELECT COUNT(DISTINCT app) AS count FROM publication_metadata;`,
 	);
-	console.log(result);
 	return result[0] ? Number(result[0].count) : 0;
 }
 
