@@ -1,3 +1,3 @@
-const RevalidateTime = 60 * 10 // 10 minutes
+const RevalidateTime = 60 * 30; // 30 minutes
 
-export { RevalidateTime }
+export { RevalidateTime };
