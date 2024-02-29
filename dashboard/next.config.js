@@ -4,11 +4,8 @@ const nextConfig = {
   // Until the @apollo-client fixes the ESM modules support (https://github.com/apollographql/apollo-feature-requests/issues/287)
   // it's required to either transpile the `@lens-protocol` packages or make sure they won't get `imported` during SSR.
   transpilePackages: ["@lens-protocol"],
-  experimental: {
-    serverComponentsExternalPackages: ['duckdb-async', 'duckdb'],
-  },
-
   output: 'standalone',
+  staticPageGenerationTimeout: 1000
 };
 
 module.exports = nextConfig;

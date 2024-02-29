@@ -11,7 +11,7 @@ const queryClient = postgres(
 	process.env.DATABASE_URL ||
 		"postgres://postgres:postgres@localhost:5432/lens_v2",
 	{
-		max: 100,
+		max: 10,
 	},
 );
 

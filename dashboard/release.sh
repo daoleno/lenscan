@@ -14,16 +14,18 @@ read TAG
 # read -s GITHUB_TOKEN # Read the GitHub Token securely
 # echo $GITHUB_TOKEN | docker login $REGISTRY -u daoleno --password-stdin
 
-# Build the Docker image, add --build-arg if needed
+# Ask for the DATABASE_URL
+echo "Please enter the DATABASE_URL:"
+read DATABASE_URL
+
+# Build the Docker image, passing DATABASE_URL as a build argument
 echo "Building the Docker image..."
-docker build -t $REGISTRY/$IMAGE_NAME:$TAG .
+docker build --build-arg DATABASE_URL="$DATABASE_URL" -t $REGISTRY/$IMAGE_NAME:$TAG .
 
 # Push the Docker image to the registry
 echo "Pushing the Docker image..."
 docker push $REGISTRY/$IMAGE_NAME:$TAG
-
 # Log out from the container registry
 # echo "Logging out from the container registry..."
 # docker logout $REGISTRY
-
 echo "Docker image build and push completed."
