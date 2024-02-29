@@ -48,6 +48,7 @@ supported_tables = {
     "publication_record",
     "publication_hashtag",
     "profile_record",
+    "publication_reaction",
 }
 
 

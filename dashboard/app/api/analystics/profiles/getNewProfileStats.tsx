@@ -18,7 +18,7 @@ export async function getDailyNewProfileStats(rangeKey: DateRangeKey) {
   let statement = `
     SELECT 
       DATE_TRUNC('day', block_timestamp)::date as day, 
-      COUNT(*) AS newProfiles
+      COUNT(*) AS "newProfiles"
     FROM profile_record
   `
 
@@ -36,7 +36,7 @@ export async function getDailyNewProfileStats(rangeKey: DateRangeKey) {
     newProfiles: Number(a.newProfiles),
   }))
 
-  return chartData as NewProfileStat[]
+  return chartData
 }
 
 export async function getProfilesGrowthPercentage(

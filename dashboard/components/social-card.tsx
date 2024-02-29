@@ -35,11 +35,6 @@ export default function SocialCard({
       icon: "/apps/tape.png",
     },
     {
-      appName: "U3",
-      url: `https://u3.xyz/u/${profileHandle}.lens`,
-      icon: "/apps/u3.png",
-    },
-    {
       appName: "Polygon",
       url: `https://polygonscan.com/address/${address}`,
       icon: "/apps/polygon.svg",
