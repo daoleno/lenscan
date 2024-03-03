@@ -39,8 +39,6 @@ type getRevenueParams = {
 export default async function getRevenue(params: getRevenueParams) {
 	const { limit, offset, sort, filter } = params;
 
-	console.log("filter", filter);
-
 	const sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : "";
 
 	const conditions = [];
