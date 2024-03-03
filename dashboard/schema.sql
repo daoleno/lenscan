@@ -16,3 +16,16 @@ CREATE INDEX idx_publication_hashtag_hashtag ON publication_hashtag(hashtag);
 
 CREATE INDEX idx_publication_reaction_type ON publication_reaction(type);
 
+-- Indexer tables
+
+CREATE TABLE lens_profile_created_transaction (
+    id SERIAL PRIMARY KEY,
+    block_number BIGINT NOT NULL,
+    block_timestamp TIMESTAMPTZ NOT NULL,
+    transaction_hash TEXT NOT NULL,
+    from_address TEXT NOT NULL,
+    to_address TEXT NOT NULL,
+    value NUMERIC NOT NULL,
+    
+    CONSTRAINT uniq_transaction_hash UNIQUE (transaction_hash)
+);
