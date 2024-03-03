@@ -263,14 +263,16 @@ export const revenueColumns: ColumnDef<Revenue>[] = [
 		),
 		cell: ({ row }) => (
 			<div className="flex items-center gap-1">
-				{["lens", "hey", "orb", "tape", "phaver", "buttrfly"].includes(
+				{["Lens Protocol", "Hey", "Orb", "Tape", "Phaver", "Buttrfly"].includes(
 					row.original.app,
 				) ? (
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger>
 								<Image
-									src={`/apps/${row.original.app.toLowerCase()}.png`}
+									src={`/apps/${row.original.app
+										.toLowerCase()
+										.replace(" ", "-")}.png`}
 									width={44}
 									height={44}
 									alt={row.original.app}

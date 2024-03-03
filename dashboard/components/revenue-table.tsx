@@ -36,12 +36,12 @@ export default async function RevenueTable({
 							id: "app",
 							title: "App",
 							options: [
-								{ label: "Lens", value: "lens" },
-								{ label: "Hey", value: "hey" },
-								{ label: "Orb", value: "orb" },
-								{ label: "Tape", value: "tape" },
-								{ label: "Phaver", value: "phaver" },
-								{ label: "Buttrfly", value: "buttrfly" },
+								{ label: "Lens Protocol", value: "Lens Protocol" },
+								{ label: "Hey", value: "Hey" },
+								{ label: "Orb", value: "Orb" },
+								{ label: "Tape", value: "Tape" },
+								{ label: "Phaver", value: "Phaver" },
+								{ label: "Buttrfly", value: "Buttrfly" },
 							],
 						},
 					]}

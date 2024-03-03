@@ -2,12 +2,12 @@ import db from "@/lib/db";
 import { sql } from "drizzle-orm";
 
 export const permissionlessCreators: Record<string, string> = {
-	"0x0b5e6100243f793e480DE6088dE6bA70aA9f3872": "lens",
-	"0x4b8845ACb8148dE64D1D99Cf27A3890a91F55E53": "hey",
-	"0xac79e9ef69021f9bf7ccb175611f3115ff65a44d": "orb",
-	"0xD0f6d9676d36F5f4AF5765fCb78c388B51577327": "tape",
-	"0x57B7bf6f792a6181Ec5aFB88cE7bcE330a9d1b67": "phaver",
-	"0xE7404472E8C7cEaf15c1cA64d4fe3eA78818fF5a": "buttrfly",
+	"0x0b5e6100243f793e480DE6088dE6bA70aA9f3872": "Lens Protocol",
+	"0x4b8845ACb8148dE64D1D99Cf27A3890a91F55E53": "Hey",
+	"0xac79e9ef69021f9bf7ccb175611f3115ff65a44d": "Orb",
+	"0xD0f6d9676d36F5f4AF5765fCb78c388B51577327": "Tape",
+	"0x57B7bf6f792a6181Ec5aFB88cE7bcE330a9d1b67": "Phaver",
+	"0xE7404472E8C7cEaf15c1cA64d4fe3eA78818fF5a": "Buttrfly",
 };
 
 export type Revenue = {
@@ -38,6 +38,8 @@ type getRevenueParams = {
 
 export default async function getRevenue(params: getRevenueParams) {
 	const { limit, offset, sort, filter } = params;
+
+	console.log("filter", filter);
 
 	const sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : "";
 
