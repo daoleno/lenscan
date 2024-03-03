@@ -29,3 +29,7 @@ CREATE TABLE lens_profile_created_transaction (
     
     CONSTRAINT uniq_transaction_hash UNIQUE (transaction_hash)
 );
+
+CREATE INDEX idx_lens_profile_created_trans_to_address_value_timestamp ON lens_profile_created_transaction(to_address, value, block_timestamp DESC);
+CREATE INDEX idx_lens_profile_created_trans_timestamp_to_address_value ON lens_profile_created_transaction(block_timestamp, to_address, value);
+CREATE INDEX idx_lens_profile_created_trans_value_timestamp ON lens_profile_created_transaction(value, block_timestamp DESC);
