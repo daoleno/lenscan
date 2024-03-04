@@ -273,8 +273,8 @@ export const revenueColumns: ColumnDef<Revenue>[] = [
 									src={`/apps/${row.original.app
 										.toLowerCase()
 										.replace(" ", "-")}.png`}
-									width={44}
-									height={44}
+									width={32}
+									height={32}
 									alt={row.original.app}
 									className="rounded-full object-cover"
 								/>
