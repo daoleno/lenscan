@@ -1,7 +1,7 @@
-import { LensClient, production } from "@lens-protocol/client";
+import { LensClient, production } from "@lens-protocol/client"
 
 const lensClient = new LensClient({
-  environment: production,
-});
+	environment: production,
+})
 
-export default lensClient;
+export default lensClient

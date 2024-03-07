@@ -8,8 +8,13 @@
 		"rules": {
 			"recommended": true,
 			"suspicious": {
-				"noExplicitAny": false,
+				"noExplicitAny": "off"
 			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"semicolons": "asNeeded"
 		}
 	}
 }
