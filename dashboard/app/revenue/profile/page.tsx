@@ -22,7 +22,7 @@ const tokens = [
 
 export default async function Page({ searchParams }: PageProps) {
 	const { tab } = searchParams
-	const searchedTab = tab ? tab : "BONSAI"
+	const searchedTab = tab ? tab : "WMATIC"
 
 	const linkBaseClass =
 		"inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
@@ -42,7 +42,7 @@ export default async function Page({ searchParams }: PageProps) {
 					<Link
 						key={token.value}
 						className={getLinkClassName(token.value)}
-						href={`/profile-revenue?tab=${token.value}`}
+						href={`/revenue/profile?tab=${token.value}`}
 					>
 						{token.label}
 					</Link>

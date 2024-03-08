@@ -4,8 +4,8 @@ import AppRevenueCards from "@/components/app-revenue-cards";
 import DailyAppRevenue from "@/components/daily-app-revenue";
 import RevenueTable from "@/components/revenue-table";
 import { RevalidateTime } from "@/config/ssr";
-import { Publication } from "../api/publications/getPublications";
-import getRevenue from "../api/revenue/getRevenue";
+import { Publication } from "../../api/publications/getPublications";
+import getRevenue from "../../api/revenue/getRevenue";
 
 export const revalidate = RevalidateTime;
 
