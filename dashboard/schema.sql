@@ -16,6 +16,8 @@ CREATE INDEX idx_publication_hashtag_hashtag ON publication_hashtag(hashtag);
 
 CREATE INDEX idx_publication_reaction_type ON publication_reaction(type);
 
+CREATE INDEX idx_profile_revenue_record_profile_id_currency_block_timestamp ON profile_revenue_record (profile_id, currency, block_timestamp DESC);
+
 -- Indexer tables
 
 CREATE TABLE lens_profile_created_transaction (

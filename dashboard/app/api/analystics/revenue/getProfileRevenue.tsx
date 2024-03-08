@@ -92,8 +92,6 @@ export default async function getRevenueRecords(
         ${filterCondition} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
     `;
 
-	console.log("statement", statement);
-
 	const revenueRecords = (await db.execute(sql.raw(statement))) as any[];
 
 	if (!revenueRecords.length) {
