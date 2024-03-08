@@ -1,18 +1,18 @@
-import { Suspense } from "react";
+import { Suspense } from "react"
 
-import { RevenueRecord } from "@/app/api/analystics/revenue/getProfileRevenue";
-import { profileRevenueColumns } from "./data-table/columns";
-import { DataTable } from "./data-table/data-table";
-import { DataTableLoading } from "./data-table/data-table-loading";
+import { RevenueRecord } from "@/app/api/analystics/revenue/getProfileRevenue"
+import { profileRevenueColumns } from "./data-table/columns"
+import { DataTable } from "./data-table/data-table"
+import { DataTableLoading } from "./data-table/data-table-loading"
 
 interface ProfileRevenueTableProps {
-	title: string;
-	data: RevenueRecord[];
-	pageCount: number;
-	totalCount?: number;
-	showToolbar?: boolean;
-	showPagination?: boolean;
-	showTitle?: boolean;
+	title: string
+	data: RevenueRecord[]
+	pageCount: number
+	totalCount?: number
+	showToolbar?: boolean
+	showPagination?: boolean
+	showTitle?: boolean
 }
 
 export default async function ProfileRevenueTable({
@@ -56,5 +56,5 @@ export default async function ProfileRevenueTable({
 				/>
 			</Suspense>
 		</div>
-	);
+	)
 }

@@ -1,24 +1,24 @@
-"use client";
+"use client"
 
 import {
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
-import Link from "next/link";
-import * as timeago from "timeago.js";
+} from "@radix-ui/react-tooltip"
+import { ColumnDef } from "@tanstack/react-table"
+import Image from "next/image"
+import Link from "next/link"
+import * as timeago from "timeago.js"
 
-import { Profile } from "@/app/api/profiles/getProfiles";
-import { type Publication } from "@/app/api/publications/getPublications";
-import { shortHash } from "@/lib/utils";
+import { Profile } from "@/app/api/profiles/getProfiles"
+import { type Publication } from "@/app/api/publications/getPublications"
+import { shortHash } from "@/lib/utils"
 
-import { RevenueRecord } from "@/app/api/analystics/revenue/getProfileRevenue";
-import { Revenue } from "@/app/api/revenue/getRevenue";
-import { formatEther, formatUnits } from "viem";
-import { Tooltip } from "../ui/tooltip";
-import { DataTableColumnHeader } from "./data-table-column-header";
+import { RevenueRecord } from "@/app/api/analystics/revenue/getProfileRevenue"
+import { Revenue } from "@/app/api/revenue/getRevenue"
+import { formatEther, formatUnits } from "viem"
+import { Tooltip } from "../ui/tooltip"
+import { DataTableColumnHeader } from "./data-table-column-header"
 
 export const publicationColumns: ColumnDef<Publication>[] = [
 	{
@@ -134,7 +134,7 @@ export const publicationColumns: ColumnDef<Publication>[] = [
 			<div>{timeago.format(row.getValue("block_timestamp"))}</div>
 		),
 	},
-];
+]
 
 export const profileColumns: ColumnDef<Profile>[] = [
 	{
@@ -216,7 +216,7 @@ export const profileColumns: ColumnDef<Profile>[] = [
 			<div>{timeago.format(row.getValue("block_timestamp"))}</div>
 		),
 	},
-];
+]
 
 export const revenueColumns: ColumnDef<Revenue>[] = [
 	{
@@ -310,7 +310,7 @@ export const revenueColumns: ColumnDef<Revenue>[] = [
 			<div>{timeago.format(row.getValue("block_timestamp"))}</div>
 		),
 	},
-];
+]
 
 export const profileRevenueColumns: ColumnDef<RevenueRecord>[] = [
 	{
@@ -332,6 +332,26 @@ export const profileRevenueColumns: ColumnDef<RevenueRecord>[] = [
 				className="underline"
 			>
 				{shortHash(row.original.tx_hash)}
+			</Link>
+		),
+		enableSorting: false,
+	},
+	{
+		accessorKey: "profile_id",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Profile" />
+		),
+		cell: ({ row }) => (
+			<Link
+				className="flex items-center gap-2"
+				href={`/profile/${row.original.profile_id}`}
+			>
+				<img
+					src={row.original.profile_picture || "/images/default-profile.png"}
+					alt={row.original.profile_handle}
+					className="h-8 w-8 rounded-full object-cover"
+				/>
+				<div className="underline">{row.original.profile_handle}</div>
 			</Link>
 		),
 		enableSorting: false,
@@ -372,4 +392,4 @@ export const profileRevenueColumns: ColumnDef<RevenueRecord>[] = [
 			<div>{timeago.format(row.getValue("block_timestamp"))}</div>
 		),
 	},
-];
+]

@@ -1,4 +1,4 @@
-import * as z from "zod";
+import * as z from "zod"
 
 export const searchParamsSchema = z.object({
 	page: z.string().default("1"),
@@ -8,7 +8,7 @@ export const searchParamsSchema = z.object({
 	publication_type: z.string().optional(),
 	is_momoka: z.string().optional(),
 	profile_id: z.string().optional(),
-});
+})
 
 export const searchProfileRevenueParamsSchema = z.object({
 	page: z.string().default("1"),
@@ -16,4 +16,4 @@ export const searchProfileRevenueParamsSchema = z.object({
 	sort: z.string().optional(),
 	profile_id: z.string().optional(),
 	currency_symbol: z.string().optional(),
-});
+})
