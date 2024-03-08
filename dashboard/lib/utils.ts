@@ -1,92 +1,94 @@
 import {
 	NftImageFragment,
 	ProfilePictureSetFragment,
-} from "@lens-protocol/client";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-import * as timeago from "timeago.js";
-import { formatUnits } from "viem";
+} from "@lens-protocol/client"
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+import * as timeago from "timeago.js"
+import { formatUnits } from "viem"
 
 export function shortHash(hash: string | undefined, length = 10) {
 	if (!hash) {
-		return "-";
+		return "-"
 	}
-	return `${hash.slice(0, length)}...`;
+	return `${hash.slice(0, length)}...`
 }
 
 export function age(ts: number | undefined | null) {
 	if (!ts) {
-		return "-";
+		return "-"
 	}
-	return timeago.format(ts * 1000);
+	return timeago.format(ts * 1000)
 }
 
 export function cn(...inputs: ClassValue[]) {
-	return twMerge(clsx(inputs));
+	return twMerge(clsx(inputs))
 }
 
 export function formatNumber(n: number | string) {
 	const formatter = new Intl.NumberFormat("en-US", {
 		maximumFractionDigits: 2,
-	});
-	return formatter.format(Number(n));
+	})
+	return formatter.format(Number(n))
 }
 
 // format any POST_CREATED style to PostCreated style
 export function formatEventType(type: string | null) {
 	if (!type) {
-		return "-";
+		return "-"
 	}
 	return type
 		.split("_")
 		.map((w) => w[0] + w.slice(1).toLowerCase())
-		.join("");
+		.join("")
 }
 
-const ipfsGateway = "https://lens.infura-ipfs.io";
+const ipfsGateway = "https://lens.infura-ipfs.io"
 
 export function processIPFSURL(uri: string | null | undefined) {
 	if (uri && uri.startsWith("ipfs://")) {
-		const cid = uri.replace("ipfs://", "");
-		return `${ipfsGateway}/ipfs/${cid}`;
+		const cid = uri.replace("ipfs://", "")
+		return `${ipfsGateway}/ipfs/${cid}`
 	}
-	return uri;
+	return uri
 }
 
 export function getIPFSURL(
 	picture: ProfilePictureSetFragment | NftImageFragment | string | null,
 ) {
 	if (typeof picture === "string") {
-		return processIPFSURL(picture);
+		return processIPFSURL(picture)
 	}
 
-	let uri;
+	let uri
 	if (!picture) {
-		return uri;
+		return uri
 	}
 
 	if (picture.__typename === "ImageSet") {
-		uri = picture?.optimized?.uri;
+		uri = picture?.optimized?.uri
 	}
 	if (picture.__typename === "NftImage") {
-		uri = picture.image.optimized?.uri;
+		uri = picture.image.optimized?.uri
 	}
 
-	return processIPFSURL(uri);
+	return processIPFSURL(uri)
 }
 
-export function isPublicationId(input: string): boolean {
-	// Define the regex pattern to match the ID formats
-	const pattern =
-		/^0x[0-9A-Fa-f]+-0x[0-9A-Fa-f]+(-[0-9A-Fa-fDA]+-[0-9A-Fa-f]+)?$/;
+export function extractPublicationId(input: string) {
+	// Define the regex pattern to match the ID formats within different input types
+	const pattern = /0x[0-9A-Fa-f]+-0x[0-9A-Fa-f]+(-[0-9A-Fa-fDA]+-[0-9A-Fa-f]+)?/
 
-	// Test the input against the pattern
-	return pattern.test(input);
+	// Use the pattern to search for a match in the input
+	const match = input.match(pattern)
+
+	// If a match is found, return the matched publicationId, else return null
+	return match ? match[0] : null
 }
 
 export function formatCryptoValue(value: bigint, decimals: number) {
 	// Assuming formatUnits converts the value based on the provided decimals
-	const number = parseFloat(formatUnits(value, decimals));
+	const number = parseFloat(formatUnits(value, decimals))
 
 	// Format the number with thousands separator and fixed decimal places
 	// Adjust minimumFractionDigits and maximumFractionDigits as needed
@@ -94,5 +96,5 @@ export function formatCryptoValue(value: bigint, decimals: number) {
 		style: "decimal",
 		minimumFractionDigits: 0, // Minimum number of decimal places to show
 		maximumFractionDigits: 6, // Maximum number of decimal places to show
-	}).format(number);
+	}).format(number)
 }

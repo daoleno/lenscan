@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 import { Input } from "@/components/ui/input"
-import { isPublicationId } from "@/lib/utils"
+import { extractPublicationId } from "@/lib/utils"
 
 export function Search() {
 	const [input, setInput] = useState("")
@@ -13,8 +13,9 @@ export function Search() {
 		e.preventDefault()
 		if (input === "") return
 
-		if (isPublicationId(input)) {
-			router.push(`/publication/${input}`)
+		const pubId = extractPublicationId(input)
+		if (pubId) {
+			router.push(`/publication/${pubId}`)
 			return
 		}
 
@@ -25,7 +26,7 @@ export function Search() {
 		<form onSubmit={handleSearch}>
 			<Input
 				type="search"
-				placeholder="Search for a profile"
+				placeholder="Search for a profile or publication"
 				className="h-9 md:w-[100px] lg:w-[300px]"
 				onInput={(e) => setInput(e.currentTarget.value)}
 			/>
