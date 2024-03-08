@@ -51,6 +51,7 @@ supported_tables = {
     "publication_reaction",
     "profile_revenue",
     "profile_revenue_record",
+    "enabled_currency",
 }
 
 

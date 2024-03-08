@@ -13,6 +13,7 @@ interface PublicationsTableProps {
 	totalCount?: number;
 	showToolbar?: boolean;
 	showPagination?: boolean;
+	showTitle?: boolean;
 }
 
 export default async function PublicationsTable({
@@ -22,10 +23,13 @@ export default async function PublicationsTable({
 	totalCount,
 	showToolbar,
 	showPagination,
+	showTitle = true,
 }: PublicationsTableProps) {
 	return (
 		<div className="my-3 flex-1 flex-col gap-3 md:flex">
-			<h2 className="p-3 text-3xl font-bold tracking-tight">{title}</h2>
+			{showTitle && (
+				<h2 className="p-3 text-3xl font-bold tracking-tight">{title}</h2>
+			)}
 			<Suspense fallback={<DataTableLoading columnCount={6} rowCount={10} />}>
 				<DataTable
 					columns={publicationColumns}
@@ -63,13 +67,6 @@ export default async function PublicationsTable({
 							options: [{ label: "Momoka", value: "true" }],
 						},
 					]}
-					// // Render dynamic searchable filters
-					// searchableColumns={[
-					//   {
-					//     id: "title",
-					//     title: "titles",
-					//   },
-					// ]}
 				/>
 			</Suspense>
 		</div>

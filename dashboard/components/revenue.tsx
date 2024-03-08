@@ -1,10 +1,10 @@
-import getPublications, {
-	Publication,
-} from "@/app/api/publications/getPublications";
-import PublicationsTable from "@/components/publications-table";
-import { searchParamsSchema } from "@/lib/validations/params";
+import getRevenueRecords, {
+	RevenueRecord,
+} from "@/app/api/analystics/revenue/getProfileRevenue";
+import { searchProfileRevenueParamsSchema } from "@/lib/validations/params";
+import ProfileRevenueTable from "./profile-revenue-table ";
 
-export interface PublicationsProps {
+export interface RevenueProps {
 	title?: string;
 	searchParams: {
 		[key: string]: string | string[] | undefined;
@@ -13,15 +13,15 @@ export interface PublicationsProps {
 	showPagination?: boolean;
 	showTitle?: boolean;
 }
-export default async function Publications({
-	title = "Publications",
+export default async function Revenue({
+	title = "Revenue",
 	searchParams,
 	showToolbar,
 	showPagination,
 	showTitle = true,
-}: PublicationsProps) {
-	const { page, per_page, sort, app, publication_type, is_momoka, profile_id } =
-		searchParamsSchema.parse(searchParams);
+}: RevenueProps) {
+	const { page, per_page, sort, profile_id, currency_symbol } =
+		searchProfileRevenueParamsSchema.parse(searchParams);
 	const pageAsNumber = Number(page);
 	const fallbackPage =
 		isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber;
@@ -29,12 +29,12 @@ export default async function Publications({
 	const limit = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
 	const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0;
 	const [column, order] = (sort?.split(".") as [
-		keyof Publication | undefined,
+		keyof RevenueRecord | undefined,
 		"asc" | "desc" | undefined,
 	]) ?? ["block_timestamp", "desc"];
-	const apps = app?.split(".") ?? [];
-	const publication_types = publication_type?.split(".") ?? [];
-	const { publications, totalCount } = await getPublications({
+	const symbols = currency_symbol?.split(".") ?? [];
+	const profileIds = profile_id?.split(".") ?? [];
+	const { revenueRecords, totalCount } = await getRevenueRecords({
 		limit,
 		offset,
 		sort: {
@@ -42,18 +42,16 @@ export default async function Publications({
 			order,
 		},
 		filter: {
-			app: apps,
-			publication_type: publication_types,
-			is_momoka: is_momoka,
-			profile_id: profile_id ? [profile_id] : undefined,
+			profile_id: profileIds,
+			symbol: symbols,
 		},
 	});
 	const maxCount = totalCount ?? 1000000;
 	const pageCount = Math.ceil(Number(maxCount) / limit);
 	return (
-		<PublicationsTable
+		<ProfileRevenueTable
 			title={title}
-			data={publications}
+			data={revenueRecords}
 			pageCount={pageCount}
 			totalCount={maxCount}
 			showToolbar={showToolbar}

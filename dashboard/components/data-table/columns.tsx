@@ -14,8 +14,9 @@ import { Profile } from "@/app/api/profiles/getProfiles";
 import { type Publication } from "@/app/api/publications/getPublications";
 import { shortHash } from "@/lib/utils";
 
+import { RevenueRecord } from "@/app/api/analystics/revenue/getProfileRevenue";
 import { Revenue } from "@/app/api/revenue/getRevenue";
-import { formatEther } from "viem";
+import { formatEther, formatUnits } from "viem";
 import { Tooltip } from "../ui/tooltip";
 import { DataTableColumnHeader } from "./data-table-column-header";
 
@@ -297,6 +298,68 @@ export const revenueColumns: ColumnDef<Revenue>[] = [
 		),
 		cell: ({ row }) => (
 			<div>{formatEther(BigInt(row.original.value))} MATIC</div>
+		),
+		enableSorting: false,
+	},
+	{
+		accessorKey: "block_timestamp",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Age" />
+		),
+		cell: ({ row }) => (
+			<div>{timeago.format(row.getValue("block_timestamp"))}</div>
+		),
+	},
+];
+
+export const profileRevenueColumns: ColumnDef<RevenueRecord>[] = [
+	{
+		accessorKey: "block_number",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Block" />
+		),
+		cell: ({ row }) => <div>{row.getValue("block_number")}</div>,
+		enableSorting: false,
+	},
+	{
+		accessorKey: "tx_hash",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Tx Hash" />
+		),
+		cell: ({ row }) => (
+			<Link
+				href={`https://polygonscan.com/tx/${row.original.tx_hash}`}
+				className="underline"
+			>
+				{shortHash(row.original.tx_hash)}
+			</Link>
+		),
+		enableSorting: false,
+	},
+	{
+		accessorKey: "amount",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Revenue" />
+		),
+		cell: ({ row }) =>
+			formatUnits(row.original.amount, row.original.currency_decimals),
+		enableSorting: false,
+	},
+	{
+		accessorKey: "currency_symbol",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Symbol" />
+		),
+		cell: ({ row }) => (
+			<div className="flex items-center gap-1">
+				<Image
+					src={`/tokens/${row.original.currency_symbol.toLowerCase()}.svg`}
+					width={24}
+					height={24}
+					alt={row.original.currency_symbol}
+				/>
+				<p>{row.original.currency_symbol}</p>
+			</div>
 		),
 		enableSorting: false,
 	},
