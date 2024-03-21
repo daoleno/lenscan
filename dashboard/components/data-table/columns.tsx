@@ -82,6 +82,7 @@ export const publicationColumns: ColumnDef<Publication>[] = [
 					"orb",
 					"t2",
 					"buttrfly",
+					"kaira",
 					"dumpling",
 				].includes(row.original.app) ? (
 					<TooltipProvider>
