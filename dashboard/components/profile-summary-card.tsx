@@ -1,4 +1,4 @@
-import { ProfileFragment } from "@lens-protocol/client";
+import type { ProfileFragment } from "@lens-protocol/client";
 import {
 	ActivityIcon,
 	CheckCircle2,
@@ -12,7 +12,7 @@ import Balance from "react-wrap-balancer";
 
 import { formatCryptoValue, getIPFSURL } from "@/lib/utils";
 
-import { ProfileRevenue } from "@/app/api/analystics/revenue/getProfileRevenue";
+import type { ProfileRevenue } from "@/app/api/analystics/revenue/getProfileRevenue";
 import Image from "next/image";
 import UserActivity from "./charts/user-activity";
 import LennyCard from "./lenny-card";
