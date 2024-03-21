@@ -170,22 +170,39 @@ export async function getTotalProfileRevenueBySymbol(
 	symbol: string,
 ): Promise<TotalProfileRevenue> {
 	const statement = `
-	SELECT
-		ec.symbol AS token_symbol,
-		ec.name AS token_name,
-		ec.decimals AS token_decimals,
-		ec.currency AS token_address,
-		SUM(CAST(prr.amount AS numeric)) AS total_revenue
-	FROM
-		profile_revenue_record prr
-	JOIN
-		enabled_currency ec
-	ON
-		prr.currency = ec.currency
-	WHERE
-		ec.symbol = '${symbol}'
-	GROUP BY
-		ec.symbol, ec.name, ec.decimals, ec.currency; 
+		SELECT
+            ec.symbol AS token_symbol,
+            ec.name AS token_name,
+            ec.decimals AS token_decimals,
+            ec.currency AS token_address,
+            SUM(poamh.amount::numeric * act.count) AS total_revenue
+        FROM
+            enabled_currency ec
+        JOIN
+            publication_open_action_module_history poamh
+        ON
+            ec.currency = poamh.currency
+        JOIN (
+            SELECT 
+                poamh_inner.history_id, 
+                COUNT(*) AS count
+            FROM 
+                publication_open_action_module_acted_record poamr
+            JOIN 
+                publication_open_action_module_history poamh_inner 
+            ON 
+                poamr.history_id = poamh_inner.history_id
+            WHERE 
+                poamh_inner.currency = (SELECT currency FROM enabled_currency WHERE symbol = '${symbol}')
+            GROUP BY 
+                poamh_inner.history_id
+        ) act 
+        ON 
+            act.history_id = poamh.history_id
+        WHERE
+            ec.symbol = '${symbol}'
+        GROUP BY
+            ec.symbol, ec.name, ec.decimals, ec.currency
 	`
 
 	const result = await db.execute(sql.raw(statement))
@@ -203,22 +220,43 @@ export async function getTotalDailyRevenueBySymbol(
 	symbol: string,
 ): Promise<TotalDailyRevenue[]> {
 	const statement = `
-	SELECT
-		ec.symbol AS token_symbol,
-		DATE_TRUNC('day', prr.block_timestamp) AS day,
-		SUM(CAST(prr.amount AS numeric) / POWER(10, ec.decimals)) AS amount
-	FROM
-		profile_revenue_record prr
-	JOIN
-		enabled_currency ec
-	ON
-		prr.currency = ec.currency
-	WHERE
-		ec.symbol = '${symbol}'
-	GROUP BY
-		day, ec.symbol
-	ORDER BY
-		day ASC, ec.symbol ASC;
+		SELECT
+            ec.symbol AS token_symbol,
+            DATE_TRUNC('day', poamh.block_timestamp) AS day,
+            SUM(poamh.amount::numeric * act.count) / POWER(10, MAX(ec.decimals)) AS amount
+        FROM
+            publication_open_action_module_history poamh
+        JOIN
+            enabled_currency ec
+        ON
+            poamh.currency = ec.currency
+        JOIN (
+            SELECT 
+                poamh_inner.history_id, 
+                COUNT(*) AS count
+            FROM 
+                publication_open_action_module_acted_record poamr
+            JOIN 
+                publication_open_action_module_history poamh_inner 
+            ON 
+                poamr.history_id = poamh_inner.history_id
+            JOIN
+                enabled_currency ec_inner
+            ON
+                poamh_inner.currency = ec_inner.currency
+            WHERE 
+                ec_inner.symbol = '${symbol}'
+            GROUP BY 
+                poamh_inner.history_id
+        ) act 
+        ON 
+            act.history_id = poamh.history_id
+        WHERE
+            ec.symbol = '${symbol}'
+        GROUP BY
+            day, ec.symbol
+        ORDER BY
+            day ASC;
 	`
 
 	const result = (await db.execute(sql.raw(statement))) as TotalDailyRevenue[]
