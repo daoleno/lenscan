@@ -51,7 +51,10 @@ supported_tables = {
     "publication_reaction",
     "profile_revenue",
     "profile_revenue_record",
+    "publication_open_action_module_acted_record",
+    "publication_open_action_module_history",
     "enabled_currency",
+    "machine_learning_quality_profiles",
 }
 
 

@@ -16,8 +16,13 @@ CREATE INDEX idx_publication_hashtag_hashtag ON publication_hashtag(hashtag);
 
 CREATE INDEX idx_publication_reaction_type ON publication_reaction(type);
 
-CREATE INDEX idx_profile_revenue_record_profile_id_currency_block_timestamp ON profile_revenue_record (profile_id, currency, block_timestamp DESC);
 
+CREATE INDEX idx_poamh_currency ON public.publication_open_action_module_history (currency);
+CREATE INDEX idx_poamh_history_id ON public.publication_open_action_module_history (history_id);
+CREATE INDEX idx_poamr_acted_profile_id ON public.publication_open_action_module_acted_record (acted_profile_id);
+CREATE INDEX idx_poamr_history_id ON public.publication_open_action_module_acted_record (history_id);
+CREATE INDEX idx_poamr_block_timestamp ON public.publication_open_action_module_acted_record (block_timestamp DESC);
+CREATE INDEX idx_poamr_transaction_executor ON public.publication_open_action_module_acted_record (transaction_executor);
 -- Indexer tables
 
 CREATE TABLE lens_profile_created_transaction (

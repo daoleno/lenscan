@@ -75,28 +75,33 @@ export async function getRevenueRecords(
 
 	const sortOrder = sort ? `ORDER BY ${sort.column} ${sort.order}` : ""
 
-	const conditions = []
+	const conditions = ["COALESCE(amount::numeric, 0) > 0"]
 	if (filter) {
 		if (filter.profile_id && filter.profile_id.length > 0) {
-			conditions.push(`prr.profile_id IN ('${filter.profile_id.join("','")}')`)
+			conditions.push(`pr.profile_id IN ('${filter.profile_id.join("','")}')`)
 		}
 
 		if (filter.symbol && filter.symbol.length > 0) {
-			// Filter based on currency symbol
 			conditions.push(`ec.symbol IN ('${filter.symbol.join("','")}')`)
 		}
 	}
 
 	const filterCondition = conditions.length
-		? " WHERE " + conditions.join(" AND ")
+		? ` WHERE ${conditions.join(" AND ")}`
 		: ""
-	const statement = `
-        SELECT prr.*, ec.name AS currency_name, ec.symbol AS currency_symbol, ec.decimals AS currency_decimals
-        FROM profile_revenue_record prr
-        JOIN enabled_currency ec ON prr.currency = ec.currency
-        ${filterCondition} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
-    `
 
+	const statement = `
+        SELECT pr.profile_id, poamh.currency, poamr.tx_hash, poamr.block_hash, 
+               poamr.block_number, poamr.log_index, poamr.tx_index, poamr.block_timestamp, 
+               poamh.amount, ec.name AS currency_name, ec.symbol AS currency_symbol, ec.decimals AS currency_decimals
+        FROM publication_open_action_module_history poamh
+        JOIN publication_record pr ON poamh.publication_id = pr.publication_id
+        JOIN publication_open_action_module_acted_record poamr ON poamr.history_id = poamh.history_id
+        LEFT JOIN enabled_currency ec ON poamh.currency = ec.currency
+        ${filterCondition}
+        ${sortOrder} 
+        LIMIT ${limit} OFFSET ${offset}
+    `
 	const revenueRecords = (await db.execute(sql.raw(statement))) as any[]
 
 	if (!revenueRecords.length) {
@@ -123,7 +128,15 @@ export async function getRevenueRecords(
 	}
 
 	// Get total count if we have profile_id filter
-	const countStatement = `SELECT COUNT(*) AS count FROM profile_revenue_record prr JOIN enabled_currency ec ON prr.currency = ec.currency ${filterCondition}`
+	const countStatement = `
+		SELECT COUNT(*) AS count
+		FROM publication_open_action_module_acted_record poamr
+		JOIN publication_open_action_module_history poamh ON poamr.history_id = poamh.history_id
+		JOIN publication_record pr ON poamh.publication_id = pr.publication_id  -- 加入这一行
+		LEFT JOIN enabled_currency ec ON poamh.currency = ec.currency
+		${filterCondition}
+    `
+
 	const result = (await db.execute(sql.raw(countStatement))) as any[]
 	const totalCount = result[0].count
 
