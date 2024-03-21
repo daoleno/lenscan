@@ -18,18 +18,29 @@ export async function getProfileRevenue(
 	profileId: string,
 ): Promise<ProfileRevenue[]> {
 	const statement = `
-    SELECT 
-        prr.profile_id, 
-        prr.currency, 
-        SUM(CAST(prr.amount AS numeric)) AS total_revenue, 
-        ec.name AS currency_name, 
-        ec.symbol AS currency_symbol, 
-        ec.decimals
-    FROM profile_revenue_record prr
-    JOIN enabled_currency ec ON prr.currency = ec.currency
-    WHERE prr.profile_id = '${profileId}'
-    GROUP BY prr.profile_id, prr.currency, ec.name, ec.symbol, ec.decimals
-    ORDER BY total_revenue DESC
+		SELECT 
+            pr.profile_id,
+            poamh.currency, 
+            SUM(COALESCE(NULLIF(poamh.amount, '')::numeric, 0) * act.count) AS total_revenue,
+            ec.name AS currency_name, 
+            ec.symbol AS currency_symbol, 
+            ec.decimals
+        FROM publication_record pr
+        JOIN publication_open_action_module_history poamh ON pr.publication_id = poamh.publication_id
+        JOIN (
+            SELECT 
+                poamh_inner.history_id, 
+                COUNT(*) AS count
+            FROM publication_open_action_module_acted_record poamr_inner
+            JOIN publication_open_action_module_history poamh_inner ON poamr_inner.history_id = poamh_inner.history_id
+            JOIN publication_record pr_inner ON poamh_inner.publication_id = pr_inner.publication_id
+            WHERE pr_inner.profile_id = '${profileId}'
+            GROUP BY poamh_inner.history_id
+        ) act ON act.history_id = poamh.history_id
+        JOIN enabled_currency ec ON poamh.currency = ec.currency
+        WHERE pr.profile_id = '${profileId}'
+        GROUP BY pr.profile_id, poamh.currency, ec.name, ec.symbol, ec.decimals
+        ORDER BY total_revenue DESC
 	`
 
 	return await db.execute(sql.raw(statement))
@@ -54,6 +65,7 @@ type getRevenueRecordsParams = {
 
 export type RevenueRecord = {
 	profile_id: string
+	publication_id: string
 	profile_handle: string
 	profile_picture: string
 	currency: string
@@ -91,7 +103,7 @@ export async function getRevenueRecords(
 		: ""
 
 	const statement = `
-        SELECT pr.profile_id, poamh.currency, poamr.tx_hash, poamr.block_hash, 
+        SELECT pr.profile_id, pr.publication_id, poamh.currency, poamr.tx_hash, poamr.block_hash, 
                poamr.block_number, poamr.log_index, poamr.tx_index, poamr.block_timestamp, 
                poamh.amount, ec.name AS currency_name, ec.symbol AS currency_symbol, ec.decimals AS currency_decimals
         FROM publication_open_action_module_history poamh
@@ -132,7 +144,7 @@ export async function getRevenueRecords(
 		SELECT COUNT(*) AS count
 		FROM publication_open_action_module_acted_record poamr
 		JOIN publication_open_action_module_history poamh ON poamr.history_id = poamh.history_id
-		JOIN publication_record pr ON poamh.publication_id = pr.publication_id  -- 加入这一行
+		JOIN publication_record pr ON poamh.publication_id = pr.publication_id
 		LEFT JOIN enabled_currency ec ON poamh.currency = ec.currency
 		${filterCondition}
     `

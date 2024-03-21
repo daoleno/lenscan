@@ -19,6 +19,7 @@ CREATE INDEX idx_publication_reaction_type ON publication_reaction(type);
 
 CREATE INDEX idx_poamh_currency ON public.publication_open_action_module_history (currency);
 CREATE INDEX idx_poamh_history_id ON public.publication_open_action_module_history (history_id);
+CREATE INDEX idx_poamh_publication_id ON public.publication_open_action_module_history (publication_id);
 CREATE INDEX idx_poamr_acted_profile_id ON public.publication_open_action_module_acted_record (acted_profile_id);
 CREATE INDEX idx_poamr_history_id ON public.publication_open_action_module_acted_record (history_id);
 CREATE INDEX idx_poamr_block_timestamp ON public.publication_open_action_module_acted_record (block_timestamp DESC);

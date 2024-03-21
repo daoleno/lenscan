@@ -337,6 +337,21 @@ export const profileRevenueColumns: ColumnDef<RevenueRecord>[] = [
 		enableSorting: false,
 	},
 	{
+		accessorKey: "publication_id",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Publication" />
+		),
+		cell: ({ row }) => (
+			<Link
+				className="underline"
+				href={`/publication/${row.original.publication_id}`}
+			>
+				{row.original.publication_id}
+			</Link>
+		),
+		enableSorting: false,
+	},
+	{
 		accessorKey: "profile_id",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="Profile" />
