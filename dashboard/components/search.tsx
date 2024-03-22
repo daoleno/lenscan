@@ -19,6 +19,16 @@ export function Search() {
 			return
 		}
 
+		// if it's a number start with #, try to convert it to hex and navigate to profile
+		if (input.startsWith("#")) {
+			const hexNumber = Number.parseInt(input.slice(1), 10)
+			let hex = hexNumber.toString(16)
+			// Ensure hex value has even length by padding with a leading zero if necessary
+			hex = hex.length % 2 === 0 ? hex : `0${hex}`
+			router.push(`/profile/0x${hex}`)
+			return
+		}
+
 		router.push(`/profile/${input}`)
 	}
 
