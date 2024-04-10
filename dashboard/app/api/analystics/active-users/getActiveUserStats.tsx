@@ -141,7 +141,7 @@ export async function getAppUserStats(
     SELECT 
         DATE_TRUNC('${timeUnit}', action_date)::date as ${timeUnit},
         app, 
-        COUNT(DISTINCT profile_id) AS dau
+        COUNT(DISTINCT profile_id) AS users
     FROM (
         SELECT 
             block_timestamp as action_date, 
