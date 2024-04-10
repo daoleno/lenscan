@@ -136,41 +136,31 @@ export async function getAppUserStats(
 ) {
 	const timeUnit = statType === "DAU" ? "day" : "month"
 
-	// Base SQL for fetching user stats per app for each time unit
-	// Data from publication_record
-	let userStatsSql = `
-    (
-      SELECT 
-        DATE_TRUNC('${timeUnit}', block_timestamp)::date as ${timeUnit}, 
+	// Base SQL for fetching combined user stats per app for each time unit
+	const userStatsSql = `
+    SELECT 
+        DATE_TRUNC('${timeUnit}', action_date)::date as ${timeUnit},
         app, 
-        'publication' as source,
-        COUNT(DISTINCT profile_id) AS users
-      FROM publication_record
-      ${getDateRangeCondition(rangeKey, "block_timestamp")}
-      GROUP BY ${timeUnit}, app
-    )
-  `
-
-	// Extending to include data from publication_reaction
-	userStatsSql += `
-    UNION ALL
-    (
-      SELECT
-        DATE_TRUNC('${timeUnit}', action_at)::date as ${timeUnit}, 
-        app, 
-        'reaction' as source,
-        COUNT(DISTINCT actioned_by_profile_id) AS users
-      FROM publication_reaction
-      WHERE app IS NOT NULL
-      ${getDateRangeAndCondition(rangeKey, "action_at")}
-      GROUP BY ${timeUnit}, app
-    )
-  `
-	userStatsSql += `
+        COUNT(DISTINCT profile_id) AS dau
+    FROM (
+        SELECT 
+            block_timestamp as action_date, 
+            app, 
+            profile_id
+        FROM publication_record
+        ${getDateRangeCondition(rangeKey, "block_timestamp")}
+        UNION ALL
+        SELECT 
+            action_at as action_date, 
+            app, 
+            actioned_by_profile_id AS profile_id
+        FROM publication_reaction
+        WHERE app IS NOT NULL
+        ${getDateRangeAndCondition(rangeKey, "action_at")}
+    ) AS combined
+    GROUP BY ${timeUnit}, app
     ORDER BY ${timeUnit}, app
-  `
-
-	console.log("userStatsSql", userStatsSql)
+    `
 
 	const userStats = (await db.execute(sql.raw(userStatsSql))) as any[]
 
