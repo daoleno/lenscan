@@ -11,10 +11,14 @@ CREATE INDEX idx_publication_record_publication_id ON publication_record(publica
 CREATE INDEX idx_publication_record_publication_type ON publication_record(publication_type);
 CREATE INDEX idx_publication_record_block_timestamp ON publication_record(block_timestamp);
 CREATE INDEX idx_publication_record_profile_id_block_timestamp ON publication_record(profile_id, block_timestamp DESC);
+CREATE INDEX idx_publication_record_app ON publication_record(app);
 
 CREATE INDEX idx_publication_hashtag_hashtag ON publication_hashtag(hashtag);
 
 CREATE INDEX idx_publication_reaction_type ON publication_reaction(type);
+CREATE INDEX idx_publication_reaction_action_at ON publication_reaction(action_at);
+CREATE INDEX idx_publication_reaction_app ON publication_reaction(app);
+CREATE INDEX idx_publication_reaction_actioned_by_profile_id ON publication_reaction(actioned_by_profile_id);
 
 
 CREATE INDEX idx_poamh_currency ON public.publication_open_action_module_history (currency);
