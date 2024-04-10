@@ -57,8 +57,20 @@ export const recommendedApps = [
 	{
 		name: "Yup",
 		description: "Decentralized Social All-In-One",
-		icon: "/apps/yup.svg",
+		icon: "/apps/yup.png",
 		url: "https://yup.io/",
+	},
+	{
+		name: "Lenspeer",
+		description: "Lenspeer is an All-in-One decentralized social media platform",
+		icon: "/apps/lenspeer.png",
+		url: "https://lenspeer.com/",
+	},
+	{
+		name: "bloomers.tv",
+		description: "Live Streaming Platform on Lens",
+		icon: "/apps/bloomers.png",
+		url: "https://bloomers.tv/",
 	},
 ]
 
