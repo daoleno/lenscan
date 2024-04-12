@@ -72,6 +72,12 @@ export const recommendedApps = [
 		icon: "/apps/bloomers.png",
 		url: "https://bloomers.tv/",
 	},
+	{
+		name: "Orna",
+		description: "Orna: Lens collects, people, communities and $Bonsai",
+		icon: "/apps/orna.png",
+		url: "https://orna.art/",
+	},
 ]
 
 export const apps = [...recommendedApps]
