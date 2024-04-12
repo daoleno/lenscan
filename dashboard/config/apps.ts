@@ -74,7 +74,7 @@ export const recommendedApps = [
 	},
 	{
 		name: "Orna",
-		description: "Orna: Lens collects, people, communities and $Bonsai",
+		description: "Lens collects marketplace, people, communities and $Bonsai",
 		icon: "/apps/orna.png",
 		url: "https://orna.art/",
 	},
