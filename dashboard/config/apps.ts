@@ -78,6 +78,18 @@ export const recommendedApps = [
 		icon: "/apps/orna.png",
 		url: "https://orna.art/",
 	},
+	{
+		name: "LensView",
+		description: "The omnipresent comment section to discuss, fact-check, and share your views about any web page",
+		icon: "/apps/lensview.png",
+		url: "https://lensview.io/",
+	},
+	{
+		name: "Focalize",
+		description: "Focalize is a full social DApp, built on Lens Protocol and XMTP, running in a browser extension.",
+		icon: "/apps/focalize.png",
+		url: "https://focalize.app/",
+	},
 ]
 
 export const apps = [...recommendedApps]
