@@ -89,7 +89,7 @@ export const recommendedApps = [
 		description: "Focalize is a full social DApp, built on Lens Protocol and XMTP, running in a browser extension.",
 		icon: "/apps/focalize.png",
 		url: "https://focalize.app/",
-	},
+	}
 ]
 
 export const apps = [...recommendedApps]
