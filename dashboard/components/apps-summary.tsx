@@ -22,33 +22,35 @@ export default async function AppsSummary() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {recommendedApps.map((app) => (
-          <Card key="1" className="w-full">
-            <CardContent className="flex items-center p-4 sm:flex-row">
-              <Image
-                alt="Orb logo"
-                className="h-15 w-15 aspect-[60/60] rounded-md object-cover"
-                height="60"
-                width="60"
-                src={app.icon}
-              />
-              <div className="ml-4 mr-8 flex flex-grow flex-col sm:gap-0">
-                <span className="text-lg font-bold">{app.name}</span>
-                <span
-                  className="text-sm"
-                  style={{
-                    whiteSpace: "pre-line",
-                  }}
-                >
-                  {app.description}
-                </span>
+          <Card key={app.name} className="w-full">
+            <CardContent className="flex flex-col p-4 sm:flex-row sm:items-center">
+              <div className="flex items-center">
+                <Image
+                  alt={`${app.name} logo`}
+                  className="h-12 w-12 rounded-md object-cover sm:h-15 sm:w-15"
+                  height="60"
+                  width="60"
+                  src={app.icon}
+                />
+                <div className="ml-4 flex flex-col">
+                  <span className="text-base font-bold sm:text-lg">{app.name}</span>
+                  <span
+                    className="mt-1 text-sm text-muted-foreground"
+                    style={{
+                      whiteSpace: "pre-line",
+                    }}
+                  >
+                    {app.description}
+                  </span>
+                </div>
               </div>
               <Link
                 href={app.url}
                 passHref
-                className="flex flex-grow justify-end"
+                className="mt-4 sm:mt-0 sm:ml-auto"
                 target="_blank"
               >
-                <Button className="hidden md:inline-block">VISIT</Button>
+                <Button className="w-full sm:w-auto">VISIT</Button>
               </Link>
             </CardContent>
           </Card>
